@@ -2,25 +2,22 @@ package models;
 import java.time.LocalDate;
 
 public class Users {
-    private int id_U; // id_U
+    private int id_U;
     private String name;
     private String prenom;
     private String email;
     private String password;
-    private String roleUser; // Enums represented as String
+    private String roleUser;
     private LocalDate dateNaiss;
     private String phoneNumber;
-    private String statut; // Enums represented as String
+    private String statut;
     private int diamond;
     private int deleteFlag;
-    private double prixtotal;
 
-    // Default Constructor
     public Users() {
     }
 
-    // Parameterized Constructor
-    public Users(int id_U, String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag, double prixtotal) {
+    public Users(int id_U, String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
         this.id_U = id_U;
         this.name = name;
         this.prenom = prenom;
@@ -32,9 +29,8 @@ public class Users {
         this.statut = statut;
         this.diamond = diamond;
         this.deleteFlag = deleteFlag;
-        this.prixtotal = prixtotal;
     }
-    public Users( String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag, double prixtotal) {
+    public Users( String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
 
         this.name = name;
         this.prenom = prenom;
@@ -46,7 +42,6 @@ public class Users {
         this.statut = statut;
         this.diamond = diamond;
         this.deleteFlag = deleteFlag;
-        this.prixtotal = prixtotal;
     }
 
     public int getId_U() {
@@ -136,12 +131,20 @@ public class Users {
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
-
-    public double getPrixtotal() {
-        return prixtotal;
-    }
-
-    public void setPrixtotal(double prixtotal) {
-        this.prixtotal = prixtotal;
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id_U=" + id_U +
+                ", name='" + name + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roleUser='" + roleUser + '\'' +
+                ", dateNaiss=" + dateNaiss +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", statut='" + statut + '\'' +
+                ", diamond=" + diamond +
+                ", deleteFlag=" + deleteFlag +
+                '}';
     }
 }

@@ -1,10 +1,8 @@
 package services;
-
 import java.sql.Date;
 import interfaces.GlobalInterface;
 import models.Users;
 import util.MyDatabase;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersService implements GlobalInterface<Users> {
-    private Connection con;
 
+    private Connection con;
     public UsersService() {
         con = MyDatabase.getInstance().getCon();
     }
 
     @Override
     public void add(Users user) {
-        String sql = "INSERT INTO users (name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag, prixtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPrenom());
@@ -33,7 +31,6 @@ public class UsersService implements GlobalInterface<Users> {
             preparedStatement.setString(8, user.getStatut());
             preparedStatement.setInt(9, user.getDiamond());
             preparedStatement.setInt(10, user.getDeleteFlag());
-            preparedStatement.setDouble(11, user.getPrixtotal());
             preparedStatement.executeUpdate();
             System.out.println("User added successfully!");
         } catch (SQLException e) {
@@ -41,26 +38,21 @@ public class UsersService implements GlobalInterface<Users> {
         }
     }
 
-
     @Override
     public void update(Users user) {
-        String sql = "UPDATE users SET name = ?, prenom = ?, email = ?, password = ?, roleUser = ?, dateNaiss = ?, phoneNumber = ?, statut = ?, diamond = ?, deleteFlag = ?, prixtotal = ? WHERE id_U = ?";
+        String sql = "UPDATE users SET name = ?, prenom = ?, email = ?, password = ?, roleUser = ?, dateNaiss = ?, phoneNumber = ?, statut = ?, diamond = ?, deleteFlag = ? WHERE id_U = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getRoleUser());
-
-            // Convert LocalDate to java.sql.Date
             preparedStatement.setDate(6, Date.valueOf(user.getDateNaiss()));
-
             preparedStatement.setString(7, user.getPhoneNumber());
             preparedStatement.setString(8, user.getStatut());
             preparedStatement.setInt(9, user.getDiamond());
             preparedStatement.setInt(10, user.getDeleteFlag());
-            preparedStatement.setDouble(11, user.getPrixtotal());
-            preparedStatement.setInt(12, user.getId_U());
+            preparedStatement.setInt(11, user.getId_U());
             preparedStatement.executeUpdate();
             System.out.println("User updated successfully!");
         } catch (SQLException e) {
@@ -96,12 +88,11 @@ public class UsersService implements GlobalInterface<Users> {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("roleUser"),
-                        rs.getDate("dateNaiss").toLocalDate(), // Convert java.sql.Date to LocalDate
+                        rs.getDate("dateNaiss").toLocalDate(),
                         rs.getString("phoneNumber"),
                         rs.getString("statut"),
                         rs.getInt("diamond"),
-                        rs.getInt("deleteFlag"),
-                        rs.getDouble("prixtotal")
+                        rs.getInt("deleteFlag")
                 );
                 list.add(user);
             }
@@ -110,6 +101,7 @@ public class UsersService implements GlobalInterface<Users> {
         }
         return list;
     }
+
     public List<Users> getById(int id) {
         List<Users> list = new ArrayList<>();
         try {
@@ -126,12 +118,11 @@ public class UsersService implements GlobalInterface<Users> {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("roleUser"),
-                        rs.getDate("dateNaiss").toLocalDate(), // Convert java.sql.Date to LocalDate
+                        rs.getDate("dateNaiss").toLocalDate(),
                         rs.getString("phoneNumber"),
                         rs.getString("statut"),
                         rs.getInt("diamond"),
-                        rs.getInt("deleteFlag"),
-                        rs.getDouble("prixtotal")
+                        rs.getInt("deleteFlag")
                 );
                 list.add(user);
             }
@@ -140,4 +131,5 @@ public class UsersService implements GlobalInterface<Users> {
         }
         return list;
     }
+
 }
