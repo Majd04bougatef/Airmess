@@ -116,4 +116,24 @@ public class ExpenseService implements GlobalInterface<Expense> {
         }
         return expenses;
     }
+
+
+    public double getExpenseSumByName(String nameEX, int id_U) {
+        String sql = "SELECT SUM(amount) as total FROM expense WHERE nameEX = ? AND id_U = ?";
+        double total = 0.0;
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setString(1, nameEX);
+            preparedStatement.setInt(2, id_U);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    total = resultSet.getDouble("total");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error calculating total for expenses with name '" + nameEX + "' and id_U '" + id_U + "': " + e.getMessage());
+        }
+        return total;
+    }
+
+
 }
