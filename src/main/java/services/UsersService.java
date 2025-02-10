@@ -132,4 +132,30 @@ public class UsersService implements GlobalInterface<Users> {
         return list;
     }
 
+    public Users login(String email, String password) {
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return new Users(
+                        rs.getInt("id_U"),
+                        rs.getString("name"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("roleUser"),
+                        rs.getDate("dateNaiss").toLocalDate(),
+                        rs.getString("phoneNumber"),
+                        rs.getString("statut"),
+                        rs.getInt("diamond"),
+                        rs.getInt("deleteFlag")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Error during login: " + e.getMessage());
+        }
+        return null;
+    }
 }
