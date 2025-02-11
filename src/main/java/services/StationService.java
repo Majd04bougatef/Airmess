@@ -41,7 +41,14 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public void delete(station station) {
-
+        String sql= "DELETE FROM `station` WHERE idS = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, station.getIdS());
+            preparedStatement.executeUpdate();
+            System.out.println("Station deleted successfully");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
