@@ -102,7 +102,7 @@ public abstract class StationService implements GlobalInterface<station> {
     }
 
     @Override
-    public List<station> getById(int id) {
+    public station getById(int id) {
         String query = "SELECT * FROM `station` WHERE idS = ?";
         station st = null;
 
@@ -131,9 +131,6 @@ public abstract class StationService implements GlobalInterface<station> {
             System.err.println(e.getMessage());
         }
 
-        List<station> l = new ArrayList<>();
-        l.add(st);
-
-        return l;
+        return st;
     }
 }
