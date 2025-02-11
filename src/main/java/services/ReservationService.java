@@ -20,7 +20,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
     @Override
     public void add(Reservation reservation) {
         // Add reservation to database
-        String query = "INSERT INTO reservation (id_U, id_O, dateRes, modePaiement) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO reservation (id_U, idO, dateRes, modePaiement) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
@@ -36,7 +36,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
     @Override
     public void update(Reservation reservation) {
         // Update reservation in database
-        String query = "UPDATE reservation SET id_U = ?, id_O = ?, dateRes = ?, modePaiement = ? WHERE idR = ?";
+        String query = "UPDATE reservation SET id_U = ?, idO = ?, dateRes = ?, modePaiement = ? WHERE idR = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
@@ -75,7 +75,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
                 Reservation reservation = new Reservation();
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
-                reservation.setIdO(res.getInt("id_O"));
+                reservation.setIdO(res.getInt("idO"));
                 reservation.setDateRes(res.getString("dateRes"));
                 reservation.setModePaiement(res.getString("modePaiement"));
 
@@ -99,7 +99,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
             if (res.next()) {
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
-                reservation.setIdO(res.getInt("id_O"));
+                reservation.setIdO(res.getInt("idO"));
                 reservation.setDateRes(res.getString("dateRes"));
                 reservation.setModePaiement(res.getString("modePaiement"));
             }
