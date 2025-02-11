@@ -15,7 +15,7 @@ public class SocialMediaServices {
         con = MyDatabase.getInstance().getCon();
     }
 
-    // Ajouter une nouvelle publication
+    // add
     public void add(SocialMedia socialMedia) {
         String sql = "INSERT INTO socialmedia (titre, contenu, id_U, category, publicationDate, lieu, `like`, dislike) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -34,7 +34,7 @@ public class SocialMediaServices {
         }
     }
 
-    // Mettre à jour une publication existante
+    //update
     public void update(SocialMedia socialMedia) {
         String sql = "UPDATE socialmedia SET titre = ?, contenu = ?, id_U = ?, category = ?, publicationDate = ?, lieu = ?, `like` = ?, dislike = ? WHERE idEB = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -54,7 +54,7 @@ public class SocialMediaServices {
         }
     }
 
-    // Supprimer une publication
+    // delete
     public void delete(int id) {
         String sql = "DELETE FROM socialmedia WHERE idEB = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -66,7 +66,7 @@ public class SocialMediaServices {
         }
     }
 
-    // Afficher toutes les publications
+    // Afficher
     public List<SocialMedia> display() {
         String query = "SELECT * FROM socialmedia";
         List<SocialMedia> socialMedias = new ArrayList<>();

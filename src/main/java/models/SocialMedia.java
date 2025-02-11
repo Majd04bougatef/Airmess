@@ -8,7 +8,7 @@ public class SocialMedia {
     private String titre;
     private String contenu;
     private int id_U;
-    private TypeEB category;  // Utilisation de l'énumération TypeEB
+    private TypeEB category;
     private Date publicationDate;
     private String lieu;
     private int like;
