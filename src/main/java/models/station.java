@@ -7,7 +7,7 @@ public class station {
     private double latitude,longitude,prixheure;
 
     public station() {}
-    public station(int id , int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,double prix) {
+    public station(int id , int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV) {
         this.idS = id;
         this.idU = idU;
         this.nom = nom;
@@ -19,7 +19,7 @@ public class station {
         this.typeVelo = typeV;
     }
 
-    public station(int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,double prix) {
+    public station(int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV) {
         this.idU = idU;
         this.nom = nom;
         this.latitude = latitude;
