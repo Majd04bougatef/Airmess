@@ -88,27 +88,24 @@ public class ReservationService implements GlobalInterface<Reservation> {
     }
 
     @Override
-    public List<Reservation> getById(int id) {
+    public Reservation getById(int id) {
         // Get reservation by id from database
         String query = "SELECT * FROM reservation WHERE idR = ?";
-        List<Reservation> reservations = new ArrayList<>();
+        Reservation reservation = new Reservation();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet res = preparedStatement.executeQuery();
-            while (res.next()) {
-                Reservation reservation = new Reservation();
+            if (res.next()) {
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
                 reservation.setIdO(res.getInt("id_O"));
                 reservation.setDateRes(res.getString("dateRes"));
                 reservation.setModePaiement(res.getString("modePaiement"));
-
-                reservations.add(reservation);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return reservation;
     }
 }

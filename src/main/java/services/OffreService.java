@@ -97,16 +97,15 @@ public class OffreService implements GlobalInterface<Offre> {
     }
 
     @Override
-    public List<Offre> getById(int id) {
+    public Offre getById(int id) {
         // TODO Auto-generated method stub
         String query = "SELECT * FROM offre WHERE idO = ?";
-        List<Offre> offres = new ArrayList<>();
+        Offre offre = new Offre();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Offre offre = new Offre();
+            if (resultSet.next()) {
                 offre.setIdO(resultSet.getInt("idO"));
                 offre.setId_U(resultSet.getInt("id_U"));
                 offre.setPriceInit(resultSet.getDouble("priceInit"));
@@ -116,12 +115,12 @@ public class OffreService implements GlobalInterface<Offre> {
                 offre.setNumberLimit(resultSet.getInt("numberLimit"));
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
-                offres.add(offre);
+
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return offres;
+        return offre;
     }
 
 }
