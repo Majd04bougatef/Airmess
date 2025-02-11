@@ -7,6 +7,6 @@ public interface GlobalInterface<T> {
     void update (T t);
     void delete (T t);
     List<T> getAll();
-    List<T> getById(int id);
+    T getById(int id);
 
 }
