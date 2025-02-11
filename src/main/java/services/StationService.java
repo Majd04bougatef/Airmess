@@ -53,7 +53,18 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public void update(station station) {
-
+        String sql= "UPDATE station SET capacite=? , nombreVelo=? , typeVelo =? , prixHeure=?  WHERE idS =?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, station.getCapacite());
+            preparedStatement.setInt(2, station.getNbVelo());
+            preparedStatement.setString(3, station.getTypeVelo());
+            preparedStatement.setDouble(4, station.getPrixheure());
+            preparedStatement.setInt(5, station.getIdS());
+            preparedStatement.executeUpdate();
+            System.out.println("Station updated successfully");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
