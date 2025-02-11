@@ -7,6 +7,7 @@ import util.MyDatabase;
 import java.sql.*;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StationService implements GlobalInterface<station> {
@@ -69,7 +70,35 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public List<station> getAll() {
-        return List.of();
+        String query = "SELECT * FROM `station`";
+
+        List<station> st = new ArrayList<>();
+
+        try {
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                station s = new station();
+
+                s.setIdS(rs.getInt("idS"));
+                s.setIdU(rs.getInt("id_U"));
+                s.setNom(rs.getString("nom"));
+                s.setLatitude(rs.getDouble("latitude"));
+                s.setLongitude(rs.getDouble("longitude"));
+                s.setCapacite(rs.getInt("capacite"));
+                s.setNbVelo(rs.getInt("nombreVelo"));
+                s.setTypeVelo(rs.getString("typeVelo"));
+                s.setPrixheure(rs.getDouble("prixHeure"));
+
+                st.add(s);
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return st;
+
     }
 
     @Override
