@@ -103,6 +103,37 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public List<station> getById(int id) {
-        return List.of();
+        String query = "SELECT * FROM `station` WHERE idS = ?";
+        station st = null;
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            if (rs.next()) {
+                st = new station();
+
+                st.setIdS(id);
+                st.setIdU(rs.getInt("id_U"));
+                st.setNom(rs.getString("nom"));
+                st.setLatitude(rs.getDouble("latitude"));
+                st.setLongitude(rs.getDouble("longitude"));
+                st.setCapacite(rs.getInt("capacite"));
+                st.setNbVelo(rs.getInt("nombreVelo"));
+                st.setTypeVelo(rs.getString("typeVelo"));
+                st.setPrixheure(rs.getDouble("prixHeure"));
+
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        List<station> l = new ArrayList<>();
+        l.add(st);
+
+        return l;
     }
 }
