@@ -25,7 +25,7 @@ import services.BonPlanServices;
     }
 }*/
 
-public class Main {
+/*public class Main {
     public static void main(String[] args) {
         BonPlanServices service = new BonPlanServices();
 
@@ -40,5 +40,16 @@ public class Main {
 
         // Appeler la méthode update pour mettre à jour l'enregistrement
         service.update(bonPlanToUpdate);
+    }
+}*/
+public class Main {
+    public static void main(String[] args) {
+        BonPlanServices service = new BonPlanServices();
+
+        // Créer un bon plan avec un ID spécifique à supprimer
+        int idPToDelete = 101;  // ID du bon plan à supprimer (par exemple)
+
+        // Appeler la méthode delete pour supprimer le bon plan
+        service.delete(idPToDelete);  // Suppression du bon plan avec l'ID 101
     }
 }

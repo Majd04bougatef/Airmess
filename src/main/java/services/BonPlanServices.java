@@ -52,6 +52,17 @@ public class BonPlanServices {
             System.err.println("Error updating Bon Plan: " + e.getMessage());
         }
     }
+    public void delete(int idP) {
+        String sql = "DELETE FROM bonplan WHERE idP = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idP);
+            preparedStatement.executeUpdate();
+            System.out.println("Bon Plan with idP " + idP + " deleted successfully!");
+        } catch (SQLException e) {
+            System.err.println("Error deleting Bon Plan: " + e.getMessage());
+        }
+    }
+
 }
 
 
