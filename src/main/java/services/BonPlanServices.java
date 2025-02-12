@@ -31,4 +31,28 @@ public class BonPlanServices {
             System.err.println("Error adding Bon Plan: " + e.getMessage());
         }
     }
+
+    public void update(bonplan bonPlan) {
+        String sql = "UPDATE bonplan SET id_U = ?, nomplace = ?, localisation = ?, description = ?, typePlace = ? WHERE idP = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, bonPlan.getId_U());
+            preparedStatement.setString(2, bonPlan.getNomplace());
+            preparedStatement.setString(3, bonPlan.getLocalisation());
+            preparedStatement.setString(4, bonPlan.getDescription());
+            preparedStatement.setString(5, bonPlan.getTypePlace());
+            preparedStatement.setInt(6, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Bon Plan updated successfully!");
+            } else {
+                System.out.println("No Bon Plan found with idP: " + bonPlan.getIdP());
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating Bon Plan: " + e.getMessage());
+        }
+    }
 }
+
+
+
