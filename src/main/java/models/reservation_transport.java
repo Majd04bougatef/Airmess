@@ -1,15 +1,15 @@
 package models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class reservation_transport {
     private int id,idU,idS;
-    private Date dateRes,dateFin;
+    private Timestamp dateRes,dateFin;
     private double prix;
     private String statut;
 
     public reservation_transport() {}
-    public reservation_transport(int id,int idU, int idS, String statut, Date dateRes, Date dateFin, double prix) {
+    public reservation_transport(int id,int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix) {
         this.id = id;
         this.idU = idU;
         this.idS = idS;
@@ -19,7 +19,7 @@ public class reservation_transport {
         this.statut = statut;
     }
 
-    public reservation_transport(int idU, int idS, String statut, Date dateRes, Date dateFin, double prix) {
+    public reservation_transport(int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix) {
         this.idU = idU;
         this.idS = idS;
         this.dateRes = dateRes;
@@ -52,19 +52,19 @@ public class reservation_transport {
         this.idS = idS;
     }
 
-    public Date getDateRes() {
+    public Timestamp getDateRes() {
         return dateRes;
     }
 
-    public void setDateRes(Date dateRes) {
+    public void setDateRes(Timestamp dateRes) {
         this.dateRes = dateRes;
     }
 
-    public Date getDateFin() {
+    public Timestamp getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(Date dateFin) {
+    public void setDateFin(Timestamp dateFin) {
         this.dateFin = dateFin;
     }
 
