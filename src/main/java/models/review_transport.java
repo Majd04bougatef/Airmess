@@ -1,11 +1,13 @@
 package models;
 
 import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 public class review_transport {
     private int id,idU,idS,rating;
     private String commentt;
-    private Date date_RT;
+    private Timestamp date_RT;
 
     public review_transport() {}
     public review_transport(int id,int idU, int idS, int rating, String commentt) {
@@ -14,7 +16,7 @@ public class review_transport {
         this.idS = idS;
         this.rating = rating;
         this.commentt = commentt;
-        this.date_RT = new Date(System.currentTimeMillis());
+        this.date_RT = new Timestamp(System.currentTimeMillis());
     }
 
     public review_transport(int idU, int idS, int rating, String commentt) {
@@ -22,7 +24,7 @@ public class review_transport {
         this.idS = idS;
         this.rating = rating;
         this.commentt = commentt;
-        this.date_RT = new Date(System.currentTimeMillis());
+        this.date_RT = new Timestamp(System.currentTimeMillis());
     }
 
     public int getId() {
@@ -65,11 +67,11 @@ public class review_transport {
         this.commentt = commentt;
     }
 
-    public Date getDate_RT() {
+    public Timestamp getDate_RT() {
         return date_RT;
     }
 
-    public void setDate_RT(Date date_RT) {
+    public void setDate_RT(Timestamp date_RT) {
         this.date_RT = date_RT;
     }
 
