@@ -19,14 +19,9 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>8.0.33</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-            <version>6.2.4</version> <!-- Use the latest version -->
-        </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
@@ -47,6 +42,13 @@
             <artifactId>javafx-fxml</artifactId>
             <version>21</version>
         </dependency>
+
+
+
+
+
+
+
     </dependencies>
 
     <build>
