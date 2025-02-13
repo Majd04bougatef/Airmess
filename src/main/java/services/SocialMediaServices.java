@@ -1,5 +1,6 @@
 package services;
 
+import interfaces.GlobalInterface;
 import models.SocialMedia;
 import util.MyDatabase;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SocialMediaServices {
+public class SocialMediaServices  {
 
     private Connection con;
 
