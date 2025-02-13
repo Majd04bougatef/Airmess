@@ -1,7 +1,6 @@
 package services;
 
 import interfaces.GlobalInterface;
-import models.Expense;
 import util.MyDatabase;
 
 import java.sql.Connection;
@@ -12,6 +11,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import models.Expense;
+
 
 public class ExpenseService implements GlobalInterface<Expense> {
 
@@ -91,15 +93,13 @@ public class ExpenseService implements GlobalInterface<Expense> {
         return expenses;
     }
 
-
     @Override
-    public List<Expense> getById(int id) {
-        List<Expense> expenses = new ArrayList<>();
+    public Expense getById(int id) {
         String sql = "SELECT * FROM expense WHERE idE = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     Expense expense = new Expense();
                     expense.setIdE(resultSet.getInt("idE"));
                     expense.setId_U(resultSet.getInt("id_U"));
@@ -108,15 +108,14 @@ public class ExpenseService implements GlobalInterface<Expense> {
                     expense.setDescription(resultSet.getString("description"));
                     expense.setCategory(resultSet.getString("category"));
                     expense.setDateE(resultSet.getDate("dateE").toLocalDate());
-                    expenses.add(expense);
+                    return expense;
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving expenses by ID: " + e.getMessage());
+            System.err.println("Error retrieving expense by id: " + e.getMessage());
         }
-        return expenses;
+        return null;
     }
-
 
     public double getExpenseSumByName(String nameEX, int id_U) {
         String sql = "SELECT SUM(amount) as total FROM expense WHERE nameEX = ? AND id_U = ?";

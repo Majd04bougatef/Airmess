@@ -1,5 +1,7 @@
 package models;
+
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Expense {
 
@@ -11,7 +13,8 @@ public class Expense {
     private String category;
     private LocalDate dateE;
 
-    public Expense() {}
+    public Expense() {
+    }
 
     public Expense(int idE, int id_U, String nameEX, double amount, String description, String category, LocalDate dateE) {
         this.idE = idE;
@@ -99,5 +102,16 @@ public class Expense {
                 ", category='" + category + '\'' +
                 ", dateE=" + dateE +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Expense expense)) return false;
+        return idE == expense.idE && id_U == expense.id_U && Double.compare(amount, expense.amount) == 0 && Objects.equals(nameEX, expense.nameEX) && Objects.equals(description, expense.description) && Objects.equals(category, expense.category) && Objects.equals(dateE, expense.dateE);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idE, id_U, nameEX, amount, description, category, dateE);
     }
 }

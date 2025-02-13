@@ -1,5 +1,7 @@
 package models;
+
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Users {
     private int id_U;
@@ -30,8 +32,8 @@ public class Users {
         this.diamond = diamond;
         this.deleteFlag = deleteFlag;
     }
-    public Users( String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
 
+    public Users(String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
         this.name = name;
         this.prenom = prenom;
         this.email = email;
@@ -131,6 +133,7 @@ public class Users {
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -146,5 +149,16 @@ public class Users {
                 ", diamond=" + diamond +
                 ", deleteFlag=" + deleteFlag +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Users users)) return false;
+        return id_U == users.id_U && diamond == users.diamond && deleteFlag == users.deleteFlag && Objects.equals(name, users.name) && Objects.equals(prenom, users.prenom) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && Objects.equals(roleUser, users.roleUser) && Objects.equals(dateNaiss, users.dateNaiss) && Objects.equals(phoneNumber, users.phoneNumber) && Objects.equals(statut, users.statut);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id_U, name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag);
     }
 }
