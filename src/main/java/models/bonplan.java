@@ -6,7 +6,7 @@ public class bonplan {
     private String nomplace;
     private String localisation;
     private String description;
-    private String typePlace; // typePlace correspond à l’enum typeC (resto, coworkingspace, cafe, muse)
+    private String typePlace;
 
     public bonplan() {}
 
