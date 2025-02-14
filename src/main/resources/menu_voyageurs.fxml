@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane fx:controller="controllers.MenuVoyageurs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="parent" stylesheets="@css/menu_voyageurs.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="parent" stylesheets="@css/menu_voyageurs.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuVoyageurs">
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="70.0" styleClass="sidebar" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="logo" fitHeight="62.0" fitWidth="55.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <image>
-                  <Image url="@image/AirMess%20copie.png" />
+                  <Image url="@image/AirMess copie.png" />
                </image></ImageView>
             <VBox fx:id="vboxmenu_voyageurs" layoutX="29.0" layoutY="249.0" prefHeight="156.0" prefWidth="27.0">
                <children>
