@@ -10,6 +10,14 @@ public class bonplan {
 
     public bonplan() {}
 
+    public bonplan( int id_U, String nomplace, String localisation, String description, String typePlace) {
+        this.id_U = id_U;
+        this.nomplace = nomplace;
+        this.localisation = localisation;
+        this.description = description;
+        this.typePlace = typePlace;
+    }
+
     public bonplan(int id_U, int idP, String nomplace, String localisation, String description, String typePlace) {
         this.id_U = id_U;
         this.idP = idP;

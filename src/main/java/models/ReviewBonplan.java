@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class ReviewBonplan {
@@ -11,6 +12,14 @@ public class ReviewBonplan {
     private LocalDateTime dateR;
 
     public ReviewBonplan() {}
+
+    public ReviewBonplan( int idU, int idP, Integer rating, String commente, LocalDateTime dateR) {
+        this.idU = idU;
+        this.idP = idP;
+        this.rating = rating;
+        this.commente = commente;
+        this.dateR = dateR;
+    }
 
     public ReviewBonplan(int idR, int idU, int idP, Integer rating, String commente, LocalDateTime dateR) {
         this.idR = idR;
