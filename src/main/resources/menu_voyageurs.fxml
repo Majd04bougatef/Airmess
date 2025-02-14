@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -17,7 +16,8 @@
             <ImageView fx:id="logo" fitHeight="62.0" fitWidth="55.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <image>
                   <Image url="@image/AirMess copie.png" />
-               </image></ImageView>
+               </image>
+            </ImageView>
             <VBox fx:id="vboxmenu_voyageurs" layoutX="29.0" layoutY="249.0" prefHeight="156.0" prefWidth="27.0">
                <children>
                   <Separator fx:id="separtor1">
@@ -25,36 +25,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </Separator>
-                  <FontAwesomeIconView fx:id="iconHome" fill="#284983" glyphName="HOME" size="30">
-                     <VBox.margin>
-                        <Insets left="3.0" top="10.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <FontAwesomeIconView fx:id="iconUser" glyphName="USER" size="30" styleClass="sidebar_opt">
-                     <VBox.margin>
-                        <Insets left="6.0" top="10.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <FontAwesomeIconView fx:id="iconBICUCLE" glyphName="BICYCLE" size="25" styleClass="sidebar_opt">
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <FontAwesomeIconView fx:id="iconBONPLAN" glyphName="MAP" size="25" styleClass="sidebar_opt">
-                     <VBox.margin>
-                        <Insets left="5.0" top="15.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <FontAwesomeIconView fx:id="iconOFFRE" glyphName="GIFT" size="25" styleClass="sidebar_opt">
-                     <VBox.margin>
-                        <Insets left="5.0" top="15.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
-                  <FontAwesomeIconView fx:id="iconSOCIALMEDIA" glyphName="COMMENTS" size="25" styleClass="sidebar_opt">
-                     <VBox.margin>
-                        <Insets left="5.0" top="15.0" />
-                     </VBox.margin>
-                  </FontAwesomeIconView>
+                  <!-- Icons removed here -->
                   <Separator fx:id="seaprtor2">
                      <VBox.margin>
                         <Insets top="10.0" />
