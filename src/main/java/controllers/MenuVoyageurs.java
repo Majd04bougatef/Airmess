@@ -97,7 +97,7 @@ public class MenuVoyageurs {
         iconTransport.setOnMouseClicked(this::loadTranportPage);
         iconBonPlan.setOnMouseClicked(this::loadBonplanPage);
         iconOffre.setOnMouseClicked(this::loadOffrePage);
-        iconSocailMedia.setOnMouseClicked(this::loadSocialPage);
+        iconSocailMedia.setOnMouseClicked(this::loadSocialMediaPage);
     }
 
 
@@ -156,7 +156,7 @@ public class MenuVoyageurs {
         }
     }
 
-    private void loadSocialPage(MouseEvent event) {
+    private void loadSocialMediaPage(MouseEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
             Parent userPage = loader.load();
