@@ -100,7 +100,6 @@ public class MenuVoyageurs {
         iconSocailMedia.setOnMouseClicked(this::loadSocialPage);
     }
 
-
     private void loadHomePage(MouseEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/homePage.fxml"));
@@ -156,7 +155,7 @@ public class MenuVoyageurs {
         }
     }
 
-    private void loadSocialPage(MouseEvent event) {
+    private void loadPage(MouseEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
             Parent userPage = loader.load();
