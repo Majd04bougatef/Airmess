@@ -93,12 +93,13 @@ public class MenuVoyageurs {
     @FXML
     public void initialize() {
         iconHome.setOnMouseClicked(this::loadHomePage);
-        iconUser.setOnMouseClicked(this::loadPage);
-        iconTransport.setOnMouseClicked(this::loadPage);
-        iconBonPlan.setOnMouseClicked(this::loadPage);
-        iconOffre.setOnMouseClicked(this::loadPage);
-        iconSocailMedia.setOnMouseClicked(this::loadPage);
+        iconUser.setOnMouseClicked(this::loadUserPage);
+        iconTransport.setOnMouseClicked(this::loadTranportPage);
+        iconBonPlan.setOnMouseClicked(this::loadBonplanPage);
+        iconOffre.setOnMouseClicked(this::loadOffrePage);
+        iconSocailMedia.setOnMouseClicked(this::loadSocialPage);
     }
+
 
     private void loadHomePage(MouseEvent event) {
         try {
@@ -111,7 +112,51 @@ public class MenuVoyageurs {
         }
     }
 
-    private void loadPage(MouseEvent event) {
+    private void loadUserPage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadTranportPage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadBonplanPage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadOffrePage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadSocialPage(MouseEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
             Parent userPage = loader.load();
