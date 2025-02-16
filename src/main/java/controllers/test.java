@@ -1,12 +1,11 @@
 package controllers;
 
-import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
+import javafx.scene.text.Text;
 
 public class test {
-    @FXML
-    private TextField id1;
 
     @FXML
-    private TextField id2;
+    private Text etxt;
+
 }
