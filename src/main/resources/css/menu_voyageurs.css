@@ -1,0 +1,13 @@
+.parent{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 30px;
+}
+
+.sidebar{
+    -fx-background-color: #4292bf;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+
+.sidebar_opt{
+    -fx-fill: #FFFFFF;
+}
