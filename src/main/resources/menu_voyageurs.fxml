@@ -16,7 +16,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="parent" stylesheets="@css/menu_voyageurs.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuVoyageurs">
    <left>
-      <AnchorPane prefHeight="700.0" prefWidth="169.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="700.0" prefWidth="170.0" styleClass="sidebar" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="logo" fitHeight="79.0" fitWidth="76.0" layoutX="52.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="52.0">
                <image>
@@ -134,7 +134,7 @@
          <children>
             <HBox prefHeight="59.0" prefWidth="1023.0">
                <children>
-                  <Pane fx:id="pane1" prefHeight="82.0" prefWidth="1020.0" style="-fx-background-color: #f3f3f3;">
+                  <Pane fx:id="pane1" prefHeight="59.0" prefWidth="1071.0" style="-fx-background-color: #f3f3f3;">
                      <children>
                         <HBox layoutX="824.0" layoutY="6.0" prefHeight="47.0" prefWidth="120.0">
                            <children>
@@ -159,7 +159,7 @@
                   </Pane>
                </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="642.0" prefWidth="1023.0" />
+            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1030.0" />
          </children>
       </AnchorPane>
    </center>
