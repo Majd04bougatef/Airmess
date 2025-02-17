@@ -16,16 +16,14 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
     @Override
     public void add(SocialMedia socialMedia) {
-        String sql = "INSERT INTO socialmedia (titre, contenu, id_U, category, publicationDate, lieu, `like`, dislike) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        // On retire les champs like et dislike ici, car ils ne sont pas nécessaires lors de l'ajout
+        String sql = "INSERT INTO socialmedia (titre, contenu, id_U, publicationDate, lieu) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, socialMedia.getTitre());
             preparedStatement.setString(2, socialMedia.getContenu());
             preparedStatement.setInt(3, socialMedia.getId_U());
-            preparedStatement.setString(4, socialMedia.getCategory().name()); // `.name()` pour convertir l'Enum
-            preparedStatement.setDate(5, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
-            preparedStatement.setString(6, socialMedia.getLieu());
-            preparedStatement.setInt(7, socialMedia.getLike());
-            preparedStatement.setInt(8, socialMedia.getDislike());
+            preparedStatement.setDate(4, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
+            preparedStatement.setString(5, socialMedia.getLieu());
 
             preparedStatement.executeUpdate();
             System.out.println(" Publication ajoutée avec succès !");
@@ -36,17 +34,15 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
     @Override
     public void update(SocialMedia socialMedia) {
-        String sql = "UPDATE socialmedia SET titre = ?, contenu = ?, id_U = ?, category = ?, publicationDate = ?, lieu = ?, `like` = ?, dislike = ? WHERE idEB = ?";
+        // On ne met pas à jour les champs like et dislike non plus ici
+        String sql = "UPDATE socialmedia SET titre = ?, contenu = ?, id_U = ?, publicationDate = ?, lieu = ? WHERE idEB = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, socialMedia.getTitre());
             preparedStatement.setString(2, socialMedia.getContenu());
             preparedStatement.setInt(3, socialMedia.getId_U());
-            preparedStatement.setString(4, socialMedia.getCategory().name());
-            preparedStatement.setDate(5, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
-            preparedStatement.setString(6, socialMedia.getLieu());
-            preparedStatement.setInt(7, socialMedia.getLike());
-            preparedStatement.setInt(8, socialMedia.getDislike());
-            preparedStatement.setInt(9, socialMedia.getIdEB());
+            preparedStatement.setDate(4, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
+            preparedStatement.setString(5, socialMedia.getLieu());
+            preparedStatement.setInt(6, socialMedia.getIdEB());
 
             preparedStatement.executeUpdate();
             System.out.println(" Publication mise à jour avec succès !");
@@ -59,7 +55,6 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
     public void delete(SocialMedia socialMedia) {
         delete(socialMedia.getIdEB()); // Appelle la version delete(int idEB)
     }
-
 
     public void delete(int idEB) {
         String sql = "DELETE FROM socialmedia WHERE idEB = ?";
@@ -86,22 +81,15 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
                 socialMedia.setContenu(rs.getString("contenu"));
                 socialMedia.setId_U(rs.getInt("id_U"));
 
-
-                try {
-                    socialMedia.setCategory(models.TypeEB.valueOf(rs.getString("category").toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    System.err.println(" Catégorie inconnue : " + rs.getString("category"));
-                    socialMedia.setCategory(models.TypeEB.ARTICLE); // Valeur par défaut
-                }
-
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
+
+                // On garde les champs like et dislike ici pour l'affichage
                 socialMedia.setLike(rs.getInt("like"));
                 socialMedia.setDislike(rs.getInt("dislike"));
 
                 socialMedias.add(socialMedia);
             }
-
         } catch (SQLException e) {
             System.err.println(" Erreur lors de la récupération des publications : " + e.getMessage());
         }
@@ -124,20 +112,13 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
                 socialMedia.setContenu(rs.getString("contenu"));
                 socialMedia.setId_U(rs.getInt("id_U"));
 
-                // ✅ Vérification de `TypeEB`
-                try {
-                    socialMedia.setCategory(models.TypeEB.valueOf(rs.getString("category").toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Catégorie inconnue pour ID " + id + " : " + rs.getString("category"));
-                    socialMedia.setCategory(models.TypeEB.ARTICLE);
-                }
-
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
+
+                // On garde les champs like et dislike ici pour l'affichage
                 socialMedia.setLike(rs.getInt("like"));
                 socialMedia.setDislike(rs.getInt("dislike"));
             }
-
         } catch (SQLException e) {
             System.err.println(" Erreur lors de la récupération de la publication : " + e.getMessage());
         }

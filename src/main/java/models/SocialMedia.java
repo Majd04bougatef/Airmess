@@ -8,7 +8,6 @@ public class SocialMedia {
     private String titre;
     private String contenu;
     private int id_U;
-    private TypeEB category;
     private Date publicationDate;
     private String lieu;
     private int like;
@@ -19,12 +18,11 @@ public class SocialMedia {
     }
 
     // Constructeur avec tous les paramètres
-    public SocialMedia(int idEB, String titre, String contenu, int id_U, TypeEB category, Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(int idEB, String titre, String contenu, int id_U,  Date publicationDate, String lieu, int like, int dislike) {
         this.idEB = idEB;
         this.titre = titre;
         this.contenu = contenu;
         this.id_U = id_U;
-        this.category = category;
         this.publicationDate = publicationDate;
         this.lieu = lieu;
         this.like = like;
@@ -32,11 +30,10 @@ public class SocialMedia {
     }
 
     // Constructeur sans idEB
-    public SocialMedia(String titre, String contenu, int id_U, TypeEB category, Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(String titre, String contenu, int id_U, Date publicationDate, String lieu, int like, int dislike) {
         this.titre = titre;
         this.contenu = contenu;
         this.id_U = id_U;
-        this.category = category;
         this.publicationDate = publicationDate;
         this.lieu = lieu;
         this.like = like;
@@ -76,13 +73,7 @@ public class SocialMedia {
         this.id_U = id_U;
     }
 
-    public TypeEB getCategory() {
-        return category;
-    }
 
-    public void setCategory(TypeEB category) {
-        this.category = category;
-    }
 
     public Date getPublicationDate() {
         return publicationDate;
@@ -123,7 +114,6 @@ public class SocialMedia {
                 ", titre='" + titre + '\'' +
                 ", contenu='" + contenu + '\'' +
                 ", idU=" + id_U +
-                ", category=" + category +
                 ", publicationDate=" + publicationDate +
                 ", lieu='" + lieu + '\'' +
                 ", like=" + like +
