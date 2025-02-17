@@ -36,7 +36,7 @@
                   <Image url="@image/3d-casual-life-young-man-holding-paper-map.png" />
                </image>
             </ImageView>
-            <Text fill="#406dab" layoutX="155.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In" wrappingWidth="178.74015808105446">
+            <Text fill="#406dab" layoutX="142.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S'identifier" wrappingWidth="239.9999999999999">
                <font>
                   <Font name="Aldhabi" size="70.0" />
                </font>
@@ -44,13 +44,13 @@
             <TextField layoutX="125.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
             <TextField layoutX="124.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
             <Text fill="#1b56a4" layoutX="132.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
-            <Text fill="#1b56a4" layoutX="130.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-            <Text fill="#9c9898" layoutX="268.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Forget Password ?" />
-            <Button layoutX="125.0" layoutY="380.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="login" textFill="WHITE">
+            <Text fill="#1b56a4" layoutX="130.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mot de passe" />
+            <Text fill="#9c9898" layoutX="268.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mot de passe oublié ?" />
+            <Button layoutX="125.0" layoutY="380.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="S'identifier" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Text fill="#9c9898" layoutX="209.0" layoutY="452.0" strokeType="OUTSIDE" strokeWidth="0.0" text="or continue with" />
+            <Text fill="#9c9898" layoutX="209.0" layoutY="452.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ou continuer avec" />
             <Button layoutX="262.0" layoutY="474.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="78.0" style="-fx-background-radius: 50; -fx-background-color: #f0f5f9;" textFill="#85d3e7">
                <font>
                   <Font size="18.0" />
@@ -61,8 +61,8 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Text fill="#9c9898" layoutX="101.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account yet?" />
-            <Text fill="PALEVIOLETRED" layoutX="260.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up for free" />
+            <Text fill="#9c9898" layoutX="101.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vous n’avez pas encore de compte ?" />
+            <Text fill="PALEVIOLETRED" layoutX="299.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inscrivez-vous gratuitement" />
          </children>
       </AnchorPane>
    </children>
