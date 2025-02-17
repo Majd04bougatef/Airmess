@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="650.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane layoutX="100.0" layoutY="75.0" prefHeight="500.0" prefWidth="1000.0" style="-fx-background-color: white; -fx-background-radius: 50; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+         <children>
+            <!-- Logo -->
+            <HBox alignment="CENTER_LEFT" layoutX="80.0" layoutY="40.0" spacing="10.0" />
+
+            <!-- Login Form -->
+            <VBox layoutX="95.0" layoutY="95.0" spacing="20.0">
+
+               <VBox spacing="8.0">
+                  <Text fill="#326ca1" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Text>
+                  <Label style="-fx-text-fill: #34495e;" text="Email" />
+                  <TextField prefHeight="40.0" prefWidth="300.0" promptText="admin@gmail.com" style="-fx-background-color: #f0f5f9; -fx-background-radius: 10;" />
+               </VBox>
+
+               <VBox spacing="8.0">
+                  <Label style="-fx-text-fill: #34495e;" text="Password" />
+                  <PasswordField prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 10;" />
+                  <HBox alignment="CENTER_RIGHT">
+                     <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" text="Forgot Password?" />
+                  </HBox>
+               </VBox>
+
+               <Button prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #db7093; -fx-text-fill: white; -fx-background-radius: 20;" text="LOGIN" />
+
+               <!-- Social Login -->
+               <VBox alignment="CENTER" spacing="15.0" translateY="20.0">
+                  <Label style="-fx-text-fill: #7f8c8d;" text="or continue with" />
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <Button prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 20; -fx-background-radius: 20;" />
+                     <Button prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 20; -fx-background-radius: 20;" />
+                  </HBox>
+               </VBox>
+
+               <HBox alignment="CENTER" spacing="5.0" translateY="30.0">
+                  <Label style="-fx-text-fill: #7f8c8d;" text="Don't have an account yet?" />
+                  <Label style="-fx-text-fill: #db7093;" text="Sign up for free" />
+               </HBox>
+            </VBox>
+
+            <!-- Right Side Panel -->
+            <AnchorPane layoutX="632.0" prefHeight="528.0" prefWidth="368.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;">
+               <ImageView fitHeight="420.0" fitWidth="250.0" layoutX="101.0" layoutY="54.0" preserveRatio="true">
+                  <image>
+                     <Image url="@image/475494119_1136555244298328_1961476089771408060_n$$.png" />
+                  </image></ImageView>
+            </AnchorPane>
+            <ImageView fitHeight="81.0" fitWidth="94.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="80.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+
+               </image>
+            </ImageView>
+            <ImageView fitHeight="420.0" fitWidth="250.0" layoutX="514.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/3d-casual-life-young-man-holding-paper-map.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="81.0" fitWidth="94.0" layoutX="48.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/AirMess%20copie.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="122.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/Capture%20d'écran%202025-01-30%20203129.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
