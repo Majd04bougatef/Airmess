@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -12,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import test.Session;
 
 import java.io.IOException;
 
@@ -126,9 +129,27 @@ public class MenuVoyageurs {
 
     @FXML
     void logout(ActionEvent event) {
+        try {
+            // Clear the session
+            Session.getInstance().logout();
 
+            // Load the login screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent loginPage = loader.load();
 
+            // Get the current stage
+            Stage stage = (Stage) anchorpane1.getScene().getWindow();
 
+            // Set the login screen on the stage
+            Scene scene = new Scene(loginPage);
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("User logged out successfully.");
+        } catch (IOException e) {
+            System.err.println("Error during logout: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 
