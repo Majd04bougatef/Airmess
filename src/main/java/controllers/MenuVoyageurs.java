@@ -158,7 +158,7 @@ public class MenuVoyageurs {
     private void loadSocialMediaPage(MouseEvent event) {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddSocialMedia.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
