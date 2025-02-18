@@ -88,7 +88,6 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
         return commentaires;
     }
 
-    // Ajout de `getById(int id)`
     @Override
     public Commentaire getById(int id) {
         String query = "SELECT * FROM commentaire WHERE idC = ?";
