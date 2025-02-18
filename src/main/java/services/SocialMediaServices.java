@@ -16,14 +16,14 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
     @Override
     public void add(SocialMedia socialMedia) {
-        // On retire les champs like et dislike ici, car ils ne sont pas nécessaires lors de l'ajout
-        String sql = "INSERT INTO socialmedia (titre, contenu, id_U, publicationDate, lieu) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO socialmedia (titre, contenu, id_U, publicationDate, lieu,imagemedia) VALUES (?, ?, ?, ?, ?,?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, socialMedia.getTitre());
             preparedStatement.setString(2, socialMedia.getContenu());
             preparedStatement.setInt(3, socialMedia.getId_U());
             preparedStatement.setDate(4, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
             preparedStatement.setString(5, socialMedia.getLieu());
+            preparedStatement.setString(6, socialMedia.getImagemedia());
 
             preparedStatement.executeUpdate();
             System.out.println(" Publication ajoutée avec succès !");
@@ -34,15 +34,15 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
     @Override
     public void update(SocialMedia socialMedia) {
-        // On ne met pas à jour les champs like et dislike non plus ici
-        String sql = "UPDATE socialmedia SET titre = ?, contenu = ?, id_U = ?, publicationDate = ?, lieu = ? WHERE idEB = ?";
+        String sql = "UPDATE socialmedia SET titre = ?, contenu = ?, id_U = ?, publicationDate = ?, lieu = ? ,imagemedia = ? WHERE idEB = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, socialMedia.getTitre());
             preparedStatement.setString(2, socialMedia.getContenu());
             preparedStatement.setInt(3, socialMedia.getId_U());
             preparedStatement.setDate(4, new java.sql.Date(socialMedia.getPublicationDate().getTime()));
             preparedStatement.setString(5, socialMedia.getLieu());
-            preparedStatement.setInt(6, socialMedia.getIdEB());
+            preparedStatement.setString(6, socialMedia.getImagemedia());
+            preparedStatement.setInt(7, socialMedia.getIdEB());
 
             preparedStatement.executeUpdate();
             System.out.println(" Publication mise à jour avec succès !");
@@ -53,7 +53,7 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
     @Override
     public void delete(SocialMedia socialMedia) {
-        delete(socialMedia.getIdEB()); // Appelle la version delete(int idEB)
+        delete(socialMedia.getIdEB());
     }
 
     public void delete(int idEB) {
@@ -83,11 +83,9 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
-
-                // On garde les champs like et dislike ici pour l'affichage
                 socialMedia.setLike(rs.getInt("like"));
                 socialMedia.setDislike(rs.getInt("dislike"));
-
+                socialMedia.setImagemedia(rs.getString("imagemedia"));
                 socialMedias.add(socialMedia);
             }
         } catch (SQLException e) {
@@ -115,7 +113,6 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
 
-                // On garde les champs like et dislike ici pour l'affichage
                 socialMedia.setLike(rs.getInt("like"));
                 socialMedia.setDislike(rs.getInt("dislike"));
             }

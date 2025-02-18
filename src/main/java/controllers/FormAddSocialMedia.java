@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,16 @@ import javafx.scene.control.TextField;
 import services.SocialMediaServices;
 import models.SocialMedia;
 import services.UsersService;
+
+
+import javafx.stage.FileChooser;
+import javafx.scene.image.Image;
+
+import java.io.IOException;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 
 public class FormAddSocialMedia {
 
@@ -31,42 +42,79 @@ public class FormAddSocialMedia {
     @FXML
     private Text text1;
 
-    private int id_u;  // Assurez-vous de définir ou récupérer l'ID de l'utilisateur ici
+    @FXML
+    private ImageView image;
+    private String imageName;
+
+
+
+    private int id_u;
 
     private final SocialMediaServices socialMediaServices = new SocialMediaServices() {};
 
     @FXML
     public void initialize() {
-        // L'initialisation est déjà configurée pour des actions spécifiques.
+
+    }
+
+
+
+
+    @FXML
+    void ajoutimage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            imageName = System.currentTimeMillis() + "_" + file.getName();
+
+            String destinationPath = "C:/xampp/htdocs/ImageSocialMedia/" + imageName;
+            File destinationFile = new File(destinationPath);
+
+            try {
+                Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                Image img = new Image(destinationFile.toURI().toString());
+                image.setImage(img);
+
+
+                System.out.println("Image enregistrée avec succès : " + imageName);
+            } catch (IOException e) {
+                showAlert("Erreur", "Impossible d'enregistrer l'image.", AlertType.ERROR);
+                System.out.println("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
+            }
+        }
     }
 
     @FXML
     private void bttnsc() {
-
         SocialMedia socialMedia = new SocialMedia();
 
-        // Contrôle de saisie : Vérifie si tous les champs sont remplis
         if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() || publication_date_picker.getValue() == null) {
             showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
             return;
         }
 
-        // Récupère les données et les assigne à l'objet socialMedia
+
         socialMedia.setTitre(Titre.getText());
         socialMedia.setContenu(contenu.getText());
         socialMedia.setLieu(Lieu.getText());
-
-        // Convertit la date sélectionnée et assigne la publication
         socialMedia.setPublicationDate(java.sql.Date.valueOf(publication_date_picker.getValue()));
-
         socialMedia.setId_U(1);
 
-        socialMediaServices.add(socialMedia);
 
+        if (imageName != null) {
+            socialMedia.setImagemedia(imageName);
+        } else {
+
+            socialMedia.setImagemedia(null);
+        }
+        socialMediaServices.add(socialMedia);
         showAlert("Succès", "Publication publiée avec succès !", AlertType.INFORMATION);
         clearFields();
-
     }
+
 
     private void showAlert(String title, String message, AlertType alertType) {
         Alert alert = new Alert(alertType);
@@ -82,6 +130,7 @@ public class FormAddSocialMedia {
         contenu.clear();
         Lieu.clear();
         publication_date_picker.setValue(null);
+        image.setImage(null);
         text1.setText("Publication ajoutée avec succès!");
     }
 

@@ -12,13 +12,15 @@ public class SocialMedia {
     private String lieu;
     private int like;
     private int dislike;
+    private String imagemedia;
+
 
     // Constructeur par défaut
     public SocialMedia() {
     }
 
     // Constructeur avec tous les paramètres
-    public SocialMedia(int idEB, String titre, String contenu, int id_U,  Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(int idEB, String titre, String contenu, int id_U,  Date publicationDate, String lieu, int like, int dislike,String imagemedia) {
         this.idEB = idEB;
         this.titre = titre;
         this.contenu = contenu;
@@ -27,10 +29,11 @@ public class SocialMedia {
         this.lieu = lieu;
         this.like = like;
         this.dislike = dislike;
+        this.imagemedia =imagemedia;
     }
 
     // Constructeur sans idEB
-    public SocialMedia(String titre, String contenu, int id_U, Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(String titre, String contenu, int id_U, Date publicationDate, String lieu, int like, int dislike,String imagemedia) {
         this.titre = titre;
         this.contenu = contenu;
         this.id_U = id_U;
@@ -38,6 +41,7 @@ public class SocialMedia {
         this.lieu = lieu;
         this.like = like;
         this.dislike = dislike;
+        this.imagemedia =imagemedia;
     }
 
     // Getters et Setters
@@ -73,6 +77,12 @@ public class SocialMedia {
         this.id_U = id_U;
     }
 
+    public String getImagemedia() {
+        return imagemedia;
+    }
+    public void setImagemedia(String imagemedia) {
+        this.imagemedia = imagemedia;
+    }
 
 
     public Date getPublicationDate() {
@@ -118,6 +128,7 @@ public class SocialMedia {
                 ", lieu='" + lieu + '\'' +
                 ", like=" + like +
                 ", dislike=" + dislike +
+                ", imagemedia='" + imagemedia + '\'' +
                 '}';
     }
 }
