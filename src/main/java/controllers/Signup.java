@@ -1,21 +1,28 @@
 package controllers;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import services.UsersService;
 
 
 import models.Users;
 
 
+import java.io.IOException;
+
+
 import javafx.stage.FileChooser;
 import javafx.scene.image.Image;
 
-import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -97,7 +104,52 @@ public class Signup {
         System.out.println("User added successfully!");
         clearFields();
 
+        // Navigate back to login page
+        try {
+            // Load the login screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent loginPage = loader.load();
+
+            // Get the current stage from the event source
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Set the login screen on the stage
+            Scene scene = new Scene(loginPage);
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("Navigated to login screen after user registration.");
+        } catch (IOException e) {
+            System.err.println("Error navigating to login: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
+    @FXML
+    void back(ActionEvent event) {
+
+        try {
+            // Load the login screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent loginPage = loader.load();
+
+            // Get the current stage from the event source
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Set the login screen on the stage
+            Scene scene = new Scene(loginPage);
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("Navigated back to login screen.");
+        } catch (IOException e) {
+            System.err.println("Error navigating back to login: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     private void clearFields() {
         nom_uesr.clear();

@@ -10,78 +10,62 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.PasswordField?>
-<AnchorPane prefHeight="700.0" prefWidth="1200.0"
-            style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.Signup">
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Signup">
     <children>
-        <AnchorPane layoutX="104.0" layoutY="60.0" prefHeight="600.0" prefWidth="1000.0"
-                    style="-fx-background-color: white; -fx-background-radius: 50; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+        <AnchorPane layoutX="104.0" layoutY="60.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: white; -fx-background-radius: 50; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
             <children>
-                <ImageView fitHeight="70.0" fitWidth="77.0" layoutX="36.0" layoutY="14.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <ImageView fitHeight="70.0" fitWidth="77.0" layoutX="36.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/AirMess%20copie.png"/>
+                        <Image url="@image/AirMess%20copie.png" />
                     </image>
                 </ImageView>
-                <ImageView fitHeight="40.0" fitWidth="179.0" layoutX="107.0" layoutY="29.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <ImageView fitHeight="40.0" fitWidth="179.0" layoutX="107.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/Capture%20d'écran%202025-01-30%20203129.png"/>
+                        <Image url="@image/Capture%20d'écran%202025-01-30%20203129.png" />
                     </image>
                 </ImageView>
-                <Text fill="#406dab" layoutX="412.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="S’enregistrer" wrappingWidth="261.1401214599607">
+                <Text fill="#406dab" layoutX="412.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S’enregistrer" wrappingWidth="261.1401214599607">
                     <font>
-                        <Font name="Aldhabi" size="70.0"/>
+                        <Font name="Aldhabi" size="70.0" />
                     </font>
                 </Text>
-                <TextField fx:id="nom_uesr" layoutX="125.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0"
-                           style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <TextField fx:id="prenom_user" layoutX="124.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0"
-                           style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <Text fill="#1b56a4" layoutX="132.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom"/>
-                <Text fill="#1b56a4" layoutX="130.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Prénom"/>
-                <TextField fx:id="tel_user" layoutX="427.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0"
-                           style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <TextField fx:id="password_user" layoutX="124.0" layoutY="446.0" prefHeight="35.0" prefWidth="240.0"
-                               style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <TextField fx:id="Email_user" layoutX="125.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0"
-                           style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <Text fill="#1b56a4" layoutX="127.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Email"/>
-                <Text fill="#1b56a4" layoutX="132.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="mot de passe"/>
-                <ComboBox fx:id="type_user" layoutX="427.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0"
-                          style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <DatePicker fx:id="dateN_user" layoutX="427.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0"
-                            style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <Text fill="#1b56a4" layoutX="428.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Type de compte"/>
-                <Text fill="#1b56a4" layoutX="428.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="numéro de téléphone"/>
-                <Text fill="#1b56a4" layoutX="428.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="date de naissance "/>
-                <Button layoutX="427.0" layoutY="444.0" mnemonicParsing="false" onAction="#enregistrer"
-                        prefHeight="35.0" prefWidth="240.0"
-                        style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="S’enregistrer"
-                        textFill="WHITE">
+                <TextField fx:id="nom_uesr" layoutX="125.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <TextField fx:id="prenom_user" layoutX="124.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <Text fill="#1b56a4" layoutX="132.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom" />
+                <Text fill="#1b56a4" layoutX="130.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prénom" />
+                <TextField fx:id="tel_user" layoutX="427.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <TextField fx:id="password_user" layoutX="124.0" layoutY="446.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <TextField fx:id="Email_user" layoutX="125.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <Text fill="#1b56a4" layoutX="127.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                <Text fill="#1b56a4" layoutX="132.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="mot de passe" />
+                <ComboBox fx:id="type_user" layoutX="427.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <DatePicker fx:id="dateN_user" layoutX="427.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+                <Text fill="#1b56a4" layoutX="428.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de compte" />
+                <Text fill="#1b56a4" layoutX="428.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="numéro de téléphone" />
+                <Text fill="#1b56a4" layoutX="428.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text="date de naissance " />
+                <Button layoutX="427.0" layoutY="444.0" mnemonicParsing="false" onAction="#enregistrer" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="S’enregistrer" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
-                <ImageView fx:id="user_photo" fitHeight="205.0" fitWidth="282.0" layoutX="699.0" layoutY="235.0"
-                           pickOnBounds="true" preserveRatio="true"/>
-                <Button layoutX="720.0" layoutY="444.0" mnemonicParsing="false" onAction="#Ajouterunephoto"
-                        prefHeight="35.0" prefWidth="240.0"
-                        style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="Ajouter une photo"
-                        textFill="WHITE">
+                <ImageView fx:id="user_photo" fitHeight="205.0" fitWidth="282.0" layoutX="699.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true" />
+                <Button layoutX="720.0" layoutY="444.0" mnemonicParsing="false" onAction="#Ajouterunephoto" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="Ajouter une photo" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
+            <Button layoutX="29.0" layoutY="553.0" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="41.0" style="-fx-background-color: #db7093; -fx-background-radius: 50;" >
+
+
+
+                <graphic>
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <image>
+                            <Image url="@image/back.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
             </children>
         </AnchorPane>
     </children>
