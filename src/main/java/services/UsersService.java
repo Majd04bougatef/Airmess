@@ -11,11 +11,6 @@ import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import util.MyDatabase;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-
-import static util.MyDatabase.getInstance;
 
 public class UsersService implements GlobalInterface<Users> {
 
@@ -25,9 +20,13 @@ public class UsersService implements GlobalInterface<Users> {
         con = MyDatabase.getInstance().getCon();
     }
 
+
+
+
+
     @Override
     public void add(Users user) {
-        String sql = "INSERT INTO users (name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag, imagesU) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode(user.getPassword());
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -36,11 +35,12 @@ public class UsersService implements GlobalInterface<Users> {
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setString(4, hashedPassword);
             preparedStatement.setString(5, user.getRoleUser());
-            preparedStatement.setDate(6, Date.valueOf(user.getDateNaiss()));
+            preparedStatement.setDate(6, user.getDateNaiss() != null ? Date.valueOf(user.getDateNaiss()) : null);
             preparedStatement.setString(7, user.getPhoneNumber());
             preparedStatement.setString(8, user.getStatut());
             preparedStatement.setInt(9, user.getDiamond());
             preparedStatement.setInt(10, user.getDeleteFlag());
+            preparedStatement.setString(11, user.getImagesU());
             preparedStatement.executeUpdate();
             System.out.println("User added successfully!");
         } catch (SQLException e) {
@@ -50,21 +50,26 @@ public class UsersService implements GlobalInterface<Users> {
 
     @Override
     public void update(Users user) {
-        String sql = "UPDATE users SET name = ?, prenom = ?, email = ?, password = ?, roleUser = ?, dateNaiss = ?, phoneNumber = ?, statut = ?, diamond = ?, deleteFlag = ? WHERE id_U = ?";
+        String sql = "UPDATE users SET name = ?, prenom = ?, email = ?, password = ?, roleUser = ?, dateNaiss = ?, phoneNumber = ?, statut = ?, diamond = ?, deleteFlag = ?, imagesU = ? WHERE id_U = ?";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = encoder.encode(user.getPassword());
+        String hashedPassword = user.getPassword() != null ? encoder.encode(user.getPassword()) : null;
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, hashedPassword);
+            if (hashedPassword != null) {
+                preparedStatement.setString(4, hashedPassword);
+            } else {
+                preparedStatement.setNull(4, Types.VARCHAR);
+            }
             preparedStatement.setString(5, user.getRoleUser());
-            preparedStatement.setDate(6, Date.valueOf(user.getDateNaiss()));
+            preparedStatement.setDate(6, user.getDateNaiss() != null ? Date.valueOf(user.getDateNaiss()) : null);
             preparedStatement.setString(7, user.getPhoneNumber());
             preparedStatement.setString(8, user.getStatut());
             preparedStatement.setInt(9, user.getDiamond());
             preparedStatement.setInt(10, user.getDeleteFlag());
-            preparedStatement.setInt(11, user.getId_U());
+            preparedStatement.setString(11, user.getImagesU());
+            preparedStatement.setInt(12, user.getId_U());
             preparedStatement.executeUpdate();
             System.out.println("User updated successfully!");
         } catch (SQLException e) {
@@ -80,7 +85,6 @@ public class UsersService implements GlobalInterface<Users> {
             ps.executeUpdate();
             System.out.println("User deleted successfully!");
         } catch (SQLException e) {
-            e.printStackTrace();
             System.err.println("Error deleting user: " + e.getMessage());
         }
     }
@@ -88,7 +92,7 @@ public class UsersService implements GlobalInterface<Users> {
     @Override
     public List<Users> getAll() {
         List<Users> list = new ArrayList<>();
-        String query = "SELECT id_U, name, prenom, email, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag FROM users";
+        String query = "SELECT id_U, name, prenom, email, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag, imagesU FROM users";
         try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 Users user = new Users(
@@ -98,16 +102,17 @@ public class UsersService implements GlobalInterface<Users> {
                         rs.getString("email"),
                         null,
                         rs.getString("roleUser"),
-                        rs.getDate("dateNaiss").toLocalDate(),
+                        rs.getDate("dateNaiss") != null ? rs.getDate("dateNaiss").toLocalDate() : null,
                         rs.getString("phoneNumber"),
                         rs.getString("statut"),
                         rs.getInt("diamond"),
-                        rs.getInt("deleteFlag")
+                        rs.getInt("deleteFlag"),
+                        rs.getString("imagesU")
                 );
                 list.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error retrieving users: " + e.getMessage());
         }
         return list;
     }
@@ -117,24 +122,26 @@ public class UsersService implements GlobalInterface<Users> {
         String query = "SELECT * FROM users WHERE id_U=?";
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
             pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Users(
-                        rs.getInt("id_U"),
-                        rs.getString("name"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        null,  // Do not include the password
-                        rs.getString("roleUser"),
-                        rs.getDate("dateNaiss").toLocalDate(),
-                        rs.getString("phoneNumber"),
-                        rs.getString("statut"),
-                        rs.getInt("diamond"),
-                        rs.getInt("deleteFlag")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Users(
+                            rs.getInt("id_U"),
+                            rs.getString("name"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            null,
+                            rs.getString("roleUser"),
+                            rs.getDate("dateNaiss") != null ? rs.getDate("dateNaiss").toLocalDate() : null,
+                            rs.getString("phoneNumber"),
+                            rs.getString("statut"),
+                            rs.getInt("diamond"),
+                            rs.getInt("deleteFlag"),
+                            rs.getString("imagesU")
+                    );
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error retrieving user by ID: " + e.getMessage());
         }
         return null;
     }
@@ -143,26 +150,30 @@ public class UsersService implements GlobalInterface<Users> {
         String sql = "SELECT * FROM users WHERE email = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                String hashedPassword = rs.getString("password");
-                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                if (encoder.matches(password, hashedPassword)) {
-                    return new Users(
-                            rs.getInt("id_U"),
-                            rs.getString("name"),
-                            rs.getString("prenom"),
-                            rs.getString("email"),
-                            null, // Password not returned for security
-                            rs.getString("roleUser"),
-                            rs.getDate("dateNaiss").toLocalDate(),
-                            rs.getString("phoneNumber"),
-                            rs.getString("statut"),
-                            rs.getInt("diamond"),
-                            rs.getInt("deleteFlag")
-                    );
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password");
+                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                    if (encoder.matches(password, hashedPassword)) {
+                        return new Users(
+                                rs.getInt("id_U"),
+                                rs.getString("name"),
+                                rs.getString("prenom"),
+                                rs.getString("email"),
+                                null,
+                                rs.getString("roleUser"),
+                                rs.getDate("dateNaiss") != null ? rs.getDate("dateNaiss").toLocalDate() : null,
+                                rs.getString("phoneNumber"),
+                                rs.getString("statut"),
+                                rs.getInt("diamond"),
+                                rs.getInt("deleteFlag"),
+                                rs.getString("imagesU")
+                        );
+                    } else {
+                        System.err.println("Invalid password.");
+                    }
                 } else {
-                    System.out.println("Invalid password.");
+                    System.err.println("Invalid email.");
                 }
             }
         } catch (SQLException e) {
@@ -185,6 +196,5 @@ public class UsersService implements GlobalInterface<Users> {
         }
         return 0;
     }
-
 
 }

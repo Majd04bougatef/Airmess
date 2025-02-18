@@ -73,18 +73,23 @@ public class ExpenseService implements GlobalInterface<Expense> {
     @Override
     public List<Expense> getAll() {
         List<Expense> expenses = new ArrayList<>();
-        String sql = "SELECT * FROM expense";
+        String sql = "SELECT idE, id_U, nameEX, amount, description, category, dateE FROM expense";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                Expense expense = new Expense();
-                expense.setIdE(resultSet.getInt("idE"));
-                expense.setId_U(resultSet.getInt("id_U"));
-                expense.setNameEX(resultSet.getString("nameEX"));
-                expense.setAmount(resultSet.getDouble("amount"));
-                expense.setDescription(resultSet.getString("description"));
-                expense.setCategory(resultSet.getString("category"));
-                expense.setDateE(resultSet.getDate("dateE").toLocalDate());
+                LocalDate dateE = null;
+                if (resultSet.getDate("dateE") != null) {
+                    dateE = resultSet.getDate("dateE").toLocalDate();
+                }
+                Expense expense = new Expense(
+                        resultSet.getInt("idE"),
+                        resultSet.getInt("id_U"),
+                        resultSet.getString("nameEX"),
+                        resultSet.getDouble("amount"),
+                        resultSet.getString("description"),
+                        resultSet.getString("category"),
+                        dateE
+                );
                 expenses.add(expense);
             }
         } catch (SQLException e) {
@@ -117,19 +122,18 @@ public class ExpenseService implements GlobalInterface<Expense> {
         return null;
     }
 
-    public double getExpenseSumByName(String nameEX, int id_U) {
-        String sql = "SELECT SUM(amount) as total FROM expense WHERE nameEX = ? AND id_U = ?";
+    public double getExpenseSumByName(String nameEX) {
+        String sql = "SELECT SUM(amount) as total FROM expense WHERE nameEX = ?";
         double total = 0.0;
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, nameEX);
-            preparedStatement.setInt(2, id_U);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     total = resultSet.getDouble("total");
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error calculating total for expenses with name '" + nameEX + "' and id_U '" + id_U + "': " + e.getMessage());
+            System.err.println("Error calculating total for expenses with name '" + nameEX + "': " + e.getMessage());
         }
         return total;
     }
