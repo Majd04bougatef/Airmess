@@ -54,18 +54,12 @@
                         <Font size="18.0" />
                     </font>
                 </Button>
-            <Button layoutX="29.0" layoutY="553.0" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="41.0" style="-fx-background-color: #db7093; -fx-background-radius: 50;" >
-
-
-
-                <graphic>
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <image>
-                            <Image url="@image/back.png" />
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
+            <Button layoutX="21.0" layoutY="526.0" mnemonicParsing="false" onAction="#back" prefHeight="35.0" prefWidth="54.0" style="-fx-background-color: #db7093; -fx-background-radius: 50;" />
+              <ImageView fitHeight="40.0" fitWidth="54.0" layoutX="21.0" layoutY="524.0">
+                  <image>
+                      <Image url="@image/back.png" />
+                  </image>
+              </ImageView>
             </children>
         </AnchorPane>
     </children>
