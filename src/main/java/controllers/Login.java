@@ -21,6 +21,32 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
+import test.Session;
+
+
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import models.Users;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+
+
+
+
+
+
+
+
+
 public class Login {
 
 
@@ -73,7 +99,7 @@ public class Login {
     }
 
 
-    @FXML
+   /* @FXML
     void identifier(ActionEvent event) {
         // Get user input from text fields
         String email = email_identifier.getText();
@@ -91,19 +117,98 @@ public class Login {
         Users loggedInUser = usersService.login(email, password);
 
         if (loggedInUser != null) {
+
+            Session.getInstance().login(loggedInUser);
+
             showAlert(AlertType.INFORMATION, "Success", "Login Successful",
                     "Welcome, " + loggedInUser.getName() + " " + loggedInUser.getPrenom() + "!");
 
-            // Print login information to console for debugging
-            System.out.println("Login successful!");
-            System.out.println("User ID: " + loggedInUser.getId_U());
-            System.out.println("User Name: " + loggedInUser.getName() + " " + loggedInUser.getPrenom());
+
+            try {
+                // Load the main menu or dashboard
+                Parent mainView = FXMLLoader.load(getClass().getResource("/menu_voyageurs.fxml"));
+                Scene mainScene = new Scene(mainView);
+
+                // Get the current stage
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene
+                currentStage.setScene(mainScene);
+                currentStage.setTitle("Menu Principal");
+                currentStage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(AlertType.ERROR, "Error", "Navigation Error",
+                        "Could not load the main menu: " + e.getMessage());
+            }
+
+
+
 
         } else {
             showAlert(AlertType.ERROR, "Error", "Authentication Failed",
                     "Invalid email or password. Please try again.");
         }
     }
+*/
+
+
+
+
+
+
+
+    @FXML
+    void identifier(ActionEvent event) {
+        String email = email_identifier.getText();
+        String password = mot_isentifier.isVisible() ?
+                mot_isentifier.getText() : passsee.getText();
+
+        // Validate inputs
+        if (email.isEmpty() || password.isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "Authentication Failed",
+                    "Email and password cannot be empty!");
+            return;
+        }
+
+        // Attempt login
+        Users loggedInUser = usersService.login(email, password);
+
+        if (loggedInUser != null) {
+            // Initialize session
+            Session.getInstance().login(loggedInUser);
+
+            try {
+                // Load appropriate view based on user role
+                String viewPath = "/menu_voyageurs.fxml";
+                if ("ADMIN".equals(loggedInUser.getRoleUser())) {
+                    viewPath = "/admin_dashboard.fxml";
+                }
+
+                Parent mainView = FXMLLoader.load(getClass().getResource(viewPath));
+                Scene mainScene = new Scene(mainView);
+
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.setScene(mainScene);
+                currentStage.setTitle(loggedInUser.getRoleUser().equals("ADMIN") ?
+                        "Admin Dashboard" : "Menu Principal");
+                currentStage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(AlertType.ERROR, "Error", "Navigation Error",
+                        "Could not load the main menu: " + e.getMessage());
+            }
+
+        } else {
+            showAlert(AlertType.ERROR, "Error", "Authentication Failed",
+                    "Invalid email or password. Please try again.");
+        }
+    }
+
+
+
 
     @FXML
     void oubliemotpasse(ActionEvent event) {

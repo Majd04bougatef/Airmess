@@ -46,7 +46,7 @@
                       text="Prénom"/>
                 <TextField fx:id="tel_user" layoutX="427.0" layoutY="308.0" prefHeight="35.0" prefWidth="240.0"
                            style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
-                <PasswordField fx:id="password_user" layoutX="124.0" layoutY="446.0" prefHeight="35.0" prefWidth="240.0"
+                <TextField fx:id="password_user" layoutX="124.0" layoutY="446.0" prefHeight="35.0" prefWidth="240.0"
                                style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
                 <TextField fx:id="Email_user" layoutX="125.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0"
                            style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;"/>
