@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -16,7 +17,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="parent" stylesheets="@css/menu_voyageurs.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuVoyageurs">
    <left>
-      <AnchorPane prefHeight="700.0" prefWidth="170.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="700.0" prefWidth="169.0" styleClass="sidebar" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="logo" fitHeight="79.0" fitWidth="76.0" layoutX="52.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="52.0">
                <image>
@@ -116,16 +117,23 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <ImageView fx:id="iconLogout" fitHeight="40.0" fitWidth="55.0" layoutX="70.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@image/menu_voyageurs/logout.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="iconSedeconnecter" fill="WHITE" layoutX="38.0" layoutY="650.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Se déconnecter" wrappingWidth="114.767578125">
+            <Text fx:id="iconSedeconnecter" fill="WHITE" layoutX="38.0" layoutY="650.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="114.767578125">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
+            <Button layoutX="-1.0" layoutY="589.0" mnemonicParsing="false" onAction="#logout" prefHeight="53.0" prefWidth="191.0" style="-fx-background-color: #4292bf;" text=" Se déconnecter" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="20" fitWidth="20">
+                     <image>
+                        <Image url="@image/menu_voyageurs/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </left>
@@ -134,7 +142,7 @@
          <children>
             <HBox prefHeight="59.0" prefWidth="1023.0">
                <children>
-                  <Pane fx:id="pane1" prefHeight="59.0" prefWidth="1071.0" style="-fx-background-color: #f3f3f3;">
+                  <Pane fx:id="pane1" prefHeight="82.0" prefWidth="1020.0" style="-fx-background-color: #f3f3f3;">
                      <children>
                         <HBox layoutX="824.0" layoutY="6.0" prefHeight="47.0" prefWidth="120.0">
                            <children>
@@ -159,7 +167,81 @@
                   </Pane>
                </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1030.0" />
+            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="642.0" prefWidth="1023.0">
+               <children>
+                  <Button layoutX="36.0" layoutY="179.0" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: #4292bf;" text="Acceuil" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/home.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="36.0" layoutY="229.0" mnemonicParsing="false" onAction="#User" style="-fx-background-color: #4292bf;" text="Compte" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/gestion user.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="36.0" layoutY="273.0" mnemonicParsing="false" onAction="#Velo" style="-fx-background-color: #4292bf;" text="Location Vélos" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/gestion transport.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="36.0" layoutY="321.0" mnemonicParsing="false" onAction="#BonPlan" style="-fx-background-color: #4292bf;" text="Bons Plans" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/gestion bonplan.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="36.0" layoutY="373.0" mnemonicParsing="false" onAction="#Offre" style="-fx-background-color: #4292bf;" text="Offres" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/gestion offre.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="36.0" layoutY="420.0" mnemonicParsing="false" onAction="#Socail" style="-fx-background-color: #4292bf;" text="Réseau Sociaux" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/gestion socail media.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+               </children></AnchorPane>
          </children>
       </AnchorPane>
    </center>

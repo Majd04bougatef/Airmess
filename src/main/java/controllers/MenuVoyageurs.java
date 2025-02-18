@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,12 +12,55 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-
-
-import javafx.scene.input.MouseEvent; // Utiliser le bon type d'événement
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import test.Session;
 import java.io.IOException;
 
+
+
 public class MenuVoyageurs {
+
+
+
+
+    @FXML
+    void Home(ActionEvent event) {
+
+    }
+
+    @FXML
+    void Offre(ActionEvent event) {
+
+    }
+
+    @FXML
+    void Socail(ActionEvent event) {
+
+    }
+
+    @FXML
+    void User(ActionEvent event) {
+
+    }
+
+    @FXML
+    void Velo(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void BonPlan(ActionEvent event) {
+
+    }
+
+
+
+
+
 
     @FXML
     private AnchorPane anchorpane1;
@@ -98,6 +142,8 @@ public class MenuVoyageurs {
         iconBonPlan.setOnMouseClicked(this::loadBonplanPage);
         iconOffre.setOnMouseClicked(this::loadOffrePage);
         iconSocailMedia.setOnMouseClicked(this::loadSocialMediaPage);
+        iconLogout.setOnMouseClicked(this::loadSocialMediaPage);
+
     }
 
     private void loadHomePage(MouseEvent event) {
@@ -166,4 +212,13 @@ public class MenuVoyageurs {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void logout(ActionEvent event) {
+
+
+
+    }
+
+
 }

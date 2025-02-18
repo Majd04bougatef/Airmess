@@ -146,7 +146,87 @@ public class UsersService implements GlobalInterface<Users> {
         return null;
     }
 
+
+
+
+
+
+
+
+
+
     public Users login(String email, String password) {
+        String query = "SELECT * FROM users WHERE email = ? AND deleteFlag = 0";
+
+        try (Connection conn = con; // Using your existing connection
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, email);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password");
+                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+                    if (encoder.matches(password, hashedPassword)) {
+                        Users user = new Users();
+                        user.setId_U(rs.getInt("id_U"));
+                        user.setName(rs.getString("name"));
+                        user.setPrenom(rs.getString("prenom"));
+                        user.setEmail(rs.getString("email"));
+                        // Don't set the password in the user object for security
+                        user.setPassword(null);
+                        user.setRoleUser(rs.getString("roleUser"));
+
+                        // Safely handle null date
+                        java.sql.Date dateNaiss = rs.getDate("dateNaiss");
+                        if (dateNaiss != null) {
+                            user.setDateNaiss(dateNaiss.toLocalDate());
+                        }
+
+                        user.setPhoneNumber(rs.getString("phoneNumber"));
+                        user.setStatut(rs.getString("statut"));
+                        user.setDiamond(rs.getInt("diamond"));
+                        user.setDeleteFlag(rs.getInt("deleteFlag"));
+                        user.setImagesU(rs.getString("imagesU"));
+
+                        // Log successful login
+                        System.out.println("Successful login for user: " + email);
+                        return user;
+
+                    } else {
+                        System.err.println("Invalid password for user: " + email);
+                        return null;
+                    }
+                } else {
+                    System.err.println("No user found with email: " + email);
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error during login: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            System.err.println("Unexpected error during login: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*  public Users login(String email, String password) {
         String sql = "SELECT * FROM users WHERE email = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -181,7 +261,7 @@ public class UsersService implements GlobalInterface<Users> {
         }
         return null;
     }
-
+*/
     public int isTaken(String column, String value) {
         String sql = "SELECT COUNT(*) AS count FROM users WHERE " + column + " = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
