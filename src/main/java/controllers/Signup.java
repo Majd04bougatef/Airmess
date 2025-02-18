@@ -62,7 +62,7 @@ public class Signup {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            String destinationPath = "C:/xampp/htdocs/imguser" + file.getName();
+            String destinationPath = "C:/xampp/htdocs/imguser/" + file.getName();
             File destinationFile = new File(destinationPath);
 
             try {
