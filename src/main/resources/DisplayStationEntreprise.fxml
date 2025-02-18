@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="@/css/DisplayStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DisplayStationEntreprise">
+   <children>
+      <Pane layoutX="29.0" layoutY="29.0" prefHeight="582.0" prefWidth="971.0">
+         <children>
+             <TableView fx:id="stationTable" layoutX="29.0" layoutY="14.0" prefHeight="546.0" prefWidth="902.0">
+                 <columns>
+                     <TableColumn fx:id="colNom" prefWidth="95.99996948242188" text="Nom" />
+                     <TableColumn fx:id="colPrixHeure" prefWidth="205.6000213623047" text="Prix/Hr" />
+                     <TableColumn fx:id="colCapacite" minWidth="0.0" prefWidth="214.39996337890625" text="Capacité" />
+                     <TableColumn fx:id="colNbVelo" minWidth="0.0" prefWidth="197.5999755859375" text="Nb Vélos" />
+                     <TableColumn fx:id="colTypeVelo" prefWidth="187.199951171875" text="Type Vélo" />
+                 </columns>
+             </TableView>
+         </children></Pane>
+   </children>
+</AnchorPane>

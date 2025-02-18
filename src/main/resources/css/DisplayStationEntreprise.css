@@ -1,0 +1,119 @@
+/* Style général du TableView */
+.table-view {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #d3d3d3;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+}
+
+/* Style des en-têtes de colonnes */
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #4a90e2, #357abd);
+    -fx-padding: 10px;
+    -fx-border-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Style des lignes */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 5px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+}
+
+/* Style des boutons d'action */
+.button-edit {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+
+.button-delete {
+    -fx-background-color: #e53935;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+
+
+/* Style global pour les Alertes */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 8px;
+    -fx-padding: 20px;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .content {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 15px;
+    -fx-border-radius: 8px;
+}
+
+.dialog-pane .header {
+    -fx-text-fill: #3a3a3a;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #45a049;
+}
+
+.dialog-pane .button:pressed {
+    -fx-background-color: #387037;
+}
+
+.dialog-pane .button-bar {
+    -fx-padding: 10px 0;
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER;
+}
+
+.dialog-pane .label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3a3a3a;
+}
+
+.combo-box {
+    -fx-font-size: 14px;
+    -fx-background-color: #f4f4f4;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-border-color: #ddd;
+}
+
+.combo-box > .list-cell {
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #ccc;
+}
