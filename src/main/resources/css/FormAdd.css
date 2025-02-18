@@ -1,0 +1,70 @@
+
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.text-field {
+    -fx-pref-width: 780px;
+    -fx-padding: 8px;
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 4px;
+}
+
+.submit-button{
+    -fx-background-color: #4196B8;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-min-width: 200px;
+}
+
+.submit-button:hover {
+    -fx-background-color: #357D9B;
+}
+
+.split-menu-button {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 4px;
+    -fx-pref-width: 780px;
+}
+
+.split-menu-button .label {
+    -fx-padding: 8px;
+    -fx-text-fill: #374151;
+}
+
+.split-menu-button .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 0 1;
+}
+
+.split-menu-button .arrow {
+    -fx-background-color: #374151;
+}
+
+.split-menu-button:hover {
+    -fx-border-color: #4196B8;
+}
+
+.split-menu-button:showing {
+    -fx-border-color: #4196B8;
+}
+
+.split-menu-button .menu-item {
+    -fx-padding: 8px;
+    -fx-pref-width: 780px;
+}
+
+.split-menu-button .menu-item:focused {
+    -fx-background-color: #4196B8;
+}
+
+.split-menu-button .menu-item:focused .label {
+    -fx-text-fill: white;
+}
