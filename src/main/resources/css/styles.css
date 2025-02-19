@@ -92,3 +92,8 @@
 .cancel-button:hover {
     -fx-background-color: #e53935; /* Darker red */
 }
+
+.show-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}

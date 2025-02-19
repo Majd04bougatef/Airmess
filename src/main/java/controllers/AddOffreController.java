@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -12,6 +13,7 @@ import services.OffreService;
 
 public class AddOffreController {
 
+    public Label warningLabel;
     @FXML
     private Button bttn;
 
@@ -43,6 +45,12 @@ public class AddOffreController {
     private Text text1;
 
     public void handleAjoutOffre(ActionEvent actionEvent) {
+        if (!validateForm()) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("Veuillez remplir tous les champs.");
+            return;
+        }
+        warningLabel.setVisible(false);
         OffreService offreService = new OffreService();
         Offre offre = new Offre();
         offre.setId_U(1);
@@ -54,5 +62,12 @@ public class AddOffreController {
         offre.setDescription(description.getText());
         offre.setPlace(place.getText());
         offreService.add(offre);
+        //close the form
+        form.getScene().getWindow().hide();
+    }
+
+    private boolean validateForm() {
+        return !prixInitial.getText().isEmpty() && !nouveauPrix.getText().isEmpty() && startDate.getValue() != null && endDate.getValue() != null && !numberLimit.getText().isEmpty() && !description.getText().isEmpty() && !place.getText().isEmpty();
+
     }
 }

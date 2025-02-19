@@ -34,6 +34,12 @@
                         <String fx:value="add-button" />
                     </styleClass>
                 </Button>
+                <Button onAction="#showReservations" text="Show Reservations">
+                    <styleClass>
+                        <String fx:value="button" />
+                        <String fx:value="show-button" />
+                    </styleClass>
+                </Button>
             </HBox>
 
             <!-- Hidden fields for delete confirmation -->

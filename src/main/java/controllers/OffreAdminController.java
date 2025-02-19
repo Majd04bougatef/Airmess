@@ -199,5 +199,32 @@ public class OffreAdminController implements Initializable {
     }
 
     public void cancelUpdate(ActionEvent actionEvent) {
+        // Hide the update fields box
+        updateFieldsBox.setVisible(false);
+        updateFieldsBox.setManaged(false);
+    }
+
+    public void showReservations(ActionEvent actionEvent) {
+        try {
+            // Load the FXML file for the "Reservations" dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservationAdmin.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller for the "Reservations" dialog
+            ReservationAdminController reservationsController = loader.getController();
+
+            // Create a new stage (dialog) for the "Reservations" window
+            Stage stage = new Stage();
+            stage.setTitle("View Reservations");
+            stage.setScene(new Scene(root));
+
+            // Set the current stage as the owner of the new stage (optional, for modality)
+            stage.initOwner(offreListView.getScene().getWindow());
+
+            // Show the dialog and wait for it to close
+            stage.showAndWait();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
