@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane stylesheets="@css/SocialMediaview.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SocialMediaview">
+    <children>
+        <ScrollPane layoutX="50" layoutY="50" prefHeight="400" prefWidth="700">
+            <content>
+                <VBox fx:id="postContainer" layoutX="50" layoutY="50" prefHeight="426.0" prefWidth="700" spacing="10">
+
+                    <!-- Exemple de structure d'un post -->
+                    <VBox spacing="10" styleClass="post-box">
+
+                        <!-- Conteneur du titre et des boutons -->
+                        <HBox spacing="10" styleClass="title-container">
+                            <Label fx:id="postTitle" styleClass="title-label" text="Titre du post" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button fx:id="btnUpdate" onAction="#handleUpdate" styleClass="update-button" text="✏ Modifier" />
+                            <Button fx:id="btnDelete" onAction="#handleDelete" styleClass="delete-button" text="🗑 Supprimer" />
+                        </HBox>
+
+                        <!-- Contenu du post -->
+                        <Label fx:id="postContent" styleClass="content-label" text="Ceci est un exemple de contenu." wrapText="true" />
+
+                        <!-- Image du post -->
+                        <ImageView fx:id="postImage" fitHeight="183.0" fitWidth="190.0" preserveRatio="true" />
+
+                        <!-- Lieu -->
+                        <Label fx:id="postLocation" styleClass="location-label" text="Lieu: Exemple" />
+
+                        <!-- Date de publication -->
+                        <Label fx:id="postDate" styleClass="date-label" text="Date de publication: 01/01/2024" />
+
+                        <HBox alignment="CENTER_RIGHT" spacing="15">
+                            <Button fx:id="btnlike" onAction="#handleLike" styleClass="like-button" text="👍 J'aime" />
+                        </HBox>
+
+                    </VBox>
+
+
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <!-- Bouton Ajouter une publication -->
+        <Button fx:id="btnAjout" layoutX="550.0" layoutY="460.0" onAction="#Ajouterpost" prefHeight="38.0" prefWidth="199.0" styleClass="add-button" text="➕ Ajouter une publication" />
+    </children>
+</AnchorPane>

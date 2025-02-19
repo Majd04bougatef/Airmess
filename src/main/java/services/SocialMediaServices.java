@@ -83,7 +83,7 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
 
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
-                socialMedia.setLike(rs.getInt("like"));
+                socialMedia.setLikee(rs.getInt("likee"));
                 socialMedia.setDislike(rs.getInt("dislike"));
                 socialMedia.setImagemedia(rs.getString("imagemedia"));
                 socialMedias.add(socialMedia);
@@ -113,7 +113,7 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
                 socialMedia.setPublicationDate(rs.getDate("publicationDate"));
                 socialMedia.setLieu(rs.getString("lieu"));
 
-                socialMedia.setLike(rs.getInt("like"));
+                socialMedia.setLikee(rs.getInt("likee"));
                 socialMedia.setDislike(rs.getInt("dislike"));
             }
         } catch (SQLException e) {
@@ -121,4 +121,19 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
         }
         return socialMedia;
     }
+
+    public void updateLikes(SocialMedia post) {
+        String query = "UPDATE socialmedia SET likee = ? WHERE idEB = ?";
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setInt(1, post.getLikee());
+            stmt.setInt(2, post.getIdEB());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }

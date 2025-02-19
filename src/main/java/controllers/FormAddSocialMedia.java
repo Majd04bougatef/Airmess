@@ -14,15 +14,17 @@ import javafx.scene.control.TextField;
 import services.SocialMediaServices;
 import models.SocialMedia;
 import services.UsersService;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 
 import javafx.stage.FileChooser;
 import javafx.scene.image.Image;
-
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
+import java.time.LocalDate;
 
 
 public class FormAddSocialMedia {
@@ -36,8 +38,6 @@ public class FormAddSocialMedia {
     @FXML
     private TextField Titre;
 
-    @FXML
-    private DatePicker publication_date_picker;
 
     @FXML
     private Text text1;
@@ -91,7 +91,7 @@ public class FormAddSocialMedia {
     private void bttnsc() {
         SocialMedia socialMedia = new SocialMedia();
 
-        if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() || publication_date_picker.getValue() == null) {
+        if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() ) {
             showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
             return;
         }
@@ -100,7 +100,7 @@ public class FormAddSocialMedia {
         socialMedia.setTitre(Titre.getText());
         socialMedia.setContenu(contenu.getText());
         socialMedia.setLieu(Lieu.getText());
-        socialMedia.setPublicationDate(java.sql.Date.valueOf(publication_date_picker.getValue()));
+        socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
         socialMedia.setId_U(1);
 
 
@@ -112,6 +112,14 @@ public class FormAddSocialMedia {
         }
         socialMediaServices.add(socialMedia);
         showAlert("Succès", "Publication publiée avec succès !", AlertType.INFORMATION);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SocialMediaview.fxml"));
+            AnchorPane root = loader.load();
+            SocialMediaview socialMediaviewController = loader.getController();
+            socialMediaviewController.refreshPosts();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         clearFields();
     }
 
@@ -129,7 +137,6 @@ public class FormAddSocialMedia {
         Titre.clear();
         contenu.clear();
         Lieu.clear();
-        publication_date_picker.setValue(null);
         image.setImage(null);
         text1.setText("Publication ajoutée avec succès!");
     }
