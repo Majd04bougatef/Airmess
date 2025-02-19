@@ -1,21 +1,16 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import models.Offre;
 import services.OffreService;
 
 public class AddOffreController {
 
     public Label warningLabel;
-    @FXML
-    private Button bttn;
 
     @FXML
     private TextField description;
@@ -41,10 +36,8 @@ public class AddOffreController {
     @FXML
     private DatePicker startDate;
 
-    @FXML
-    private Text text1;
 
-    public void handleAjoutOffre(ActionEvent actionEvent) {
+    public void handleAjoutOffre() {
         if (!validateForm()) {
             return;
         }
@@ -90,7 +83,12 @@ public class AddOffreController {
             warningLabel.setText("Les prix doivent être positifs.");
             return false;
         }
-        if (startDate.getValue().isAfter(endDate.getValue())) {
+        if (Double.parseDouble(prixInitial.getText())<Double.parseDouble(nouveauPrix.getText())) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("Les prix Initial doit etre supérieur.");
+            return false;
+        }
+            if (startDate.getValue().isAfter(endDate.getValue())) {
             warningLabel.setVisible(true);
             warningLabel.setText("La date de début doit être avant la date de fin.");
             return false;
