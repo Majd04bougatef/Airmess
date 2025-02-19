@@ -123,6 +123,9 @@ public class FormAddSocialMedia {
         clearFields();
     }
 
+    public void setSocialMediaViewController(SocialMediaview controller) {
+    }
+
 
     private void showAlert(String title, String message, AlertType alertType) {
         Alert alert = new Alert(alertType);

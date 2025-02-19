@@ -127,11 +127,19 @@ public abstract class SocialMediaServices implements GlobalInterface<SocialMedia
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setInt(1, post.getLikee());
             stmt.setInt(2, post.getIdEB());
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Mise à jour réussie pour l'ID : " + post.getIdEB());
+            } else {
+                System.out.println("Erreur: la mise à jour a échoué pour l'ID : " + post.getIdEB());
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
 
