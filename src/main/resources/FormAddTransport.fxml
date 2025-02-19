@@ -7,11 +7,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="592.0" prefWidth="1030.0" stylesheets="@css/FormAddStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FormAddTransport">
    <children>
       <Pane fx:id="form" layoutX="43.0" layoutY="2.0" prefHeight="558.0" prefWidth="940.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;" AnchorPane.leftAnchor="50.0">
          <children>
+            <TextField fx:id="Longitude" layoutX="437.0" layoutY="135.0" />
             <Text fx:id="text1" layoutX="66.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter une station" wrappingWidth="410.13671875">
                <font>
                   <Font name="Arial Black" size="23.0" />
@@ -19,31 +21,27 @@
             </Text>
 
             <Text fx:id="textNom" layoutX="66.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la station" wrappingWidth="130.70703125" />
-            <TextField fx:id="Nom" layoutX="66.0" layoutY="124.0" prefHeight="35.0" prefWidth="774.0" promptText="Entrez un nom" />
+            <TextField fx:id="Nom" layoutX="66.0" layoutY="124.0" prefHeight="35.0" prefWidth="341.0" promptText="Entrez un nom" />
 
-            <Text fx:id="textLatitude" layoutX="66.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Latitude" wrappingWidth="87.70703125" />
-            <TextField fx:id="Latitude" layoutX="66.0" layoutY="205.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la latitude" />
+            <Text fx:id="textCapacite" layoutX="66.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
+            <TextField fx:id="Capacite" layoutX="66.0" layoutY="269.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
 
-            <Text fx:id="textLongitude" layoutX="474.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Longitude" wrappingWidth="87.70703125" />
-            <TextField fx:id="Longitude" layoutX="474.0" layoutY="205.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez la longitude" />
+            <Text fx:id="textNbVelo" layoutX="66.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
+            <TextField fx:id="NbVelo" layoutX="66.0" layoutY="195.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
 
-            <Text fx:id="textCapacite" layoutX="66.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
-            <TextField fx:id="Capacite" layoutX="66.0" layoutY="291.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
-
-            <Text fx:id="textNbVelo" layoutX="474.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
-            <TextField fx:id="NbVelo" layoutX="474.0" layoutY="291.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
-
-            <Text fx:id="textTypeVelo" layoutX="66.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de vélo" wrappingWidth="96.70703125" />
-            <ComboBox fx:id="TypeVelo" layoutX="66.0" layoutY="380.0" prefHeight="35.0" prefWidth="774.0" promptText="Typer Velo">
+            <Text fx:id="textTypeVelo" layoutX="66.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de vélo" wrappingWidth="96.70703125" />
+            <ComboBox fx:id="TypeVelo" layoutX="66.0" layoutY="343.0" prefHeight="37.0" prefWidth="300.0" promptText="Typer Velo">
                <items>
 
                </items>
             </ComboBox>
 
-            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="454.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
-            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="469.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
+            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
+            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="422.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
 
-            <Button layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#btnAjoutTranport" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Ajouter" />
+            <Button layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#btnAjoutTranport" prefHeight="37.0" prefWidth="859.0" styleClass="submit-button" text="Ajouter" />
+            <TextField fx:id="Latitude" layoutX="529.0" layoutY="229.0" />
+            <WebView fx:id="mapView" layoutX="412.0" layoutY="72.0" prefHeight="380.0" prefWidth="513.0" />
          </children>
       </Pane>
    </children>

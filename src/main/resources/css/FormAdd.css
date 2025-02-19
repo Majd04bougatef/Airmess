@@ -30,7 +30,7 @@
     -fx-background-color: white;
     -fx-border-color: #e5e7eb;
     -fx-border-radius: 4px;
-    -fx-pref-width: 780px;
+    -fx-pref-width: 400px;
 }
 
 .split-menu-button .label {

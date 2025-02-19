@@ -1,29 +1,21 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
+
+import javafx.scene.web.WebView;
 import models.station;
+import netscape.javascript.JSObject;
 import services.StationService;
 
-import java.io.IOException;
+import javafx.scene.web.WebEngine;
 
-
-public class FormAddTransport {
+import java.net.URL;public class FormAddTransport {
 
     @FXML
     private TextField Capacite;
-
-    @FXML
-    private TextField Latitude;
-
-    @FXML
-    private TextField Longitude;
 
     @FXML
     private TextField NbVelo;
@@ -36,89 +28,103 @@ public class FormAddTransport {
 
     @FXML
     private ComboBox<String> TypeVelo;
+
+    @FXML
+    private TextField Latitude;
+
+    @FXML
+    private TextField Longitude;
+
+    @FXML
+    private WebView mapView;
+
+    private double lat = 51.1;
+    private double lng = -0.3;
+
     public void initialize() {
         if (TypeVelo != null) {
-            TypeVelo.getItems().addAll("velo urbain", "velo de route", "velo electrique");
+            TypeVelo.getItems().addAll("Vélo urbain", "Vélo de route", "Vélo électrique");
+        }
+
+        WebEngine webEngine = mapView.getEngine();
+        URL url = getClass().getResource("/html/map.html");
+        if (url != null) {
+            webEngine.load(url.toExternalForm());
+
+            webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    JSObject window = (JSObject) webEngine.executeScript("window");
+                    window.setMember("javaConnector", new JavaConnector());
+                }
+            });
         }
     }
 
-    @FXML
-    private Pane form;
-
-    @FXML
-    private Text text1;
-
-    @FXML
-    private Text textCapacite;
-
-    @FXML
-    private Text textLatitude;
-
-    @FXML
-    private Text textLongitude;
-
-    @FXML
-    private Text textNbVelo;
-
-    @FXML
-    private Text textNom;
-
-    @FXML
-    private Text textPrixHeure;
-
-    @FXML
-    private Text textTypeVelo;
+    public class JavaConnector {
+        public void receiveCoordinates(double latitude, double longitude) {
+            Platform.runLater(() -> {
+                Latitude.setText(String.valueOf(latitude));
+                Longitude.setText(String.valueOf(longitude));
+            });
+        }
+    }
 
 
+    // Méthode d'action du bouton "Ajouter"
     public void btnAjoutTranport(ActionEvent actionEvent) {
-
         try {
+            // Récupérer les valeurs des champs de texte
             String nom = Nom.getText();
-            double latitude = Double.parseDouble(Latitude.getText());
-            double longitude = Double.parseDouble(Longitude.getText());
             int capacite = Integer.parseInt(Capacite.getText());
             int nbVelo = Integer.parseInt(NbVelo.getText());
             String typeVelo = TypeVelo.getValue();
             double prixHeure = Double.parseDouble(PrixHeure.getText());
 
-            StationService st = new StationService() {};
-            station newStation = new station(2, nom, latitude, longitude, prixHeure, capacite, nbVelo, typeVelo);
+            // Convertir les valeurs de Latitude et Longitude
+            lat = Double.parseDouble(Latitude.getText());
+            lng = Double.parseDouble(Longitude.getText());
 
-            st.add(newStation);
+            // Vérifier si les coordonnées sont valides
+            if (lat == 0 || lng == 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur de saisie");
+                alert.setHeaderText(null);
+                alert.setContentText("Veuillez sélectionner un emplacement sur la carte.");
+                alert.showAndWait();
+                return;
+            }
 
+            // Créer un nouvel objet Station
+            station newStation = new station(2, nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo);
+
+            // Ajouter la station à la base de données (via le service)
+            StationService stService = new StationService(){};
+            stService.add(newStation);
+
+            // Afficher une alerte de succès
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
             alert.setHeaderText(null);
-            alert.setContentText(" La station a été ajoutée avec succès !");
-
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("/css/alert-style.css").toExternalForm());
-            dialogPane.getStyleClass().add("dialog-pane");
-
+            alert.setContentText("La station a été ajoutée avec succès !");
             alert.showAndWait();
 
+            // Réinitialiser les champs
             Nom.clear();
-            Latitude.clear();
-            Longitude.clear();
             Capacite.clear();
             NbVelo.clear();
             PrixHeure.clear();
             TypeVelo.getSelectionModel().clearSelection();
+            Latitude.clear();
+            Longitude.clear();
+            lat = 0;
+            lng = 0;
 
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de saisie");
             alert.setHeaderText(null);
-            alert.setContentText(" Veuillez entrer des valeurs valides pour les champs numériques.");
-
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("/css/alert-style.css").toExternalForm());
-            dialogPane.getStyleClass().add("dialog-pane");
-
+            alert.setContentText("Veuillez entrer des valeurs valides pour les champs numériques.");
             alert.showAndWait();
         }
     }
-
-
-
 }

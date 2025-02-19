@@ -114,7 +114,7 @@ public class MenuVoyageurs {
     @FXML
     void Velo(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddTransport.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayStationVoyageurs.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
