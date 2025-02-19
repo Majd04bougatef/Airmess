@@ -21,7 +21,6 @@ import javafx.scene.text.Text;
 
 public class MenuEntreprise {
 
-    public VBox dropdownVeloOptions;
     @FXML
     private AnchorPane anchorpane1;
 
@@ -29,28 +28,7 @@ public class MenuEntreprise {
     private AnchorPane centralAnocherPane;
 
     @FXML
-    private ImageView iconBonPlan;
-
-    @FXML
-    private ImageView iconHome;
-
-    @FXML
     private ImageView iconLogout;
-
-    @FXML
-    private ImageView iconOffre;
-
-    @FXML
-    private Text iconSedeconnecter;
-
-    @FXML
-    private ImageView iconSocailMedia;
-
-    @FXML
-    private ImageView iconTransport;
-
-    @FXML
-    private ImageView iconUser;
 
     @FXML
     private Circle imageUser;
@@ -74,31 +52,7 @@ public class MenuEntreprise {
     private Separator separtor1;
 
     @FXML
-    private Text textIconBonPlan;
-
-    @FXML
-    private Text textIconHome;
-
-    @FXML
-    private Text textIconOffre;
-
-    @FXML
-    private Text textIconSocail;
-
-    @FXML
-    private Text textIconUser;
-
-    @FXML
-    private Text textIconVelo;
-
-    @FXML
     private VBox vboxmenu_voyageurs;
-
-    @FXML
-    private SplitMenuButton menbtn2;
-
-    @FXML
-    private MenuButton menubtn;
 
 
     public void Home(ActionEvent actionEvent) {
@@ -109,7 +63,7 @@ public class MenuEntreprise {
 
     public void Velo(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayStationEntreprise.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/widgetStationEntreprise.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
@@ -129,35 +83,5 @@ public class MenuEntreprise {
 
     public void logout(ActionEvent actionEvent) {
 
-    }
-
-    public void navigateToAdd(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddTransport.fxml"));
-            Parent userPage = loader.load();
-
-            centralAnocherPane.getChildren().setAll(userPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void navigateToDisplay(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DisplayStationEntreprise.fxml"));
-            Parent userPage = loader.load();
-
-            centralAnocherPane.getChildren().setAll(userPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showMenu(MouseEvent event) {
-        menubtn.show();
-    }
-
-    public void hideMenu(MouseEvent event) {
-        menubtn.hide();
     }
 }

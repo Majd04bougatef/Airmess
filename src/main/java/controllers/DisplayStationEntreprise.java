@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import models.station;
 import services.StationService;
@@ -30,6 +32,9 @@ public class DisplayStationEntreprise implements Initializable {
 
     @FXML
     private TableColumn<station, Double> colPrixHeure;
+
+    @FXML
+    private TableColumn<station,Void> colAction;
 
     @FXML
     private TableColumn<station, String> colTypeVelo;
@@ -64,9 +69,48 @@ public class DisplayStationEntreprise implements Initializable {
         colNbVelo.setCellValueFactory(new PropertyValueFactory<>("nbVelo"));
         colTypeVelo.setCellValueFactory(new PropertyValueFactory<>("typeVelo"));
 
+        // Ajouter une icône dans la colonne Action
+        colAction.setCellFactory(param -> new TableCell<>() {
+            private final ImageView iconView = new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/DisplayTransportEntreprise/supprimer.png")))
+            );
+
+            {
+                iconView.setFitWidth(20);  // Taille de l'icône
+                iconView.setFitHeight(20);
+
+            }
+
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(iconView);
+                }
+            }
+        });
 
         stationTable.setItems(observableList);
     }
+
+    private void showStationDetails(station selectedStation) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Détails de la Station");
+        alert.setHeaderText("Informations de la station : " + selectedStation.getNom());
+
+        String details = "🚲 Nom : " + selectedStation.getNom() +
+                "\n💰 Prix/Heure : " + selectedStation.getPrixheure() + " €" +
+                "\n🏠 Capacité : " + selectedStation.getCapacite() +
+                "\n🚴 Nombre de vélos : " + selectedStation.getNbVelo() +
+                "\n🔧 Type de vélo : " + selectedStation.getTypeVelo();
+
+        alert.setContentText(details);
+        alert.showAndWait();
+    }
+
     private void showEditDialog(station selectedStation) {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

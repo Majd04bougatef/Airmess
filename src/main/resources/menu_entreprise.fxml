@@ -2,8 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -63,19 +61,18 @@
                             <Insets top="10.0" />
                         </VBox.margin>
                     </Button>
-                  <MenuButton fx:id="menubtn" mnemonicParsing="false" onMouseEntered="#showMenu" onMousePressed="#hideMenu" prefHeight="56.0" prefWidth="235.0" styleClass="menu-button" text="Station" textFill="WHITE">
-                      <items>
-                          <MenuItem mnemonicParsing="false" onAction="#navigateToAdd" styleClass="menu-item" text="Ajouter Station" />
-                          <MenuItem mnemonicParsing="false" onAction="#navigateToDisplay" styleClass="menu-item" text="Afficher Station" />
-                      </items>
+                  <Button mnemonicParsing="false" onAction="#Velo" style="-fx-background-color: #4292bf;" text="Station" textFill="WHITE">
                      <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20" fitWidth="20">
                            <image>
-                              <Image url="@image/menu_voyageurs/gestion%20transport.png" />
+                              <Image url="@image/menu_voyageurs/gestion transport.png" />
                            </image>
                         </ImageView>
                      </graphic>
-                  </MenuButton>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
 
 
                     <Button mnemonicParsing="false" onAction="#BonPlan" style="-fx-background-color: #4292bf;" text="Bons Plans" textFill="WHITE">
