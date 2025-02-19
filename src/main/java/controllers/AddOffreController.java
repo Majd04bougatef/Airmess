@@ -46,8 +46,6 @@ public class AddOffreController {
 
     public void handleAjoutOffre(ActionEvent actionEvent) {
         if (!validateForm()) {
-            warningLabel.setVisible(true);
-            warningLabel.setText("Veuillez remplir tous les champs.");
             return;
         }
         warningLabel.setVisible(false);
@@ -67,7 +65,42 @@ public class AddOffreController {
     }
 
     private boolean validateForm() {
-        return !prixInitial.getText().isEmpty() && !nouveauPrix.getText().isEmpty() && startDate.getValue() != null && endDate.getValue() != null && !numberLimit.getText().isEmpty() && !description.getText().isEmpty() && !place.getText().isEmpty();
+        if( prixInitial.getText().isEmpty()
+                || nouveauPrix.getText().isEmpty()
+                || startDate.getValue() == null
+                || endDate.getValue() == null
+                || numberLimit.getText().isEmpty()
+                || description.getText().isEmpty()
+                || place.getText().isEmpty()){
+            warningLabel.setVisible(true);
+            warningLabel.setText("Veuillez remplir tous les champs.");
+            return false;
+        }
+        try {
+            Double.parseDouble(prixInitial.getText());
+            Double.parseDouble(nouveauPrix.getText());
+            Integer.parseInt(numberLimit.getText());
+        } catch (NumberFormatException e) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("Les champs prix et nombre de places doivent être des nombres.");
+            return false;
+        }
+        if (Double.parseDouble(prixInitial.getText()) < 0 || Double.parseDouble(nouveauPrix.getText()) < 0) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("Les prix doivent être positifs.");
+            return false;
+        }
+        if (startDate.getValue().isAfter(endDate.getValue())) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("La date de début doit être avant la date de fin.");
+            return false;
+        }
+        if (Integer.parseInt(numberLimit.getText()) < 0) {
+            warningLabel.setVisible(true);
+            warningLabel.setText("Le nombre de places doit être positif.");
+            return false;
+        }
+        return true;
 
     }
 }
