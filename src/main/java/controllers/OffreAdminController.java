@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OffreAdminController implements Initializable {
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     public VBox deleteConfirmationBox;
     public TextField confirmationTextField;
@@ -68,13 +70,14 @@ public class OffreAdminController implements Initializable {
     }
 
     private String formatOffreDisplay(Offre offre) {
+
         return String.format(
                 "Description: %s\nPrix: %.2f -> %.2f\nDate :du %s au %s\nLieu: %s\nnombre de place disponible: %d",
                 offre.getDescription(),
                 offre.getPriceInit(),
                 offre.getPriceAfter(),
-                offre.getStartDate(),
-                offre.getEndDate(),
+                LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER),
+                LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER),
                 offre.getPlace(),
                 offre.getNumberLimit()
         );
