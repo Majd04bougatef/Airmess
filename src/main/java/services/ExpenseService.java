@@ -25,7 +25,7 @@ public class ExpenseService implements GlobalInterface<Expense> {
 
     @Override
     public void add(Expense expense) {
-        String sql = "INSERT INTO expense (id_U, nameEX, amount, description, category, dateE) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO expense (id_U, nameEX, amount, description, category, dateE,Imagedepense) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, expense.getId_U());
             preparedStatement.setString(2, expense.getNameEX());
@@ -33,6 +33,7 @@ public class ExpenseService implements GlobalInterface<Expense> {
             preparedStatement.setString(4, expense.getDescription());
             preparedStatement.setString(5, expense.getCategory());
             preparedStatement.setDate(6, Date.valueOf(expense.getDateE()));
+            preparedStatement.setString(7, expense.getImagedepense());
             preparedStatement.executeUpdate();
             System.out.println("Expense added successfully!");
         } catch (SQLException e) {
@@ -42,7 +43,7 @@ public class ExpenseService implements GlobalInterface<Expense> {
 
     @Override
     public void update(Expense expense) {
-        String sql = "UPDATE expense SET id_U = ?, nameEX = ?, amount = ?, description = ?, category = ?, dateE = ? WHERE idE = ?";
+        String sql = "UPDATE expense SET id_U = ?, nameEX = ?, amount = ?, description = ?, category = ?, dateE = ? , Imagedepense = ? WHERE idE = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, expense.getId_U());
             preparedStatement.setString(2, expense.getNameEX());
@@ -50,7 +51,8 @@ public class ExpenseService implements GlobalInterface<Expense> {
             preparedStatement.setString(4, expense.getDescription());
             preparedStatement.setString(5, expense.getCategory());
             preparedStatement.setDate(6, Date.valueOf(expense.getDateE()));
-            preparedStatement.setInt(7, expense.getIdE());
+            preparedStatement.setString(7, expense.getImagedepense());
+            preparedStatement.setInt(8, expense.getIdE());
             preparedStatement.executeUpdate();
             System.out.println("Expense updated successfully!");
         } catch (SQLException e) {
@@ -73,7 +75,7 @@ public class ExpenseService implements GlobalInterface<Expense> {
     @Override
     public List<Expense> getAll() {
         List<Expense> expenses = new ArrayList<>();
-        String sql = "SELECT idE, id_U, nameEX, amount, description, category, dateE FROM expense";
+        String sql = "SELECT idE, id_U, nameEX, amount, description, category, dateE, Imagedepense FROM expense";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -88,7 +90,8 @@ public class ExpenseService implements GlobalInterface<Expense> {
                         resultSet.getDouble("amount"),
                         resultSet.getString("description"),
                         resultSet.getString("category"),
-                        dateE
+                        dateE,
+                        resultSet.getString("Imagedepense")
                 );
                 expenses.add(expense);
             }
@@ -113,6 +116,7 @@ public class ExpenseService implements GlobalInterface<Expense> {
                     expense.setDescription(resultSet.getString("description"));
                     expense.setCategory(resultSet.getString("category"));
                     expense.setDateE(resultSet.getDate("dateE").toLocalDate());
+                    expense.setImagedepense(resultSet.getString("Imagedepense"));
                     return expense;
                 }
             }

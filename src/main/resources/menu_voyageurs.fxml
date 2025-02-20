@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -60,6 +59,18 @@
                      <VBox.margin>
                         <Insets left="5.0" top="10.0" />
                      </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#depense" style="-fx-background-color: #4292bf;" text="dépense" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/budget.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#Velo" style="-fx-background-color: #4292bf;" text="Location Vélos" textFill="WHITE">
                      <graphic>
@@ -158,7 +169,7 @@
                      <children>
                         <HBox layoutX="824.0" layoutY="6.0" prefHeight="47.0" prefWidth="120.0">
                            <children>
-                              <Text fill="#807d7d" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de l'utilsateur">
+                              <Text fx:id="nameuser" fill="#807d7d" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="116.80010986328125">
                                  <HBox.margin>
                                     <Insets right="10.0" top="12.0" />
                                  </HBox.margin>
@@ -166,7 +177,6 @@
                                     <Font size="16.0" />
                                  </font>
                               </Text>
-                              <Circle fx:id="imageUser" fill="WHITE" radius="22.0" stroke="#c1c1c1" strokeType="INSIDE" />
                            </children>
                         </HBox>
                         <TextField fx:id="rechercheMenu_Voyageurs" layoutX="225.0" layoutY="18.0" prefHeight="25.0" prefWidth="202.0" promptText="Recherche" />
@@ -175,11 +185,17 @@
                               <Image url="@image/menu_voyageurs/recherche.png" />
                            </image>
                         </ImageView>
+                        <Button layoutX="921.0" mnemonicParsing="false" onAction="#compt" prefHeight="58.0" prefWidth="100.0" style="-fx-background-color: whi;">
+                           <graphic>
+                              <ImageView fx:id="fotouser" fitHeight="58.0" fitWidth="100.0" layoutX="852.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Button>
                      </children>
                   </Pane>
                </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="642.0" prefWidth="1023.0" />
+            <AnchorPane fx:id="centralAnocherPane" layoutY="43.0" prefHeight="642.0" prefWidth="1023.0">
+              </AnchorPane>
          </children>
       </AnchorPane>
    </center>
