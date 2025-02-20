@@ -1,0 +1,22 @@
+.expense-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 3);
+    -fx-background-radius: 10;
+    -fx-min-width: 300;
+    -fx-max-width: 300;
+}
+
+.expense-name {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.expense-amount {
+    -fx-font-size: 16;
+    -fx-text-fill: #db7093;
+}
+
+.expense-date {
+    -fx-font-size: 14;
+    -fx-text-fill: #666666;
+}

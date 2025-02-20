@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import test.Session;
 import models.Users;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,6 +50,7 @@ public class Detailuser implements Initializable {
         this.centralAnocherPane = centralAnocherPane;
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Load user data into UI components
@@ -68,11 +70,31 @@ public class Detailuser implements Initializable {
 
             if (currentUser.getImagesU() != null && !currentUser.getImagesU().isEmpty()) {
                 try {
-                    Image userImage = new Image(currentUser.getImagesU());
+                    String imagePath = currentUser.getImagesU();
+                    System.out.println("User Image Path: " + imagePath);
+
+                    Image userImage;
+                    if (imagePath.startsWith("http") || imagePath.startsWith("https")) {
+                        // Load from a URL
+                        userImage = new Image(imagePath, true);
+                    } else {
+                        // Load from a local file
+                        File file = new File(imagePath);
+                        if (file.exists()) {
+                            userImage = new Image(file.toURI().toString());
+                        } else {
+                            System.err.println("Image file not found: " + imagePath);
+                            return; // Exit if image not found
+                        }
+                    }
+
                     imguser.setImage(userImage);
                 } catch (Exception e) {
                     System.err.println("Error loading user image: " + e.getMessage());
+                    e.printStackTrace();
                 }
+            } else {
+                System.err.println("No image path provided for user.");
             }
         } else {
             System.err.println("No user found in session");

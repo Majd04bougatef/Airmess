@@ -2,14 +2,11 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -26,9 +23,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 
-
 public class Updateuser implements Initializable {
-
 
     @FXML
     private DatePicker modifier_dateN_user;
@@ -45,7 +40,12 @@ public class Updateuser implements Initializable {
     @FXML
     private ComboBox<String> modifier_type_user;
 
+    @FXML
+    private ImageView modifierfoto;
 
+    private UsersService ps = new UsersService();
+
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize ComboBox items
         if (modifier_type_user != null) {
@@ -75,28 +75,30 @@ public class Updateuser implements Initializable {
             // Set profile image
             if (currentUser.getImagesU() != null && !currentUser.getImagesU().isEmpty()) {
                 try {
-                    Image userImage = new Image(currentUser.getImagesU());
-                    modifierfoto.setImage(userImage);
-                    modifierfoto.setFitWidth(260);
-                    modifierfoto.setFitHeight(310);
-                    modifierfoto.setPreserveRatio(true);
+                    File imageFile = new File(currentUser.getImagesU());
+                    if (imageFile.exists()) {
+                        Image userImage = new Image("file:" + imageFile.getAbsolutePath());
+                        modifierfoto.setImage(userImage);
+                        modifierfoto.setFitWidth(260);
+                        modifierfoto.setFitHeight(310);
+                        modifierfoto.setPreserveRatio(true);
+                    } else {
+                        System.err.println("Le fichier image n'existe pas à l'emplacement spécifié.");
+                    }
                 } catch (Exception e) {
-                    System.err.println("Error loading user image: " + e.getMessage());
+                    System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
                 }
             }
         } else {
-            System.err.println("No user found in session");
+            System.err.println("Aucun utilisateur trouvé dans la session");
         }
     }
-
-    @FXML
-    private ImageView modifierfoto;
 
     @FXML
     void modifierfoto(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Fichiers Image", "*.png", "*.jpg", "*.jpeg")
         );
 
         File file = fileChooser.showOpenDialog(null);
@@ -108,15 +110,12 @@ public class Updateuser implements Initializable {
                 Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 Image image = new Image(destinationFile.toURI().toString());
                 modifierfoto.setImage(image);
-                System.out.println("Image path in project: " + destinationFile.getAbsolutePath());
+                System.out.println("Image enregistrée à : " + destinationFile.getAbsolutePath());
             } catch (IOException e) {
-                System.out.println("Error saving image to project: " + e.getMessage());
+                System.out.println("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
         }
     }
-
-    private UsersService ps = new UsersService();
-
 
     @FXML
     void modifierinfo(ActionEvent event) {
@@ -138,16 +137,11 @@ public class Updateuser implements Initializable {
             }
 
             // Call update method from service
-            UsersService userService = new UsersService();
-            userService.update(currentUser);
+            ps.update(currentUser);
 
-            System.out.println("User information updated successfully!");
+            System.out.println("Informations utilisateur mises à jour avec succès !");
         } else {
-            System.err.println("No user found in session");
+            System.err.println("Aucun utilisateur trouvé dans la session");
         }
-
-
     }
-
-
 }

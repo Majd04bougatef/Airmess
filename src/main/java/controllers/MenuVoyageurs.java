@@ -19,6 +19,7 @@ import test.Session;
 import javafx.scene.image.Image;
 
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -216,14 +217,24 @@ public class MenuVoyageurs {
         }
 
         if (session.getCurrentUser() != null && session.getCurrentUser().getImagesU() != null) {
-            Image userImage = new Image(session.getCurrentUser().getImagesU());
-            fotouser.setImage(userImage);
+            try {
+                File imageFile = new File(session.getCurrentUser().getImagesU());
+                if (imageFile.exists()) {
+                    Image userImage = new Image(imageFile.toURI().toString()); // Convert to valid URL
+                    fotouser.setImage(userImage);
 
-            fotouser.setFitWidth(100);
-            fotouser.setFitHeight(58);
-            fotouser.setPreserveRatio(true);
+                    fotouser.setFitWidth(100);
+                    fotouser.setFitHeight(58);
+                    fotouser.setPreserveRatio(true);
+                } else {
+                    System.out.println("Image file not found: " + imageFile.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
 
 }
