@@ -41,8 +41,8 @@
 
                         <HBox alignment="CENTER_RIGHT" spacing="15">
                             <Button fx:id="btnlike" onAction="#handleLike" styleClass="like-button" text="👍 J'aime" />
-                            <Button fx:id="btnComment" onAction="#handleComment" styleClass="comment-button"
-                                    text="💬 Commenter" />
+                            <Button fx:id="btnComment" onAction="#handleComment" styleClass="comment-button" text="💬 Commenter" />
+
 
                         </HBox>
                         <VBox fx:id="commentSection" spacing="10" visible="true">
