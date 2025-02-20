@@ -100,7 +100,6 @@ public class Login {
             Session.getInstance().login(loggedInUser);
 
             try {
-                // Load appropriate view based on user role
                 String viewPath = "/menu_voyageurs.fxml";
                 if ("ADMIN".equals(loggedInUser.getRoleUser())) {
                     viewPath = "/admin_dashboard.fxml";

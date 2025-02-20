@@ -18,6 +18,10 @@ public class WidgetStationVoyageurs {
         laodPage("/DisplayStationVoyageurs.fxml");
     }
 
+    public void MesReservation(ActionEvent actionEvent) {
+        laodPage("/MesReservationTransportVoyageurs.fxml");
+    }
+
     private void laodPage(String s) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(s));
@@ -29,6 +33,7 @@ public class WidgetStationVoyageurs {
             System.out.println("Erreur de chargement du FXML : " + s);
         }
     }
+
 
 
 }

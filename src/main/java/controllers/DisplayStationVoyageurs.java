@@ -17,8 +17,7 @@ public class DisplayStationVoyageurs {
     @FXML
     private VBox cardsContainer;
 
-    @FXML
-    private ScrollPane mainScrollPane; // Ajout de l'accès au ScrollPane
+
 
     public void initialize() {
         StationService service = new StationService(){};
@@ -52,21 +51,6 @@ public class DisplayStationVoyageurs {
         }
     }
 
-    // Méthode pour charger la vue de réservation
-    public void loadReservationView(station st) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservationStationVoyageurs.fxml"));
-            Parent reservationView = loader.load();
-
-            ReservationController controller = loader.getController();
-            controller.setStation(st);
-
-            mainScrollPane.setContent(reservationView);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static DisplayStationVoyageurs instance;
 
 
@@ -76,10 +60,6 @@ public class DisplayStationVoyageurs {
 
     public static DisplayStationVoyageurs getInstance() {
         return instance;
-    }
-
-    public void setScrollContent(Parent content) {
-        mainScrollPane.setContent(content);
     }
 
 }

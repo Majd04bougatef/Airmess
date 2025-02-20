@@ -12,9 +12,11 @@
 <AnchorPane prefHeight="300.0" prefWidth="184.0" stylesheets="css/cardStation.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CardStation">
 
     <children>
-        <VBox fx:id="vboxx" layoutX="-1.0" layoutY="-2.0" prefHeight="300.0" prefWidth="192.0" styleClass="card"> <!-- Ajouter la classe card ici -->
+        <VBox fx:id="vboxx" layoutX="-1.0" layoutY="-2.0" prefHeight="300.0" prefWidth="192.0" styleClass="card">
             <children>
                 <ImageView fx:id="image" fitHeight="117.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true" />
+                <Text fx:id="idStation" text="ID de la station" opacity="0" visible="false"/>
+
                 <Text fx:id="nom" text="Nom de la station">
                     <VBox.margin>
                         <Insets bottom="5.0" left="10.0" />

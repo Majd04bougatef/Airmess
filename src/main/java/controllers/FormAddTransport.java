@@ -90,7 +90,8 @@ import java.net.URL;public class FormAddTransport {
                 return;
             }
 
-            station newStation = new station(2, nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo);
+            System.out.println("test") ;
+            station newStation = new station(2, nom, lat, lng, prixHeure,  nbVelo,capacite, typeVelo);
 
             StationService stService = new StationService(){};
             stService.add(newStation);
@@ -100,7 +101,7 @@ import java.net.URL;public class FormAddTransport {
             alert.setHeaderText(null);
             alert.setContentText("La station a été ajoutée avec succès !");
             alert.showAndWait();
-
+            System.out.println("test2") ;
             Nom.clear();
             Capacite.clear();
             NbVelo.clear();
@@ -110,6 +111,7 @@ import java.net.URL;public class FormAddTransport {
             Longitude.clear();
             lat = 0;
             lng = 0;
+            System.out.println("test 3") ;
 
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

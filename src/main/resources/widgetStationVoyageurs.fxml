@@ -14,7 +14,7 @@
                <HBox.margin>
                   <Insets left="350.0" right="20.0" top="15.0" />
                </HBox.margin></Button>
-            <Button mnemonicParsing="false" text="Button">
+            <Button mnemonicParsing="false" text="Mes Réservations" onAction="#MesReservation">
                <HBox.margin>
                   <Insets left="200.0" top="15.0" />
                </HBox.margin></Button>
