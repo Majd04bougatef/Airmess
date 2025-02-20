@@ -15,12 +15,15 @@ import javafx.scene.text.Text;
 import models.reservation_transport;
 import models.station;
 import services.ReservationTransportService;
+import test.Session;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
 public class CardStation {
+
+    private Session session = Session.getInstance();
 
     @FXML
     private Text idStation;
@@ -91,11 +94,15 @@ public class CardStation {
     }
 
     private void ajouterReservation(int nbVeloRes) {
+
+
+
         ReservationTransportService service = new ReservationTransportService() {};
 
         reservation_transport reservation = new reservation_transport();
         reservation.setIdS(currentStation.getIdS());
-        reservation.setIdU(2);
+        session.checkLogin();
+        reservation.setIdU(session.getId_U());
         reservation.setDateRes(Timestamp.from(Instant.now()));
         reservation.setDateFin(null);
         reservation.setPrix(0.0);
