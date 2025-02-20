@@ -1,0 +1,139 @@
+/* CSS de base pour améliorer l'apparence des cartes */
+.bonplan-card {
+    -fx-background-color: white;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);
+    -fx-pref-width: 250px;  /* Largeur fixe pour aligner les cartes */
+    -fx-pref-height: 320px;  /* Ajusté pour intégrer les boutons */
+    -fx-alignment: center;
+    -fx-spacing: 10; /* Espace entre les éléments internes */
+}
+
+.bonplan-card:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-cursor: hand;
+}
+
+/* Titres et descriptions */
+.bonplan-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 5;
+}
+
+.bonplan-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+    -fx-padding: 5;
+}
+
+/* Alignement horizontal des cartes */
+#flowPaneBonPlans {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 20;
+    -fx-hgap: 30;
+    -fx-vgap: 20;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+}
+
+#imageBP {
+    -fx-border-radius: 10;
+}
+
+/* CSS pour les titres des champs du formulaire */
+.form-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #333333;
+}
+
+/* Titres des champs de saisie */
+#textTitre, #textTitre2, #textTitre1, #textTitre11 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* Si vous voulez également changer le style des TextFields */
+TextField {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Style pour le SplitMenuButton */
+.listCategorie {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Style du bouton Ajouter */
+.submit-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.submit-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Style du bouton Ajouter Image */
+#addImageButton {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+#addImageButton:hover {
+    -fx-background-color: #0b7dda;
+}
+
+/* Mise en forme des boutons "Modifier" et "Supprimer" */
+.update-button {
+    -fx-background-color: #4292bf;  /* Jaune */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 90px;
+}
+
+.update-button:hover {
+    -fx-background-color: #4292bf;  /* Jaune foncé */
+}
+
+/* Bouton Supprimer */
+.delete-button {
+    -fx-background-color: #fbbbb9;  /* Rouge */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 90px;
+}
+
+.delete-button:hover {
+    -fx-background-color: #fbbbb9;  /* Rouge foncé */
+}
+
+/* Alignement des boutons dans chaque carte */
+.hbox-buttons {
+    -fx-spacing: 10; /* Espace entre les boutons */
+    -fx-alignment: center;
+}
+
+.label-bold {
+    -fx-font-weight: bold;
+}
