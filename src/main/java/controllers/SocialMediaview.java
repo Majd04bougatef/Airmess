@@ -20,8 +20,6 @@ import services.SocialMediaServices;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class SocialMediaview {
