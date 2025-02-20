@@ -34,6 +34,7 @@ public class OffreAdminController implements Initializable {
     public TextField updateLocationField;
     public TextField updateDescriptionField;
     public VBox updateFieldsBox;
+    public TextField updateNumberField;
     @FXML
     private ListView<Offre> offreListView;
 
@@ -68,7 +69,7 @@ public class OffreAdminController implements Initializable {
 
     private String formatOffreDisplay(Offre offre) {
         return String.format(
-                "Description: %s\nPrice: %.2f -> %.2f\nDates: %s to %s\nPlace: %s\nLimit: %d",
+                "Description: %s\nPrix: %.2f -> %.2f\nDate :du %s au %s\nLieu: %s\nnombre de place disponible: %d",
                 offre.getDescription(),
                 offre.getPriceInit(),
                 offre.getPriceAfter(),
@@ -100,6 +101,7 @@ public class OffreAdminController implements Initializable {
             updateStartDateField.setValue(LocalDate.parse(selectedOffre.getStartDate(), DATE_FORMATTER));
             updateEndDateField.setValue(LocalDate.parse(selectedOffre.getEndDate(), DATE_FORMATTER));
             updateLocationField.setText(selectedOffre.getPlace());
+            updateNumberField.setText(String.valueOf(selectedOffre.getNumberLimit()));
         } else {
             System.out.println("No offer selected.");
         }
@@ -169,12 +171,61 @@ public class OffreAdminController implements Initializable {
         Offre selectedOffre = offreListView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
             // Update the selected offer with the new data
+            if (updateDescriptionField.getText().isEmpty() || updatePriceField.getText().isEmpty() || updateDiscountField.getText().isEmpty() || updateStartDateField.getValue() == null || updateEndDateField.getValue() == null || updateLocationField.getText().isEmpty() || updateNumberField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Missing Fields");
+                alert.setHeaderText("Please fill in all the fields");
+                alert.setContentText("All fields are required.");
+                alert.showAndWait();
+                return;
+            }
+            try {
+                Double.parseDouble(updatePriceField.getText());
+                Double.parseDouble(updateDiscountField.getText());
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Price");
+                alert.setHeaderText("Price must be a number");
+                alert.setContentText("Please enter a valid price.");
+                alert.showAndWait();
+                return;
+            }
+            try {
+                Integer.parseInt(updateNumberField.getText());
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Number");
+                alert.setHeaderText("Number of places must be an integer");
+                alert.setContentText("Please enter a valid number.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(updatePriceField.getText()) < 0 || Double.parseDouble(updateDiscountField.getText()) < 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Price");
+                alert.setHeaderText("Price must be positive");
+                alert.setContentText("Please enter a valid price.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(updateDiscountField.getText()) >= Double.parseDouble(updatePriceField.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Discount");
+                alert.setHeaderText("Discount must be less than Price");
+                alert.setContentText("Please enter a valid discount.");
+                alert.showAndWait();
+                return;
+            }
             selectedOffre.setDescription(updateDescriptionField.getText());
             selectedOffre.setPriceInit(Double.parseDouble(updatePriceField.getText()));
             selectedOffre.setPriceAfter(Double.parseDouble(updateDiscountField.getText()));
             selectedOffre.setStartDate(updateStartDateField.getValue().toString());
             selectedOffre.setEndDate(updateEndDateField.getValue().toString());
             selectedOffre.setPlace(updateLocationField.getText());
+            selectedOffre.setNumberLimit(Integer.parseInt(updateNumberField.getText()));
+
+
 
             // Save the updated offer to the database
             if (updateEndDateField.getValue().isBefore(updateStartDateField.getValue())) {

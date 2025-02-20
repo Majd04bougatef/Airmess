@@ -8,33 +8,33 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?import java.lang.String?>
 <?import javafx.scene.control.DatePicker?>
+
 <AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OffreAdminController">
     <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
         <VBox spacing="10" styleClass="vbox-container">
             <ListView fx:id="offreListView" styleClass="list-view" />
             <HBox spacing="10" styleClass="hbox-container">
-                <Button onAction="#handleUpdateButtonAction" text="Update">
+                <Button onAction="#handleUpdateButtonAction" text="Mettre à jour">
                     <styleClass>
                         <String fx:value="button" />
                         <String fx:value="update-button" />
                     </styleClass>
                 </Button>
-                <Button onAction="#handleDeleteButtonAction" text="Delete">
+                <Button onAction="#handleDeleteButtonAction" text="Supprimer">
                     <styleClass>
                         <String fx:value="button" />
                         <String fx:value="delete-button" />
                     </styleClass>
                 </Button>
-                <Button onAction="#handleAddButtonAction" text="Add">
+                <Button onAction="#handleAddButtonAction" text="Ajouter">
                     <styleClass>
                         <String fx:value="button" />
                         <String fx:value="add-button" />
                     </styleClass>
                 </Button>
-                <Button onAction="#showReservations" text="Show Reservations">
+                <Button onAction="#showReservations" text="Afficher les réservations">
                     <styleClass>
                         <String fx:value="button" />
                         <String fx:value="show-button" />
@@ -42,17 +42,17 @@
                 </Button>
             </HBox>
 
-            <!-- Hidden fields for delete confirmation -->
+            <!-- Champs cachés pour la confirmation de suppression -->
             <VBox fx:id="deleteConfirmationBox" visible="false" managed="false" spacing="10">
-                <Label text="Are you sure you want to delete this offer?" />
+                <Label text="Êtes-vous sûr de vouloir supprimer cette offre ?" />
                 <HBox spacing="10">
-                    <Button onAction="#confirmDelete" text="Confirm">
+                    <Button onAction="#confirmDelete" text="Confirmer">
                         <styleClass>
                             <String fx:value="button" />
                             <String fx:value="confirm-button" />
                         </styleClass>
                     </Button>
-                    <Button onAction="#cancelDelete" text="Cancel">
+                    <Button onAction="#cancelDelete" text="Annuler">
                         <styleClass>
                             <String fx:value="button" />
                             <String fx:value="cancel-button" />
@@ -60,22 +60,31 @@
                     </Button>
                 </HBox>
             </VBox>
-            <!-- Hidden fields for Update fields -->
+
+            <!-- Champs cachés pour les champs de mise à jour -->
             <VBox fx:id="updateFieldsBox" visible="false" managed="false" spacing="10">
+                <Label text="Description" />
                 <TextField fx:id="updateDescriptionField" promptText="Description" />
-                <TextField fx:id="updateLocationField" promptText="Location" />
-                <TextField fx:id="updatePriceField" promptText="Price" />
-                <TextField fx:id="updateDiscountField" promptText="Discount" />
-                <DatePicker fx:id="updateStartDateField" promptText="Start Date" />
-                <DatePicker fx:id="updateEndDateField" promptText="End Date" />
+                <Label text="Lieu" />
+                <TextField fx:id="updateLocationField" promptText="Lieu" />
+                <Label text="Prix" />
+                <TextField fx:id="updatePriceField" promptText="Prix" />
+                <Label text="Remise" />
+                <TextField fx:id="updateDiscountField" promptText="Remise" />
+                <Label text="Date de début" />
+                <DatePicker fx:id="updateStartDateField" promptText="Date de début" />
+                <Label text="Date de fin" />
+                <DatePicker fx:id="updateEndDateField" promptText="Date de fin" />
+                <Label text="nombre de place disponible" />
+                <TextField fx:id="updateNumberField" promptText="nombre de place disponible" />
                 <HBox spacing="10">
-                    <Button onAction="#confirmUpdate" text="Confirm">
+                    <Button onAction="#confirmUpdate" text="Confirmer">
                         <styleClass>
                             <String fx:value="button" />
                             <String fx:value="confirm-button" />
                         </styleClass>
                     </Button>
-                    <Button onAction="#cancelUpdate" text="Cancel">
+                    <Button onAction="#cancelUpdate" text="Annuler">
                         <styleClass>
                             <String fx:value="button" />
                             <String fx:value="cancel-button" />

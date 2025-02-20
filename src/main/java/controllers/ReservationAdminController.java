@@ -53,7 +53,7 @@ public class ReservationAdminController implements Initializable {
     private String formatReservationDisplay(Reservation reservation) {
         return String.format(
                 "Reservation ID: %d\nDate: %s\nPayment Method: %s\nUser: %d",
-                reservation.getIdO(),
+                reservation.getIdO().getIdO(),
                 reservation.getDateRes(),
                 reservation.getModePaiement(),
                 reservation.getId_U()

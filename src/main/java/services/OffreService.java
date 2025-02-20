@@ -98,7 +98,6 @@ public class OffreService implements GlobalInterface<Offre> {
 
     @Override
     public Offre getById(int id) {
-        // TODO Auto-generated method stub
         String query = "SELECT * FROM offre WHERE idO = ?";
         Offre offre = new Offre();
         try {

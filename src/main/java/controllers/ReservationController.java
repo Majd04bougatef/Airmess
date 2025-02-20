@@ -103,7 +103,7 @@ public class ReservationController implements Initializable {
             // Handle the result after the dialog is closed
             if (controller.isConfirmed()) {
                 String selectedDate = controller.getSelectedDate();
-                String paymentMethod = controller.cardRadioButton.getText();
+                String paymentMethod = controller.getPaimentMethod();
                 ReservationService reservationService = new ReservationService();
                 System.out.println(paymentMethod);
                 switch (paymentMethod) {
@@ -117,13 +117,14 @@ public class ReservationController implements Initializable {
                         paymentMethod = "espece";
                         break;
                 }
-                Reservation reservation = new Reservation(offre.getIdO(), selectedDate, paymentMethod, 1);
+                Reservation reservation = new Reservation(offre, selectedDate, paymentMethod, 1);
                 ReservationService reservationService1 = new ReservationService();
                 reservationService1.add(reservation);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to load the reservation dialog.");
+            e.printStackTrace();
         }
     }
 }
