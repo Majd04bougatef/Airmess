@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -21,13 +22,19 @@
             </Text>
 
             <Text fx:id="textNom" layoutX="66.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la station" wrappingWidth="130.70703125" />
-            <TextField fx:id="Nom" layoutX="66.0" layoutY="124.0" prefHeight="35.0" prefWidth="341.0" promptText="Entrez un nom" />
+            <TextField fx:id="Nom" layoutX="66.0" layoutY="113.0" prefHeight="35.0" prefWidth="341.0" promptText="Entrez un nom" />
+            <Label fx:id="lblNomError" layoutX="66.0" layoutY="150.0" prefHeight="17.0" prefWidth="205.0" text="" textFill="red" />
+
 
             <Text fx:id="textCapacite" layoutX="66.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
             <TextField fx:id="Capacite" layoutX="66.0" layoutY="269.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
+            <Label fx:id="lblCapaciteError" layoutX="75.0" layoutY="304.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
+
 
             <Text fx:id="textNbVelo" layoutX="66.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
             <TextField fx:id="NbVelo" layoutX="66.0" layoutY="195.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
+            <Label fx:id="lblNbVeloError" layoutX="66.0" layoutY="229.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
+
 
             <Text fx:id="textTypeVelo" layoutX="66.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de vélo" wrappingWidth="96.70703125" />
             <ComboBox fx:id="TypeVelo" layoutX="66.0" layoutY="343.0" prefHeight="37.0" prefWidth="300.0" promptText="Typer Velo">
@@ -35,9 +42,12 @@
 
                </items>
             </ComboBox>
+            <Label fx:id="lblPrixHeureError" layoutX="66.0" layoutY="457.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
-            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
+            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
             <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="422.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
+            <Label fx:id="lblTypeVeloError" layoutX="70.0" layoutY="380.0" prefHeight="17.0" prefWidth="271.0" text="" textFill="red" />
+
 
             <Button layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#btnAjoutTranport" prefHeight="37.0" prefWidth="859.0" styleClass="submit-button" text="Ajouter" />
             <TextField fx:id="Latitude" layoutX="529.0" layoutY="229.0" />
