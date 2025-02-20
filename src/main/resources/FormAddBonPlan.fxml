@@ -35,9 +35,11 @@
                     </items>
                 </SplitMenuButton>
 
-                <Button fx:id="bttnBP" layoutX="66.0" layoutY="464.0" mnemonicParsing="false" onAction="#ajouterBP" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Ajouter" />
+                <Button fx:id="bttnBP" layoutX="66.0" layoutY="450.0" mnemonicParsing="false" onAction="#ajouterBP" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Ajouter" />
                 <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" layoutX="587.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" />
                 <Button fx:id="addImageButton" layoutX="640.0" layoutY="364.0" mnemonicParsing="false" onAction="#addImageBP" prefHeight="32.0" prefWidth="139.0" text="Ajouter Image" />
+                <Button fx:id="afficherBP" layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#afficherBonPlan" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Afficher les Bon Plans" />
+
             </children>
         </Pane>
     </children>

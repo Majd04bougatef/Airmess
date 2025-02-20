@@ -1,0 +1,94 @@
+/* CSS de base pour améliorer l'apparence des cartes */
+.bonplan-card {
+    -fx-background-color: white;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);
+}
+
+.bonplan-card:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-cursor: hand;
+}
+
+.bonplan-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 5;
+}
+
+.bonplan-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+    -fx-padding: 5;
+}
+
+#flowPaneBonPlans {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10;
+    -fx-hgap: 15;
+    -fx-vgap: 15;
+}
+
+#imageBP {
+    -fx-border-radius: 10;
+}
+
+/* CSS pour les titres des champs du formulaire */
+.form-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #333333;
+}
+
+/* Titres des champs de saisie */
+#textTitre, #textTitre2, #textTitre1, #textTitre11 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* Si vous voulez également changer le style des TextFields, vous pouvez aussi modifier la police des TextField */
+TextField {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Style pour le SplitMenuButton */
+.listCategorie {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Style du bouton Ajouter */
+.submit-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.submit-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Style du bouton Ajouter Image */
+#addImageButton {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+#addImageButton:hover {
+    -fx-background-color: #0b7dda;
+}
+.label-bold {
+    -fx-font-weight: bold;
+}

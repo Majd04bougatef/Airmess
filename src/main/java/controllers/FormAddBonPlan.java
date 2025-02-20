@@ -2,6 +2,9 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -9,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import models.bonplan;
 import services.BonPlanServices;
 
@@ -27,6 +31,9 @@ public class FormAddBonPlan {
 
     @FXML
     private Button bttnBP;
+
+    @FXML
+    private Button afficherBP; // Ajout du bouton "Afficher"
 
     @FXML
     private Pane form;
@@ -51,8 +58,6 @@ public class FormAddBonPlan {
 
     private final BonPlanServices bonPlanServices = new BonPlanServices() {};
 
-
-
     @FXML
     public void initialize() {
         resto.setOnAction(this::handleTypeSelection);
@@ -65,8 +70,7 @@ public class FormAddBonPlan {
         MenuItem selectedItem = (MenuItem) event.getSource();
         String selectedType = selectedItem.getText();
         type.setText(selectedType); // Mettre à jour le texte du SplitMenuButton
-        System.out.println("Type sélectionné: " + selectedType); // Afficher le type sélectionné dans la console
-
+        System.out.println("Type sélectionné: " + selectedType);
     }
 
     @FXML
@@ -95,13 +99,11 @@ public class FormAddBonPlan {
     void ajouterBP(ActionEvent event) {
         bonplan bonPlan = new bonplan();
 
-        // Vérifier si le nom, la description et la localisation sont remplis
         if (name.getText().isEmpty() || DescriptionBP.getText().isEmpty() || LocalistionBP.getText().isEmpty()) {
             showAlertBP("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
             return;
         }
 
-        // Vérifier la valeur du type de lieu
         String selectedType = type.getText();
         if (selectedType.equals("Choisir un type")) {
             showAlertBP("Erreur", "Veuillez sélectionner un type de lieu !", AlertType.ERROR);
@@ -124,6 +126,22 @@ public class FormAddBonPlan {
 
         showAlertBP("Succès", "Bon plan ajouté avec succès !", AlertType.INFORMATION);
         clearFieldsBP();
+    }
+
+    @FXML
+    void afficherBonPlan(ActionEvent event) {
+        try {
+            // Mise à jour du chemin d'accès en fonction de la localisation du fichier FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherBonPlan.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) afficherBP.getScene().getWindow(); // Changer ici pour éviter les erreurs
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlertBP("Erreur", "Impossible d'ouvrir la page AfficherBonPlan", AlertType.ERROR);
+        }
     }
 
     private void showAlertBP(String title, String message, AlertType alertType) {
