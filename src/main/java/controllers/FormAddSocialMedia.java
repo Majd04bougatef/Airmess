@@ -25,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class FormAddSocialMedia {
@@ -52,6 +54,7 @@ public class FormAddSocialMedia {
 
     private final SocialMediaServices socialMediaServices = new SocialMediaServices() {};
 
+
     @FXML
     public void initialize() {
 
@@ -63,7 +66,7 @@ public class FormAddSocialMedia {
     @FXML
     void ajoutimage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg","*.gif", "*.avif"));
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
@@ -91,11 +94,20 @@ public class FormAddSocialMedia {
     private void bttnsc() {
         SocialMedia socialMedia = new SocialMedia();
 
+
         if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() ) {
             showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
             return;
         }
 
+        if (!Lieu.getText().matches("[a-zA-Z0-9\\s]+")) {
+            showAlert("Erreur", "Le lieu ne doit contenir que des lettres, des chiffres et des espaces !", AlertType.ERROR);
+            return;
+        }
+
+        if (!validateContent(Titre.getText()) || !validateContent(contenu.getText()) || !validateContent(Lieu.getText())) {
+            return;
+        }
 
         socialMedia.setTitre(Titre.getText());
         socialMedia.setContenu(contenu.getText());
@@ -124,6 +136,24 @@ public class FormAddSocialMedia {
     }
 
     public void setSocialMediaViewController(SocialMediaview controller) {
+    }
+    List<String> forbiddenWords = Arrays.asList("ccc", "bbb");
+
+    public  boolean validateContent(String content) {
+        if (content.isEmpty() || content.trim().isEmpty()) {
+            showAlert("Erreur", "Le contenu ne peut pas être vide ou composé uniquement d'espaces.", Alert.AlertType.ERROR);
+            return false;
+        }
+        for (String word : forbiddenWords) {
+            if (content.toLowerCase().contains(word)) {
+                showAlert("Erreur", "Le contenu contient des mots interdits.", Alert.AlertType.ERROR);
+                return false;
+            }
+        }
+
+
+
+        return true;
     }
 
 

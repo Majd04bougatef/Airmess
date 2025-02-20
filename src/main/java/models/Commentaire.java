@@ -30,7 +30,7 @@ public class Commentaire {
 
     }
 
-    // 🏗️ Constructeur sans idC
+    //  Constructeur sans idC
     public Commentaire(int idEB, int id_U, String description, int numberLike, int numberDislike) {
         this.idEB = idEB;
         this.id_U = id_U;
@@ -40,7 +40,6 @@ public class Commentaire {
 
     }
 
-    // 🎯 Getters et Setters
     public int getIdC() {
         return idC;
     }
@@ -114,7 +113,6 @@ public class Commentaire {
 
 
 
-    // 🔍 Méthode toString()
     @Override
     public String toString() {
         return "Commentaire{" +
