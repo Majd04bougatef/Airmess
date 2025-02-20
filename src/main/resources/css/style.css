@@ -4,6 +4,10 @@
     -fx-border-radius: 10;
     -fx-padding: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);
+    -fx-pref-width: 250px;  /* Largeur fixe pour aligner les cartes */
+    -fx-pref-height: 320px;  /* Ajusté pour intégrer les boutons */
+    -fx-alignment: center;
+    -fx-spacing: 10; /* Espace entre les éléments internes */
 }
 
 .bonplan-card:hover {
@@ -11,6 +15,7 @@
     -fx-cursor: hand;
 }
 
+/* Titres et descriptions */
 .bonplan-title {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
@@ -24,11 +29,14 @@
     -fx-padding: 5;
 }
 
+/* Alignement horizontal des cartes */
 #flowPaneBonPlans {
     -fx-background-color: #f0f0f0;
-    -fx-padding: 10;
-    -fx-hgap: 15;
-    -fx-vgap: 15;
+    -fx-padding: 20;
+    -fx-hgap: 30;
+    -fx-vgap: 20;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
 }
 
 #imageBP {
@@ -49,7 +57,7 @@
     -fx-text-fill: #333333;
 }
 
-/* Si vous voulez également changer le style des TextFields, vous pouvez aussi modifier la police des TextField */
+/* Si vous voulez également changer le style des TextFields */
 TextField {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -89,6 +97,43 @@ TextField {
 #addImageButton:hover {
     -fx-background-color: #0b7dda;
 }
+
+/* Mise en forme des boutons "Modifier" et "Supprimer" */
+.update-button {
+    -fx-background-color: #4292bf;  /* Jaune */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 90px;
+}
+
+.update-button:hover {
+    -fx-background-color: #4292bf;  /* Jaune foncé */
+}
+
+/* Bouton Supprimer */
+.delete-button {
+    -fx-background-color: #fbbbb9;  /* Rouge */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 90px;
+}
+
+.delete-button:hover {
+    -fx-background-color: #fbbbb9;  /* Rouge foncé */
+}
+
+/* Alignement des boutons dans chaque carte */
+.hbox-buttons {
+    -fx-spacing: 10; /* Espace entre les boutons */
+    -fx-alignment: center;
+}
+
 .label-bold {
     -fx-font-weight: bold;
 }

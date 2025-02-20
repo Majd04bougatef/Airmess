@@ -38,14 +38,14 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
 
     @Override
     public void update(bonplan bonPlan) {
-        String sql = "UPDATE bonplan SET  nomplace = ?, localisation = ?, description = ?, typePlace = ,?,imageBP = ? WHERE idP = ?";
+        String sql = "UPDATE bonplan SET  nomplace = ?, localisation = ?, description = ?, typePlace = ?,imageBP = ? WHERE idP = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, bonPlan.getNomplace());
             preparedStatement.setString(2, bonPlan.getLocalisation());
             preparedStatement.setString(3, bonPlan.getDescription());
             preparedStatement.setString(4, bonPlan.getTypePlace());
             preparedStatement.setString(5, bonPlan.getImageBP());
-            preparedStatement.setInt(5, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
+            preparedStatement.setInt(6, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {
