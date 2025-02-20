@@ -101,7 +101,7 @@ public class FormAddSocialMedia {
         socialMedia.setContenu(contenu.getText());
         socialMedia.setLieu(Lieu.getText());
         socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
-        socialMedia.setId_U(1);
+        socialMedia.setId_U(2);
 
 
         if (imageName != null) {
