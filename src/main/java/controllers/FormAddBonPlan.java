@@ -114,7 +114,7 @@ public class FormAddBonPlan {
         bonPlan.setDescription(DescriptionBP.getText());
         bonPlan.setLocalisation(LocalistionBP.getText());
         bonPlan.setTypePlace(selectedType);
-        bonPlan.setId_U(1);
+        bonPlan.setId_U(2);
 
         if (imageName != null) {
             bonPlan.setImageBP(imageName);
