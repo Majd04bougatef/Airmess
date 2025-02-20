@@ -15,11 +15,13 @@ public class Users {
     private String statut;
     private int diamond;
     private int deleteFlag;
+    private String imagesU;
+
 
     public Users() {
     }
 
-    public Users(int id_U, String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
+    public Users(int id_U, String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag, String imagesU) {
         this.id_U = id_U;
         this.name = name;
         this.prenom = prenom;
@@ -31,9 +33,10 @@ public class Users {
         this.statut = statut;
         this.diamond = diamond;
         this.deleteFlag = deleteFlag;
+        this.imagesU = imagesU;
     }
 
-    public Users(String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag) {
+    public Users(String name, String prenom, String email, String password, String roleUser, LocalDate dateNaiss, String phoneNumber, String statut, int diamond, int deleteFlag, String imagesU) {
         this.name = name;
         this.prenom = prenom;
         this.email = email;
@@ -44,6 +47,7 @@ public class Users {
         this.statut = statut;
         this.diamond = diamond;
         this.deleteFlag = deleteFlag;
+        this.imagesU = imagesU;
     }
 
     public int getId_U() {
@@ -134,6 +138,14 @@ public class Users {
         this.deleteFlag = deleteFlag;
     }
 
+    public String getImagesU() {
+        return imagesU;
+    }
+
+    public void setImagesU(String imagesU) {
+        this.imagesU = imagesU;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -148,17 +160,18 @@ public class Users {
                 ", statut='" + statut + '\'' +
                 ", diamond=" + diamond +
                 ", deleteFlag=" + deleteFlag +
+                ", imagesU='" + imagesU + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Users users)) return false;
-        return id_U == users.id_U && diamond == users.diamond && deleteFlag == users.deleteFlag && Objects.equals(name, users.name) && Objects.equals(prenom, users.prenom) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && Objects.equals(roleUser, users.roleUser) && Objects.equals(dateNaiss, users.dateNaiss) && Objects.equals(phoneNumber, users.phoneNumber) && Objects.equals(statut, users.statut);
+        return id_U == users.id_U && diamond == users.diamond && deleteFlag == users.deleteFlag && Objects.equals(name, users.name) && Objects.equals(prenom, users.prenom) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && Objects.equals(roleUser, users.roleUser) && Objects.equals(dateNaiss, users.dateNaiss) && Objects.equals(phoneNumber, users.phoneNumber) && Objects.equals(statut, users.statut) && Objects.equals(imagesU, users.imagesU);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_U, name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag);
+        return Objects.hash(id_U, name, prenom, email, password, roleUser, dateNaiss, phoneNumber, statut, diamond, deleteFlag, imagesU);
     }
 }

@@ -12,11 +12,12 @@ public class Expense {
     private String description;
     private String category;
     private LocalDate dateE;
+    private String Imagedepense;
 
     public Expense() {
     }
 
-    public Expense(int idE, int id_U, String nameEX, double amount, String description, String category, LocalDate dateE) {
+    public Expense(int idE, int id_U, String nameEX, double amount, String description, String category, LocalDate dateE, String Imagedepense) {
         this.idE = idE;
         this.id_U = id_U;
         this.nameEX = nameEX;
@@ -24,15 +25,18 @@ public class Expense {
         this.description = description;
         this.category = category;
         this.dateE = dateE;
+        this.Imagedepense = Imagedepense;
     }
 
-    public Expense(int id_U, String nameEX, double amount, String description, String category, LocalDate dateE) {
+    public Expense(int id_U, String nameEX, double amount, String description, String category, LocalDate dateE, String Imagedepense) {
+
         this.id_U = id_U;
         this.nameEX = nameEX;
         this.amount = amount;
         this.description = description;
         this.category = category;
         this.dateE = dateE;
+        this.Imagedepense = Imagedepense;
     }
 
     public int getIdE() {
@@ -91,6 +95,14 @@ public class Expense {
         this.dateE = dateE;
     }
 
+    public String getImagedepense() {
+        return Imagedepense;
+    }
+
+    public void setImagedepense(String imagedepense) {
+        Imagedepense = imagedepense;
+    }
+
     @Override
     public String toString() {
         return "Expense{" +
@@ -101,17 +113,18 @@ public class Expense {
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", dateE=" + dateE +
+                ", Imagedepense='" + Imagedepense + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Expense expense)) return false;
-        return idE == expense.idE && id_U == expense.id_U && Double.compare(amount, expense.amount) == 0 && Objects.equals(nameEX, expense.nameEX) && Objects.equals(description, expense.description) && Objects.equals(category, expense.category) && Objects.equals(dateE, expense.dateE);
+        return idE == expense.idE && id_U == expense.id_U && Double.compare(amount, expense.amount) == 0 && Objects.equals(nameEX, expense.nameEX) && Objects.equals(description, expense.description) && Objects.equals(category, expense.category) && Objects.equals(dateE, expense.dateE) && Objects.equals(Imagedepense, expense.Imagedepense);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idE, id_U, nameEX, amount, description, category, dateE);
+        return Objects.hash(idE, id_U, nameEX, amount, description, category, dateE, Imagedepense);
     }
 }
