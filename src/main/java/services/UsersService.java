@@ -46,34 +46,57 @@ public class UsersService implements GlobalInterface<Users> {
         }
     }
 
-    @Override
-    public void update(Users user) {
-        String sql = "UPDATE users SET name = ?, prenom = ?, email = ?, password = ?, roleUser = ?, dateNaiss = ?, phoneNumber = ?, statut = ?, diamond = ?, deleteFlag = ?, imagesU = ? WHERE id_U = ?";
+
+    public void updatepassword(Users user) {
+        String sql = "UPDATE users SET password = ? WHERE id_U = ?";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = user.getPassword() != null ? encoder.encode(user.getPassword()) : null;
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            if (hashedPassword != null) {
+                preparedStatement.setString(1, hashedPassword);
+            } else {
+                preparedStatement.setNull(1, Types.VARCHAR);
+            }
+            preparedStatement.setInt(2, user.getId_U());
+            preparedStatement.executeUpdate();
+            System.out.println("User password updated successfully!");
+        } catch (SQLException e) {
+            System.err.println("Error updating user password: " + e.getMessage());
+        }
+    }
+
+
+    @Override
+    public void update(Users user) {
+        // Updated SQL query without password field
+        String sql = "UPDATE users SET "
+                + "name = ?, prenom = ?, email = ?, roleUser = ?, "
+                + "dateNaiss = ?, phoneNumber = ?, statut = ?, "
+                + "diamond = ?, deleteFlag = ?, imagesU = ? "
+                + "WHERE id_U = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            // Set parameters for the updated fields
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
-            if (hashedPassword != null) {
-                preparedStatement.setString(4, hashedPassword);
-            } else {
-                preparedStatement.setNull(4, Types.VARCHAR);
-            }
-            preparedStatement.setString(5, user.getRoleUser());
-            preparedStatement.setDate(6, user.getDateNaiss() != null ? Date.valueOf(user.getDateNaiss()) : null);
-            preparedStatement.setString(7, user.getPhoneNumber());
-            preparedStatement.setString(8, user.getStatut());
-            preparedStatement.setInt(9, user.getDiamond());
-            preparedStatement.setInt(10, user.getDeleteFlag());
-            preparedStatement.setString(11, user.getImagesU());
-            preparedStatement.setInt(12, user.getId_U());
+            preparedStatement.setString(4, user.getRoleUser());
+            preparedStatement.setDate(5, user.getDateNaiss() != null ?
+                    Date.valueOf(user.getDateNaiss()) : null);
+            preparedStatement.setString(6, user.getPhoneNumber());
+            preparedStatement.setString(7, user.getStatut());
+            preparedStatement.setInt(8, user.getDiamond());
+            preparedStatement.setInt(9, user.getDeleteFlag());
+            preparedStatement.setString(10, user.getImagesU());
+            preparedStatement.setInt(11, user.getId_U());
+
             preparedStatement.executeUpdate();
-            System.out.println("User updated successfully!");
+            System.out.println("User updated successfully (password unchanged)!");
         } catch (SQLException e) {
             System.err.println("Error updating user: " + e.getMessage());
         }
     }
+
 
     @Override
     public void delete(Users user) {
@@ -146,28 +169,37 @@ public class UsersService implements GlobalInterface<Users> {
 
 
     public Users login(String email, String password) {
-        String query = "SELECT * FROM users WHERE email = ? AND deleteFlag = 0";
+        String query = "SELECT * FROM users WHERE email = ?";
 
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, email);
-
             ResultSet rs = pstmt.executeQuery();
+
             if (rs.next()) {
+                int deleteFlag = rs.getInt("deleteFlag");
                 String hashedPassword = rs.getString("password");
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
                 if (encoder.matches(password, hashedPassword)) {
+                    if (deleteFlag == 1) {
+                        // Reactivate user
+                        String reactivateQuery = "UPDATE users SET deleteFlag = 0 WHERE email = ?";
+                        PreparedStatement updateStmt = con.prepareStatement(reactivateQuery);
+                        updateStmt.setString(1, email);
+                        updateStmt.executeUpdate();
+                        updateStmt.close();
+                        System.out.println("User account reactivated: " + email);
+                    }
+
                     Users user = new Users();
                     user.setId_U(rs.getInt("id_U"));
                     user.setName(rs.getString("name"));
                     user.setPrenom(rs.getString("prenom"));
                     user.setEmail(rs.getString("email"));
-                    // Don't set the password in the user object for security
                     user.setPassword(null);
                     user.setRoleUser(rs.getString("roleUser"));
 
-                    // Safely handle null date
                     java.sql.Date dateNaiss = rs.getDate("dateNaiss");
                     if (dateNaiss != null) {
                         user.setDateNaiss(dateNaiss.toLocalDate());
@@ -176,16 +208,13 @@ public class UsersService implements GlobalInterface<Users> {
                     user.setPhoneNumber(rs.getString("phoneNumber"));
                     user.setStatut(rs.getString("statut"));
                     user.setDiamond(rs.getInt("diamond"));
-                    user.setDeleteFlag(rs.getInt("deleteFlag"));
+                    user.setDeleteFlag(0); // Ensure deleteFlag is reset
                     user.setImagesU(rs.getString("imagesU"));
 
-                    // Log successful login
                     System.out.println("Successful login for user: " + email);
 
-                    // Close resources manually
                     rs.close();
                     pstmt.close();
-
                     return user;
                 } else {
                     System.err.println("Invalid password for user: " + email);
@@ -201,10 +230,6 @@ public class UsersService implements GlobalInterface<Users> {
             }
         } catch (SQLException e) {
             System.err.println("Database error during login: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        } catch (Exception e) {
-            System.err.println("Unexpected error during login: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -226,4 +251,19 @@ public class UsersService implements GlobalInterface<Users> {
         return 0;
     }
 
+
+    public boolean emailExists(String email) {
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking email existence: " + e.getMessage());
+        }
+        return false;
+    }
 }

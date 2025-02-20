@@ -85,6 +85,7 @@ public class Login {
         System.out.println(password);
 
 
+
         // Validate inputs
         if (email.isEmpty() || password.isEmpty()) {
             showAlert(AlertType.ERROR, "Error", "Authentication Failed",
