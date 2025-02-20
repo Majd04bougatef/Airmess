@@ -1,0 +1,24 @@
+.custom-list-view {
+    -fx-background-color: #f8f9fa;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+}
+
+.list-cell {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #f1f1f1;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}

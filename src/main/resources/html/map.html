@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Carte des Stations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 100vh; width: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    var map = L.map('map').setView([51.505, -0.09], 13); // Exemple de coordonnées de départ
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Créer un groupe de couches pour les marqueurs
+    var markerLayer = L.layerGroup().addTo(map);
+
+    var javaConnector = window.javaConnector; // Assurez-vous que javaConnector est défini ici
+
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Effacer tous les anciens marqueurs
+        markerLayer.clearLayers();
+
+        // Ajouter un nouveau marqueur
+        L.marker([lat, lng]).addTo(markerLayer)
+            .bindPopup("Nouvelle station ici !<br>Latitude: " + lat + "<br>Longitude: " + lng)
+            .openPopup();
+
+        // Envoie les coordonnées à Java via javaConnector
+        if (javaConnector) {
+            javaConnector.receiveCoordinates(lat, lng);
+        }
+    });
+</script>
+</body>
+</html>
