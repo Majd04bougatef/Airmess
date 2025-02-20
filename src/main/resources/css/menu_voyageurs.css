@@ -11,3 +11,57 @@
 .sidebar_opt{
     -fx-fill: #FFFFFF;
 }
+.button {
+    -fx-background-color: #4292bf;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-effect: null;
+    -fx-transition: all 0.3s ease;
+}
+
+.button:hover {
+    -fx-background-color: #3580a8;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:pressed {
+    -fx-background-color: #2e6b8b;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.button.active {
+    -fx-border-left: 4px solid white;
+    -fx-background-color: #3580a8;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-padding: 10px;
+}
+
+.menu-button:hover {
+    -fx-background-color: #3580a8;
+    -fx-border-radius: 5px;
+    -fx-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4292bf;
+    -fx-font-size: 15px;
+    -fx-padding: 10px 33px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #3580a8;
+    -fx-text-fill: white;
+}
+

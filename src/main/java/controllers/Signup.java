@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,29 +61,43 @@ public class Signup {
     @FXML
     void Ajouterunephotodep(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", ".png", ".jpg", "*.jpeg"));
         File file = fileChooser.showOpenDialog(null);
 
-        if (file != null) {
-            String destinationDirectory = "C:/xampp/htdocs/imguser/";
-            File dir = new File(destinationDirectory);
+        if (file == null) {
+            System.out.println("No file selected!");
+            return;
+        }
 
-            // Create directory if it does not exist
-            if (!dir.exists()) {
-                dir.mkdirs();
+        System.out.println("Selected file: " + file.getAbsolutePath());
+
+        String destinationDirectory = "C:/xampp/htdocs/imguser/";
+        File dir = new File(destinationDirectory);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String destinationPath = destinationDirectory + file.getName();
+        File destinationFile = new File(destinationPath);
+
+        try {
+            Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            if (destinationFile.exists()) {
+                // ✅ Set imagePath correctly
+                imagePath = destinationFile.getAbsolutePath();
+
+                Platform.runLater(() -> {
+                    Image image = new Image(destinationFile.toURI().toString());
+                    user_photo.setImage(image);
+                });
+                System.out.println("Image saved and displayed: " + imagePath);
+            } else {
+                System.out.println("Error: File was not copied successfully.");
             }
-
-            String destinationPath = destinationDirectory + file.getName();
-            File destinationFile = new File(destinationPath);
-
-            try {
-                Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                Image image = new Image(destinationFile.toURI().toString());
-                user_photo.setImage(image);
-                System.out.println("Image saved to: " + destinationFile.getAbsolutePath());
-            } catch (IOException e) {
-                System.out.println("Error saving image: " + e.getMessage());
-            }
+        } catch (IOException e) {
+            System.out.println("Error saving image: " + e.getMessage());
         }
     }
 
@@ -205,12 +220,13 @@ public class Signup {
     }
 
     private boolean validateImage() {
-        if (imagePath == null) {
-            showAlert("Attention", "Veuillez sélectionner une photo");
+        if (imagePath == null || imagePath.isEmpty()) {
+            validationroleuser.setText("Veuillez sélectionner une photo.");
             return false;
         }
         return true;
     }
+
 
     // Utilitaires
     private void resetValidationLabels() {
