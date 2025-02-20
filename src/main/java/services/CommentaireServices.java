@@ -126,16 +126,18 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
         return commentaire;
     }
 
-    public List<Commentaire> getAllWithPostDetails() {
+    public List<Commentaire> getAllWithPostDetails(int postId) {
         String query = "SELECT c.idC, c.idEB, c.id_U, c.description, c.numberlike, c.numberdislike, " +
                 "s.titre, s.contenu, s.imagemedia " +
                 "FROM commentaire c " +
-                "JOIN socialmedia s ON c.idEB = s.idEB";
+                "JOIN socialmedia s ON c.idEB = s.idEB "  +
+                "WHERE c.idEB = ?"; ;
 
         List<Commentaire> commentaires = new ArrayList<>();
 
-        try (Statement statement = con.createStatement();
-             ResultSet rs = statement.executeQuery(query)) {
+        try (PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setInt(1, postId);
+            ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
                 Commentaire commentaire = new Commentaire();
@@ -146,25 +148,21 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
                 commentaire.setNumberLike(rs.getInt("numberlike"));
                 commentaire.setNumberDislike(rs.getInt("numberdislike"));
 
-                String postTitre = rs.getString("titre");
-                String postContenu = rs.getString("contenu");
-                String postImagemedia = rs.getString("imagemedia");
+                commentaire.setPostTitre(rs.getString("titre"));
+                commentaire.setPostContenu(rs.getString("contenu"));
+                commentaire.setPostImagemedia(rs.getString("imagemedia"));
 
-                System.out.println(" Commentaire ID: " + commentaire.getIdC() +
-                        " | Post: " + postTitre +
-                        " | Contenu: " + postContenu);
+                System.out.println("Commentaire ID: " + commentaire.getIdC() +
+                        " | Post: " + commentaire.getPostTitre() +
+                        " | Contenu: " + commentaire.getPostContenu());
 
                 commentaires.add(commentaire);
             }
 
         } catch (SQLException e) {
-            System.err.println(" Erreur lors de la récupération des commentaires avec posts : " + e.getMessage());
+            System.err.println("Erreur lors de la récupération des commentaires avec posts : " + e.getMessage());
         }
 
         return commentaires;
     }
-
-
-
-
 }

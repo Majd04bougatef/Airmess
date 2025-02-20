@@ -1,8 +1,6 @@
 package controllers;
 
 import javafx.event.ActionEvent;
-import java.sql.Date;
-import java.time.LocalDate;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,8 +18,10 @@ import services.CommentaireServices;
 import services.UsersService;
 import services.SocialMediaServices;
 import java.util.List;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import javafx.scene.layout.HBox;
 
@@ -94,6 +94,7 @@ public class SocialMediaview {
 
 
             postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel);
+
 
 
             if (post.getImagemedia() != null && !post.getImagemedia().isEmpty()) {
@@ -220,9 +221,30 @@ public class SocialMediaview {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    socialMediaServices.delete(postToDelete);
-                    refreshPosts();
-                    System.out.println("Post supprimé");
+                    try {
+                        List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postToDelete.getIdEB());
+                        for (Commentaire commentaire : commentaires) {
+                            CommentaireServices.delete(commentaire);
+                        }
+
+                        socialMediaServices.delete(postToDelete);
+
+                        refreshPosts();
+
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Succès");
+                        successAlert.setHeaderText("La publication a été supprimée avec succès.");
+                        successAlert.showAndWait();
+
+                        System.out.println("Post supprimé avec succès");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Erreur");
+                        errorAlert.setHeaderText("Une erreur est survenue lors de la suppression.");
+                        errorAlert.setContentText("Veuillez réessayer plus tard.");
+                        errorAlert.showAndWait();
+                    }
                 }
             });
         }
@@ -320,7 +342,8 @@ public class SocialMediaview {
 
     public void refreshCommentList(VBox commentList, int postId) {
         commentList.getChildren().clear();
-        List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails();
+
+        List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postId);
 
         for (Commentaire commentaire : commentaires) {
             if (commentaire.getIdEB() == postId) {
@@ -340,10 +363,12 @@ public class SocialMediaview {
                 deleteButton.setOnAction(this::handleDeleteComment);
 
                 commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
+
                 commentList.getChildren().add(commentBox);
             }
         }
     }
+
 
 
     @FXML
