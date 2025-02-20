@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -15,6 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.bonplan;
 import services.BonPlanServices;
+import models.ReviewBonplan;
+import services.ReviewBonPlanServices;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,15 +46,13 @@ public class AfficherBonPlan {
     }
 
     private VBox createBonPlanCard(bonplan bp) {
-        // Créer la carte
         VBox card = new VBox();
         card.getStyleClass().add("bonplan-card");
 
-        // Image
+        // Image du Bon Plan
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
         imageView.setFitHeight(150);
-
         if (bp.getImageBP() != null) {
             File file = new File("C:/xampp/htdocs/ImageBonPlan/" + bp.getImageBP());
             if (file.exists()) {
@@ -61,37 +60,69 @@ public class AfficherBonPlan {
             }
         }
 
-        // Labels
+        // Labels pour les détails du bon plan
         Label nomLabel = new Label("Nom: " + bp.getNomplace());
-        nomLabel.getStyleClass().add("label-bold");
-
         Label descLabel = new Label("Description: " + bp.getDescription());
-        descLabel.getStyleClass().add("label-bold");
-
         Label locLabel = new Label("Localisation: " + bp.getLocalisation());
-        locLabel.getStyleClass().add("label-bold");
-
         Label typeLabel = new Label("Type: " + bp.getTypePlace());
-        typeLabel.getStyleClass().add("label-bold");
 
-        // Boutons
+        // Boutons Modifier et Supprimer
         Button updateButton = new Button("Modifier");
         updateButton.getStyleClass().add("update-button");
-        updateButton.setOnAction(event -> openUpdateForm(bp)); // Ouvre la page de modification
+        updateButton.setOnAction(event -> openUpdateForm(bp));
 
         Button deleteButton = new Button("Supprimer");
         deleteButton.getStyleClass().add("delete-button");
         deleteButton.setOnAction(event -> deleteBonPlan(bp, card));
 
-        // HBox pour les boutons
         HBox buttonBox = new HBox(10, updateButton, deleteButton);
         buttonBox.getStyleClass().add("hbox-buttons");
 
-        // Ajouter les éléments à la carte
-        card.getChildren().addAll(imageView, nomLabel, descLabel, locLabel, typeLabel, buttonBox);
+        // Séparateur visuel avant les commentaires
+        Separator separator = new Separator();
+        separator.setPrefHeight(1);
+        separator.setStyle("-fx-background-color: #dddddd; -fx-padding: 5px;");
 
+        // Section Commentaires
+        VBox commentsSection = new VBox();
+        commentsSection.getStyleClass().add("comments-section");
+        loadComments(bp.getIdP(), commentsSection);
+
+        // Ajout de commentaire
+        TextArea commentField = new TextArea();
+        commentField.setPromptText("Ajouter un commentaire...");
+        commentField.setPrefRowCount(2);
+        commentField.getStyleClass().add("comment-field");
+
+        // Sélection de la note
+        ChoiceBox<Integer> ratingBox = new ChoiceBox<>();
+        ratingBox.getItems().addAll(1, 2, 3, 4, 5);
+        ratingBox.setValue(5); // Valeur par défaut
+
+        Button addCommentButton = new Button("Envoyer");
+        addCommentButton.getStyleClass().add("add-comment-button");
+        addCommentButton.setOnAction(event -> {
+            String commentText = commentField.getText().trim();
+            Integer rating = ratingBox.getValue();
+
+            if (!commentText.isEmpty() && rating != null) {
+                ReviewBonplan newReview = new ReviewBonplan(1, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
+                ReviewBonPlanServices reviewService = new ReviewBonPlanServices(){};
+                reviewService.add(newReview);
+                loadComments(bp.getIdP(), commentsSection);
+                commentField.clear();
+            }
+        });
+
+        HBox commentBox = new HBox(10);
+        commentBox.getChildren().addAll(commentField, ratingBox, addCommentButton);
+        commentBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Ajout des éléments dans la carte
+        card.getChildren().addAll(imageView, nomLabel, descLabel, locLabel, typeLabel, buttonBox, separator, commentsSection, commentBox);
         return card;
     }
+
 
     private void openUpdateForm(bonplan bp) {
         try {
@@ -146,4 +177,48 @@ public class AfficherBonPlan {
             flowPaneBonPlans.getChildren().add(createBonPlanCard(bp)); // Recharge les cartes
         }
     }
+    private void loadComments(int idP, VBox commentsSection) {
+        commentsSection.getChildren().clear(); // Nettoyer avant de recharger
+
+        ReviewBonPlanServices reviewService = new ReviewBonPlanServices() {};
+        List<ReviewBonplan> comments = reviewService.getCommentsByBonPlan(idP);
+
+        for (ReviewBonplan review : comments) {
+            HBox commentBox = new HBox(10);
+            commentBox.setAlignment(Pos.CENTER_LEFT);
+
+            Label commentLabel = new Label("⭐ " + review.getRating() + " - " + review.getCommente());
+            commentLabel.setWrapText(true);
+
+            Button editButton = new Button("Modifier");
+            Button deleteButton = new Button("Supprimer");
+
+            // Action de suppression
+            deleteButton.setOnAction(event -> {
+                reviewService.delete(review);
+                commentsSection.getChildren().remove(commentBox);
+            });
+
+            // Action de modification
+            editButton.setOnAction(event -> {
+                TextField editField = new TextField(review.getCommente());
+                Button saveButton = new Button("Enregistrer");
+
+                saveButton.setOnAction(e -> {
+                    review.setCommente(editField.getText());
+                    reviewService.update(review);
+                    commentLabel.setText("⭐ " + review.getRating() + " - " + review.getCommente());
+
+                    commentBox.getChildren().setAll(commentLabel, editButton, deleteButton);
+                });
+
+                commentBox.getChildren().setAll(editField, saveButton);
+            });
+
+            commentBox.getChildren().addAll(commentLabel, editButton, deleteButton);
+            commentsSection.getChildren().add(commentBox);
+        }
+    }
+
+
 }

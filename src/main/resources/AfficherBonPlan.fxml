@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherBonPlan" stylesheets="/css/style.css">
     <children>
@@ -17,7 +12,7 @@
                 <!-- FlowPane pour afficher les cartes horizontalement avec espacement -->
                 <FlowPane fx:id="flowPaneBonPlans" hgap="30" vgap="30" prefWrapLength="900" style="-fx-padding: 10;">
                     <!-- Exemple de carte de bon plan -->
-                    <VBox fx:id="bonPlanCard" prefWidth="250.0" prefHeight="320.0" styleClass="bonplan-card">
+                    <VBox fx:id="bonPlanCard" prefWidth="250.0" prefHeight="400.0" styleClass="bonplan-card">
                         <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250" />
                         <Label fx:id="nameLabel" text="Nom du Bon Plan" styleClass="bonplan-title label-bold" />
                         <Label fx:id="descriptionLabel" text="Description" styleClass="bonplan-description label-bold" />
@@ -25,6 +20,17 @@
                             <Button fx:id="btnModifier" text="Modifier" styleClass="update-button"/>
                             <Button fx:id="btnSupprimer" text="Supprimer" styleClass="delete-button"/>
                         </HBox>
+
+                        <!-- Section Commentaires -->
+                        <VBox fx:id="commentsSection" spacing="5" style="-fx-padding: 10;">
+                            <Label text="Commentaires :" styleClass="comment-title"/>
+                            <VBox fx:id="commentsList" spacing="5" styleClass="comments-list"/>
+                            <HBox spacing="5">
+                                <TextField fx:id="commentField" promptText="Ajouter un commentaire..." />
+                                <Button fx:id="btnAddComment" text="Envoyer" styleClass="add-comment-button"/>
+                            </HBox>
+                        </VBox>
+
                     </VBox>
                 </FlowPane>
             </content>
