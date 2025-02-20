@@ -15,7 +15,7 @@ public class WidgetStationVoyageurs {
 
     @FXML
     void reserver(ActionEvent event) {
-        laodPage("DisplayStationVoyageurs.fxml");
+        laodPage("/DisplayStationVoyageurs.fxml");
     }
 
     private void laodPage(String s) {

@@ -70,21 +70,17 @@ import java.net.URL;public class FormAddTransport {
     }
 
 
-    // Méthode d'action du bouton "Ajouter"
     public void btnAjoutTranport(ActionEvent actionEvent) {
         try {
-            // Récupérer les valeurs des champs de texte
             String nom = Nom.getText();
             int capacite = Integer.parseInt(Capacite.getText());
             int nbVelo = Integer.parseInt(NbVelo.getText());
             String typeVelo = TypeVelo.getValue();
             double prixHeure = Double.parseDouble(PrixHeure.getText());
 
-            // Convertir les valeurs de Latitude et Longitude
             lat = Double.parseDouble(Latitude.getText());
             lng = Double.parseDouble(Longitude.getText());
 
-            // Vérifier si les coordonnées sont valides
             if (lat == 0 || lng == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erreur de saisie");
@@ -94,21 +90,17 @@ import java.net.URL;public class FormAddTransport {
                 return;
             }
 
-            // Créer un nouvel objet Station
             station newStation = new station(2, nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo);
 
-            // Ajouter la station à la base de données (via le service)
             StationService stService = new StationService(){};
             stService.add(newStation);
 
-            // Afficher une alerte de succès
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
             alert.setHeaderText(null);
             alert.setContentText("La station a été ajoutée avec succès !");
             alert.showAndWait();
 
-            // Réinitialiser les champs
             Nom.clear();
             Capacite.clear();
             NbVelo.clear();
