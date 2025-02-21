@@ -37,14 +37,14 @@ public class AfficherBonPlan {
 
     private void loadBonPlans() {
         List<bonplan> bonPlansList = bonPlanServices.getAll();
-        flowPaneBonPlans.getChildren().clear(); // Vider la liste avant de la recharger
+        flowPaneBonPlans.getChildren().clear();
 
         for (bonplan bp : bonPlansList) {
             VBox card = createBonPlanCard(bp);
             flowPaneBonPlans.getChildren().add(card);
         }
 
-        flowPaneBonPlans.setPrefWrapLength(900); // Ajuster la largeur pour aligner les cartes
+        flowPaneBonPlans.setPrefWrapLength(900);
     }
 
     private VBox createBonPlanCard(bonplan bp) {
@@ -62,13 +62,12 @@ public class AfficherBonPlan {
             }
         }
 
-        // Labels pour les détails du bon plan
         Label nomLabel = new Label("Nom: " + bp.getNomplace());
         Label descLabel = new Label("Description: " + bp.getDescription());
         Label locLabel = new Label("Localisation: " + bp.getLocalisation());
         Label typeLabel = new Label("Type: " + bp.getTypePlace());
 
-        // Boutons Modifier et Supprimer
+
         Button updateButton = new Button("Modifier");
         updateButton.getStyleClass().add("update-button");
         updateButton.setOnAction(event -> openUpdateForm(bp));
@@ -80,26 +79,23 @@ public class AfficherBonPlan {
         HBox buttonBox = new HBox(10, updateButton, deleteButton);
         buttonBox.getStyleClass().add("hbox-buttons");
 
-        // Séparateur visuel avant les commentaires
         Separator separator = new Separator();
         separator.setPrefHeight(1);
         separator.setStyle("-fx-background-color: #dddddd; -fx-padding: 5px;");
 
-        // Section Commentaires
+        //  Commentaires
         VBox commentsSection = new VBox();
         commentsSection.getStyleClass().add("comments-section");
         loadComments(bp.getIdP(), commentsSection);
 
-        // Ajout de commentaire
         TextArea commentField = new TextArea();
         commentField.setPromptText("Ajouter un commentaire...");
         commentField.setPrefRowCount(2);
         commentField.getStyleClass().add("comment-field");
 
-        // Sélection de la note
         ChoiceBox<Integer> ratingBox = new ChoiceBox<>();
         ratingBox.getItems().addAll(1, 2, 3, 4, 5);
-        ratingBox.setValue(5); // Valeur par défaut
+        ratingBox.setValue(5);
 
         Button addCommentButton = new Button("Envoyer");
         addCommentButton.getStyleClass().add("add-comment-button");
@@ -120,7 +116,6 @@ public class AfficherBonPlan {
         commentBox.getChildren().addAll(commentField, ratingBox, addCommentButton);
         commentBox.setAlignment(Pos.CENTER_LEFT);
 
-        // Ajout des éléments dans la carte
         card.getChildren().addAll(imageView, nomLabel, descLabel, locLabel, typeLabel, buttonBox, separator, commentsSection, commentBox);
         return card;
     }
@@ -131,7 +126,6 @@ public class AfficherBonPlan {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormUpdateBonPlan.fxml"));
             Parent root = loader.load();
 
-            // Obtenir le contrôleur et passer les données du bon plan sélectionné
             FormUpdateBonPlan controller = loader.getController();
             controller.initData(bp);
 
@@ -139,7 +133,6 @@ public class AfficherBonPlan {
             stage.setTitle("Modifier Bon Plan");
             stage.setScene(new Scene(root));
 
-            // Fermer la fenêtre et rafraîchir les cartes après mise à jour
             stage.setOnHidden(event -> refreshBonPlanList());
 
             stage.show();
@@ -150,20 +143,18 @@ public class AfficherBonPlan {
 
 
     private void deleteBonPlan(bonplan bp, VBox card) {
-        // Confirmer la suppression
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation de suppression");
         alert.setHeaderText("Voulez-vous vraiment supprimer ce bon plan ?");
         alert.setContentText("Cette action est irréversible.");
 
         alert.showAndWait().ifPresent(response -> {
-            // Supprimer de la base de données
+
             bonPlanServices.delete(bp);
 
-            // Supprimer la carte de l'interface
             flowPaneBonPlans.getChildren().remove(card);
 
-            // Afficher un message de confirmation
+
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setTitle("Suppression réussie");
             successAlert.setHeaderText(null);
@@ -172,15 +163,14 @@ public class AfficherBonPlan {
         });
     }
     public void refreshBonPlanList() {
-        flowPaneBonPlans.getChildren().clear(); // Supprime les anciennes cartes
-
-        List<bonplan> bonPlansList = bonPlanServices.getAll(); // Récupère les nouvelles données
+        flowPaneBonPlans.getChildren().clear();
+        List<bonplan> bonPlansList = bonPlanServices.getAll();
         for (bonplan bp : bonPlansList) {
-            flowPaneBonPlans.getChildren().add(createBonPlanCard(bp)); // Recharge les cartes
+            flowPaneBonPlans.getChildren().add(createBonPlanCard(bp));
         }
     }
     private void loadComments(int idP, VBox commentsSection) {
-        commentsSection.getChildren().clear(); // Nettoyer avant de recharger
+        commentsSection.getChildren().clear();
 
         ReviewBonPlanServices reviewService = new ReviewBonPlanServices() {};
         List<ReviewBonplan> comments = reviewService.getCommentsByBonPlan(idP);
@@ -195,13 +185,13 @@ public class AfficherBonPlan {
             Button editButton = new Button("Modifier");
             Button deleteButton = new Button("Supprimer");
 
-            // Action de suppression
+
             deleteButton.setOnAction(event -> {
                 reviewService.delete(review);
                 commentsSection.getChildren().remove(commentBox);
             });
 
-            // Action de modification
+
             editButton.setOnAction(event -> {
                 TextField editField = new TextField(review.getCommente());
                 Button saveButton = new Button("Enregistrer");
@@ -227,13 +217,9 @@ public class AfficherBonPlan {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddBonPlan.fxml"));
             Parent addBonPlanPage = loader.load();
 
-            // Remplacer l'affichage dans la scène actuelle
             ((Node) event.getSource()).getScene().setRoot(addBonPlanPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-
 }

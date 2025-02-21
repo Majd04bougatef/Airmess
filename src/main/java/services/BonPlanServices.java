@@ -137,12 +137,12 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                return true; // Le bon plan existe déjà
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Le bon plan n'existe pas
+        return false;
     }
 
 

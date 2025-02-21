@@ -33,7 +33,7 @@ public class FormAddBonPlan {
     private Button bttnBP;
 
     @FXML
-    private Button afficherBP; // Ajout du bouton "Afficher"
+    private Button afficherBP;
 
     @FXML
     private Pane form;
@@ -69,7 +69,7 @@ public class FormAddBonPlan {
     private void handleTypeSelection(ActionEvent event) {
         MenuItem selectedItem = (MenuItem) event.getSource();
         String selectedType = selectedItem.getText();
-        type.setText(selectedType); // Mettre à jour le texte du SplitMenuButton
+        type.setText(selectedType);
         System.out.println("Type sélectionné: " + selectedType);
     }
 
@@ -135,11 +135,11 @@ public class FormAddBonPlan {
     @FXML
     void afficherBonPlan(ActionEvent event) {
         try {
-            // Mise à jour du chemin d'accès en fonction de la localisation du fichier FXML
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherBonPlan.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) afficherBP.getScene().getWindow(); // Changer ici pour éviter les erreurs
+            Stage stage = (Stage) afficherBP.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
