@@ -6,8 +6,11 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherBonPlan" stylesheets="/css/style.css">
     <children>
+        <!-- Bouton pour basculer vers le formulaire d'ajout -->
+        <Button text="Ajouter un Bon Plan" layoutX="20" layoutY="10" onAction="#showAddBonPlan" styleClass="add-button"/>
+
         <!-- ScrollPane pour permettre le défilement -->
-        <ScrollPane layoutX="10.0" layoutY="10.0" prefWidth="1000.0" prefHeight="700.0">
+        <ScrollPane layoutX="10.0" layoutY="50.0" prefWidth="1000.0" prefHeight="700.0">
             <content>
                 <!-- FlowPane pour afficher les cartes horizontalement avec espacement -->
                 <FlowPane fx:id="flowPaneBonPlans" hgap="30" vgap="30" prefWrapLength="900" style="-fx-padding: 10;">
@@ -16,6 +19,8 @@
                         <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250" />
                         <Label fx:id="nameLabel" text="Nom du Bon Plan" styleClass="bonplan-title label-bold" />
                         <Label fx:id="descriptionLabel" text="Description" styleClass="bonplan-description label-bold" />
+
+                        <!-- Boutons Modifier et Supprimer -->
                         <HBox spacing="10" alignment="CENTER">
                             <Button fx:id="btnModifier" text="Modifier" styleClass="update-button"/>
                             <Button fx:id="btnSupprimer" text="Supprimer" styleClass="delete-button"/>
@@ -30,7 +35,6 @@
                                 <Button fx:id="btnAddComment" text="Envoyer" styleClass="add-comment-button"/>
                             </HBox>
                         </VBox>
-
                     </VBox>
                 </FlowPane>
             </content>

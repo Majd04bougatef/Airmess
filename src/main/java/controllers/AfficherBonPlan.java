@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,9 +17,10 @@ import services.BonPlanServices;
 import models.ReviewBonplan;
 import services.ReviewBonPlanServices;
 import javafx.geometry.Pos;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class AfficherBonPlan {
@@ -219,6 +221,19 @@ public class AfficherBonPlan {
             commentsSection.getChildren().add(commentBox);
         }
     }
+    @FXML
+    void showAddBonPlan(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddBonPlan.fxml"));
+            Parent addBonPlanPage = loader.load();
+
+            // Remplacer l'affichage dans la scène actuelle
+            ((Node) event.getSource()).getScene().setRoot(addBonPlanPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

@@ -109,6 +109,10 @@ public class FormAddBonPlan {
             showAlertBP("Erreur", "Veuillez sélectionner un type de lieu !", AlertType.ERROR);
             return;
         }
+        if (bonPlanServices.existsByName(name.getText())) {
+            showAlertBP("Erreur", "Ce bon plan existe déjà !", AlertType.ERROR);
+            return;
+        }
 
         bonPlan.setNomplace(name.getText());
         bonPlan.setDescription(DescriptionBP.getText());
