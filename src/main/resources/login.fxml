@@ -16,7 +16,7 @@
             <children>
                 <AnchorPane layoutX="656.0" prefHeight="600.0" prefWidth="414.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;">
                     <children>
-                        <ImageView fitHeight="454.0" fitWidth="185.0" layoutX="153.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="454.0" fitWidth="185.0" layoutX="86.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@image/475494119_1136555244298328_1961476089771408060_n$$.png" />
                             </image>
@@ -38,9 +38,9 @@
                         <Image url="@image/3d-casual-life-young-man-holding-paper-map.png" />
                     </image>
                 </ImageView>
-                <Text fill="#406dab" layoutX="142.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S'identifier" wrappingWidth="239.9999999999999">
+                <Text fill="#406dab" layoutX="122.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S'identifier" wrappingWidth="383.9999999999999">
                     <font>
-                        <Font name="Aldhabi" size="70.0" />
+                        <Font size="40.0" />
                     </font>
                 </Text>
                 <TextField fx:id="email_identifier" layoutX="125.0" layoutY="236.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />

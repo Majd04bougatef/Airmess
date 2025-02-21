@@ -17,7 +17,7 @@
             <children>
                 <ImageView fitHeight="70.0" fitWidth="77.0" layoutX="36.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/AirMess%20copie.png" />
+                        <Image url="@image/AirMess copie.png" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="40.0" fitWidth="179.0" layoutX="107.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">

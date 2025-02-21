@@ -19,7 +19,7 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
 
     @Override
     public void add(bonplan bonplan) {
-        String sql = "INSERT INTO bonplan (id_U, idP, nomplace, localisation, description, typePlace) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO bonplan (id_U, idP, nomplace, localisation, description, typePlace , imageBP) VALUES (?, ?, ?, ?, ?, ? ,?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, bonplan.getId_U());
             preparedStatement.setInt(2, bonplan.getIdP());
@@ -27,6 +27,7 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
             preparedStatement.setString(4, bonplan.getLocalisation());
             preparedStatement.setString(5, bonplan.getDescription());
             preparedStatement.setString(6, bonplan.getTypePlace());
+            preparedStatement.setString(7, bonplan.getImageBP());
 
             preparedStatement.executeUpdate();
             System.out.println("Bon Plan added successfully!");
@@ -37,13 +38,14 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
 
     @Override
     public void update(bonplan bonPlan) {
-        String sql = "UPDATE bonplan SET  nomplace = ?, localisation = ?, description = ?, typePlace = ? WHERE idP = ?";
+        String sql = "UPDATE bonplan SET  nomplace = ?, localisation = ?, description = ?, typePlace = ?,imageBP = ? WHERE idP = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, bonPlan.getNomplace());
             preparedStatement.setString(2, bonPlan.getLocalisation());
             preparedStatement.setString(3, bonPlan.getDescription());
             preparedStatement.setString(4, bonPlan.getTypePlace());
-            preparedStatement.setInt(5, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
+            preparedStatement.setString(5, bonPlan.getImageBP());
+            preparedStatement.setInt(6, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -86,6 +88,7 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
                     r.setLocalisation(bp.getString("localisation"));
                     r.setDescription(bp.getString("description"));
                     r.setTypePlace(bp.getString("typePlace"));
+                    r.setImageBP(bp.getString("imageBP"));
 
                     rt.add(r);
                 }
@@ -117,6 +120,7 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
                 b.setLocalisation(rs.getString("localisation"));
                 b.setDescription(rs.getString("description"));
                 b.setTypePlace(rs.getString("typePlace"));
+                b.setImageBP(rs.getString("imageBP"));
 
             }
         } catch (SQLException e) {
@@ -124,6 +128,21 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
         }
 
         return b;
+    }
+    public boolean existsByName(String nom) {
+        String query = "SELECT COUNT(*) FROM bonplan WHERE nomplace = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, nom);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

@@ -7,24 +7,28 @@ public class bonplan {
     private String localisation;
     private String description;
     private String typePlace;
+    private String imageBP;
+
 
     public bonplan() {}
 
-    public bonplan( int id_U, String nomplace, String localisation, String description, String typePlace) {
+    public bonplan( int id_U, String nomplace, String localisation, String description, String typePlace , String imageBP) {
         this.id_U = id_U;
         this.nomplace = nomplace;
         this.localisation = localisation;
         this.description = description;
         this.typePlace = typePlace;
+        this.imageBP = imageBP;
     }
 
-    public bonplan(int id_U, int idP, String nomplace, String localisation, String description, String typePlace) {
+    public bonplan(int id_U, int idP, String nomplace, String localisation, String description, String typePlace , String imageBP) {
         this.id_U = id_U;
         this.idP = idP;
         this.nomplace = nomplace;
         this.localisation = localisation;
         this.description = description;
         this.typePlace = typePlace;
+        this.imageBP = imageBP;
     }
 
     public int getId_U() {
@@ -75,6 +79,14 @@ public class bonplan {
         this.typePlace = typePlace;
     }
 
+    public String getImageBP() {
+        return imageBP;
+    }
+
+    public void setImageBP(String imageBP) {
+        this.imageBP = imageBP;
+    }
+
     @Override
     public String toString() {
         return "BonPlan{" +
@@ -84,6 +96,7 @@ public class bonplan {
                 ", localisation='" + localisation + '\'' +
                 ", description='" + description + '\'' +
                 ", typePlace='" + typePlace + '\'' +
+                ", imageBP='" + imageBP + '\'' +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package services;
 
 import interfaces.GlobalInterface;
+import models.Offre;
 import models.Reservation;
 import util.MyDatabase;
 
@@ -24,7 +25,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
-            preparedStatement.setInt(2, reservation.getIdO());
+            preparedStatement.setInt(2, reservation.getIdO().getIdO());
             preparedStatement.setString(3, reservation.getDateRes());
             preparedStatement.setString(4, reservation.getModePaiement());
             preparedStatement.executeUpdate();
@@ -40,7 +41,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
-            preparedStatement.setInt(2, reservation.getIdO());
+            preparedStatement.setInt(2, reservation.getIdO().getIdO());
             preparedStatement.setString(3, reservation.getDateRes());
             preparedStatement.setString(4, reservation.getModePaiement());
             preparedStatement.setInt(5, reservation.getIdR());
@@ -75,7 +76,9 @@ public class ReservationService implements GlobalInterface<Reservation> {
                 Reservation reservation = new Reservation();
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
-                reservation.setIdO(res.getInt("idO"));
+                Offre offre = new Offre();
+                offre.setIdO(res.getInt("idO"));
+                reservation.setIdO(offre);
                 reservation.setDateRes(res.getString("dateRes"));
                 reservation.setModePaiement(res.getString("modePaiement"));
 
@@ -99,7 +102,9 @@ public class ReservationService implements GlobalInterface<Reservation> {
             if (res.next()) {
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
-                reservation.setIdO(res.getInt("idO"));
+                Offre offre = new Offre();
+                offre.setIdO(res.getInt("idO"));
+                reservation.setIdO(offre);
                 reservation.setDateRes(res.getString("dateRes"));
                 reservation.setModePaiement(res.getString("modePaiement"));
             }

@@ -87,7 +87,7 @@ public class MenuVoyageurs {
     @FXML
     void BonPlan(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherBonPlan.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
@@ -124,7 +124,7 @@ public class MenuVoyageurs {
     void Socail(ActionEvent event) {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddSocialMedia.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SocialMediaview.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
@@ -136,7 +136,7 @@ public class MenuVoyageurs {
     @FXML
     void User(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddBonPlan.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
@@ -148,7 +148,7 @@ public class MenuVoyageurs {
     @FXML
     void Velo(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddTransport.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/WidgetStationVoyageurs.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
