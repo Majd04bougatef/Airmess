@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.Updateexpense"
+            prefHeight="640.0" prefWidth="1030.0">
+    <stylesheets>
+        <URL value="@/css/Cardexpen.css" />
+    </stylesheets>
+<children>
+    <VBox spacing="20" layoutX="300" layoutY="100">
+        <TextField fx:id="nameField" promptText="Expense Name" />
+        <TextField fx:id="amountField" promptText="Amount" />
+        <TextArea fx:id="descriptionField" promptText="Description" />
+        <TextField fx:id="categoryField" promptText="Category" />
+        <Button text="Save Changes" onAction="#saveChanges" styleClass="update-button" />
+    </VBox>
+</children>
+</AnchorPane>

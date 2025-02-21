@@ -2,50 +2,36 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
-
-import test.Session;
-
-
 import javafx.scene.image.ImageView;
-
-
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.geometry.Insets;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import models.Expense;
+import util.MyDatabase;
+import test.Session;
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
-
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-
-
-import java.io.IOException;
-
-
-import util.MyDatabase;
-
-
-import javafx.geometry.Insets;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-
-import models.Expense;
-
 import java.sql.ResultSet;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class Displayexpense implements Initializable {
-
 
     private AnchorPane centralAnocherPane;
 
@@ -71,7 +57,6 @@ public class Displayexpense implements Initializable {
             Connection conn = MyDatabase.getInstance().getCon();
 
             if (conn == null || conn.isClosed()) {
-                // Get a new connection if closed
                 MyDatabase.getInstance().reconnect(); // Assuming there's a reconnect method
                 conn = MyDatabase.getInstance().getCon();
             }
@@ -104,7 +89,6 @@ public class Displayexpense implements Initializable {
         return expenses;
     }
 
-
     private void displayExpenseCards(List<Expense> expenses) {
         expenseGrid.getChildren().clear();
         int column = 0;
@@ -121,7 +105,6 @@ public class Displayexpense implements Initializable {
             }
         }
     }
-
 
     private VBox createExpenseCard(Expense expense) {
         VBox card = new VBox(10);
@@ -153,10 +136,62 @@ public class Displayexpense implements Initializable {
         Label dateLabel = new Label(expense.getDateE().toString());
         dateLabel.getStyleClass().add("expense-date");
 
-        card.getChildren().addAll(imageView, nameLabel, amountLabel, dateLabel);
+        // Buttons (Delete and Edit)
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("delete-button");
+        deleteButton.setOnAction(e -> deleteExpense(expense));
+
+        Button editButton = new Button("Edit");
+        editButton.getStyleClass().add("update-button");
+        editButton.setOnAction(e -> editExpense(expense));
+
+        HBox buttonBox = new HBox(10, editButton, deleteButton);
+        card.getChildren().addAll(imageView, nameLabel, amountLabel, dateLabel, buttonBox);
+
         return card;
     }
 
+    private void deleteExpense(Expense expense) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Confirmation");
+        alert.setHeaderText("Are you sure you want to delete this expense?");
+        alert.setContentText("This action cannot be undone.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String query = "DELETE FROM expense WHERE idE = ?";
+            try (Connection conn = MyDatabase.getInstance().getCon();
+                 PreparedStatement pst = conn.prepareStatement(query)) {
+
+                pst.setInt(1, expense.getIdE());
+                pst.executeUpdate();
+                loadExpenses(); // Refresh the grid after deletion
+            } catch (SQLException e) {
+                System.err.println("Error deleting expense: " + e.getMessage());
+            }
+        }
+    }
+
+    private void editExpense(Expense expense) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Updateexpense.fxml"));
+            Parent updateExpensePage = loader.load();
+
+            Updateexpense controller = loader.getController();
+            controller.setExpenseToEdit(expense);
+
+            if (centralAnocherPane != null) {
+                centralAnocherPane.getChildren().clear(); // Clear previous content
+                centralAnocherPane.getChildren().add(updateExpensePage);
+                System.out.println("Updateexpense.fxml loaded inside centralAnchorPane.");
+            } else {
+                System.err.println("Error: centralAnchorPane is null.");
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading Updateexpense.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     public void setCentralAnocherPane(AnchorPane centralAnocherPane) {
         this.centralAnocherPane = centralAnocherPane;
@@ -180,15 +215,4 @@ public class Displayexpense implements Initializable {
             e.printStackTrace();
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
