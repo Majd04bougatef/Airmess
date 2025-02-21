@@ -2,8 +2,6 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -15,12 +13,14 @@ import javafx.scene.text.Text;
 import models.reservation_transport;
 import models.station;
 import services.ReservationTransportService;
+import test.Session;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
 public class CardStation {
+
+    private Session session = Session.getInstance();
 
     @FXML
     private Text idStation;
@@ -39,11 +39,6 @@ public class CardStation {
     private VBox vboxx;
 
     private station currentStation;
-    private DisplayStationVoyageurs parentController;
-
-    public void setParentController(DisplayStationVoyageurs parentController) {
-        this.parentController = parentController;
-    }
 
     @FXML
     void reserver(ActionEvent event) {
@@ -95,7 +90,8 @@ public class CardStation {
 
         reservation_transport reservation = new reservation_transport();
         reservation.setIdS(currentStation.getIdS());
-        reservation.setIdU(2);
+        session.checkLogin();
+        reservation.setIdU(session.getId_U());
         reservation.setDateRes(Timestamp.from(Instant.now()));
         reservation.setDateFin(null);
         reservation.setPrix(0.0);
@@ -114,7 +110,6 @@ public class CardStation {
 
     @FXML
     void review(ActionEvent event) {
-        System.out.println("Revue de la station: " + currentStation.getNom());
     }
 
     public void setData(station st) {

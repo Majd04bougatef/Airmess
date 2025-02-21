@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Offre.ReservationDialogController">
+    <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+        <!-- Date Picker -->
+        <Label text="Select Reservation Date:" />
+        <DatePicker fx:id="datePicker" />
+
+        <!-- Payment Method -->
+        <Label text="Select Payment Method:" />
+        <RadioButton text="Reserve with Cash" fx:id="cashRadioButton" />
+        <RadioButton text="Reserve with Card" fx:id="cardRadioButton" />
+
+        <!-- Buttons -->
+        <HBox spacing="10">
+            <Button text="Confirm" onAction="#handleConfirmButtonAction" styleClass="confirm-button" />
+            <Button text="Cancel" onAction="#handleCancelButtonAction" styleClass="cancel-button" />
+        </HBox>
+    </VBox>
+</AnchorPane>

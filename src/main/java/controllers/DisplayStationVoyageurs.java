@@ -17,7 +17,8 @@ public class DisplayStationVoyageurs {
     @FXML
     private VBox cardsContainer;
 
-
+    @FXML
+    private ScrollPane mainScrollPane;
 
     public void initialize() {
         StationService service = new StationService(){};
@@ -32,7 +33,7 @@ public class DisplayStationVoyageurs {
                 Parent card = loader.load();
                 CardStation controller = loader.getController();
                 controller.setData(st);
-                controller.setParentController(this); // Passer le parent
+                //controller.setParentController(this); // Passer le parent
 
                 hbox.getChildren().add(card);
                 count++;
@@ -51,6 +52,7 @@ public class DisplayStationVoyageurs {
         }
     }
 
+
     private static DisplayStationVoyageurs instance;
 
 
@@ -60,6 +62,10 @@ public class DisplayStationVoyageurs {
 
     public static DisplayStationVoyageurs getInstance() {
         return instance;
+    }
+
+    public void setScrollContent(Parent content) {
+        mainScrollPane.setContent(content);
     }
 
 }

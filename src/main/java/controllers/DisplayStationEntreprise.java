@@ -7,15 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import models.station;
 import services.StationService;
-
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -69,18 +65,15 @@ public class DisplayStationEntreprise implements Initializable {
         colNbVelo.setCellValueFactory(new PropertyValueFactory<>("nbVelo"));
         colTypeVelo.setCellValueFactory(new PropertyValueFactory<>("typeVelo"));
 
-        // Ajouter une icône dans la colonne Action
         colAction.setCellFactory(param -> new TableCell<>() {
-            private final ImageView iconView = new ImageView(
-                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/DisplayTransportEntreprise/supprimer.png")))
-            );
+            private final Button deleteButton = new Button("Supprimer");
 
             {
-                iconView.setFitWidth(20);  // Taille de l'icône
-                iconView.setFitHeight(20);
-
+                deleteButton.setOnAction(event -> {
+                    station selectedStation = getTableView().getItems().get(getIndex());
+                    showDeleteConfirmation(selectedStation);
+                });
             }
-
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -88,12 +81,29 @@ public class DisplayStationEntreprise implements Initializable {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(iconView);
+                    setGraphic(deleteButton);
                 }
             }
         });
 
         stationTable.setItems(observableList);
+    }
+
+    private void showDeleteConfirmation(station selectedStation) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText("Supprimer la station : " + selectedStation.getNom());
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer cette station ?");
+
+        ButtonType btnDelete = new ButtonType("Supprimer", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnCancel = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(btnDelete, btnCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == btnDelete) {
+            stationService.delete(selectedStation);
+            loadData();
+        }
     }
 
     private void showStationDetails(station selectedStation) {
@@ -123,10 +133,9 @@ public class DisplayStationEntreprise implements Initializable {
         TextField capaciteField = new TextField(String.valueOf(selectedStation.getCapacite()));
         TextField nbVeloField = new TextField(String.valueOf(selectedStation.getNbVelo()));
 
-        // ComboBox pour le type de vélo
         ComboBox<String> typeVeloBox = new ComboBox<>();
         typeVeloBox.getItems().addAll("Vélo de route", "Vélo urbain", "Vélo électrique");
-        typeVeloBox.setValue(selectedStation.getTypeVelo()); // Sélectionner la valeur actuelle
+        typeVeloBox.setValue(selectedStation.getTypeVelo());
 
         grid.add(new Label("Nom:"), 0, 0);
         grid.add(nomField, 1, 0);

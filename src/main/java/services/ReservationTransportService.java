@@ -156,5 +156,14 @@ public abstract class ReservationTransportService implements GlobalInterface<res
     }
 
 
-
+    public void deletee(int id) {
+        String sql= "DELETE FROM `reservation_transport` WHERE id = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            System.out.println("reservation deleted successfully");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }
