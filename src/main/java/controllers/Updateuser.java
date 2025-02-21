@@ -4,15 +4,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 import services.UsersService;
 import test.Session;
@@ -26,20 +31,26 @@ import javafx.fxml.Initializable;
 public class Updateuser implements Initializable {
 
     @FXML
-    private DatePicker modifier_dateN_user;
+    private Label naissancecontroller;
+    @FXML
+    private Label nimerocontroller;
+    @FXML
+    private Label Nomcontrole;
+    @FXML
+    private Label Prénomcontroller;
+    @FXML
+    private Label imagecpntroller;
 
+    @FXML
+    private DatePicker modifier_dateN_user;
     @FXML
     private TextField modifier_nom_uesr;
-
     @FXML
     private TextField modifier_prenom_user;
-
     @FXML
     private TextField modifier_tel_user;
-
     @FXML
     private ComboBox<String> modifier_type_user;
-
     @FXML
     private ImageView modifierfoto;
 
@@ -110,8 +121,10 @@ public class Updateuser implements Initializable {
                 Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 Image image = new Image(destinationFile.toURI().toString());
                 modifierfoto.setImage(image);
+                imagecpntroller.setText(""); // Clear image error on successful upload
                 System.out.println("Image enregistrée à : " + destinationFile.getAbsolutePath());
             } catch (IOException e) {
+                imagecpntroller.setText("Erreur lors de l'enregistrement de l'image");
                 System.out.println("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
         }
@@ -119,6 +132,10 @@ public class Updateuser implements Initializable {
 
     @FXML
     void modifierinfo(ActionEvent event) {
+        if (!validateForm()) {
+            return;
+        }
+
         // Get current user from session
         Session session = Session.getInstance();
         Users currentUser = session.getCurrentUser();
@@ -139,9 +156,99 @@ public class Updateuser implements Initializable {
             // Call update method from service
             ps.update(currentUser);
 
-            System.out.println("Informations utilisateur mises à jour avec succès !");
+            showAlert(AlertType.INFORMATION, "Succès", "Informations utilisateur mises à jour avec succès !");
         } else {
-            System.err.println("Aucun utilisateur trouvé dans la session");
+            showAlert(AlertType.ERROR, "Erreur", "Aucun utilisateur trouvé dans la session");
         }
+    }
+
+    // Validation Methods
+    private boolean validateForm() {
+        resetValidationLabels();
+        boolean isValid = true;
+
+        isValid &= validateName();
+        isValid &= validateSurname();
+        isValid &= validatePhone();
+        isValid &= validateBirthDate();
+        isValid &= validateUserType();
+        isValid &= validateImage();
+
+        return isValid;
+    }
+
+    private boolean validateName() {
+        if (modifier_nom_uesr.getText().trim().isEmpty()) {
+            Nomcontrole.setText("Nom requis");
+            return false;
+        }
+        Nomcontrole.setText("");
+        return true;
+    }
+
+    private boolean validateSurname() {
+        if (modifier_prenom_user.getText().trim().isEmpty()) {
+            Prénomcontroller.setText("Prénom requis");
+            return false;
+        }
+        Prénomcontroller.setText("");
+        return true;
+    }
+
+    private boolean validatePhone() {
+        String phone = modifier_tel_user.getText().trim();
+        if (!Pattern.matches("^\\d{8}$", phone)) {
+            nimerocontroller.setText("Numéro invalide (8 chiffres)");
+            return false;
+        }
+        nimerocontroller.setText("");
+        return true;
+    }
+
+    private boolean validateBirthDate() {
+        LocalDate birthDate = modifier_dateN_user.getValue();
+        if (birthDate == null) {
+            naissancecontroller.setText("Date de naissance requise");
+            return false;
+        }
+        if (birthDate.plusYears(15).isAfter(LocalDate.now())) {
+            naissancecontroller.setText("Âge minimum : 15 ans");
+            return false;
+        }
+        naissancecontroller.setText("");
+        return true;
+    }
+
+    private boolean validateUserType() {
+        if (modifier_type_user.getValue() == null) {
+            showAlert(AlertType.ERROR, "Erreur", "Veuillez sélectionner un type d'utilisateur.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateImage() {
+        if (modifierfoto.getImage() == null) {
+            imagecpntroller.setText("Veuillez sélectionner une photo.");
+            return false;
+        }
+        imagecpntroller.setText("");
+        return true;
+    }
+
+    private void resetValidationLabels() {
+        Nomcontrole.setText("");
+        Prénomcontroller.setText("");
+        nimerocontroller.setText("");
+        naissancecontroller.setText("");
+        imagecpntroller.setText("");
+    }
+
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
