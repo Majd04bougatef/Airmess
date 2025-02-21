@@ -129,6 +129,21 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
 
         return b;
     }
+    public boolean existsByName(String nom) {
+        String query = "SELECT COUNT(*) FROM bonplan WHERE nomplace = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, nom);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
 

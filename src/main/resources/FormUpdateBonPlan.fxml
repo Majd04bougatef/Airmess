@@ -24,7 +24,7 @@
                         <Font name="Arial Black" size="23.0" />
                     </font>
                 </Text>
-                <TextField fx:id="idBonPlan" visible="false" /> <!-- ID caché pour différencier update/ajout -->
+                <TextField fx:id="idBonPlan" visible="false" />
 
                 <Text fx:id="textTitre" layoutX="66.0" layoutY="109.0" text="Nom de l'endroit" />
                 <TextField fx:id="name" layoutX="66.0" layoutY="124.0" prefHeight="35.0" prefWidth="364.0"
