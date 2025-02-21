@@ -9,38 +9,30 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="300.0" prefWidth="184.0" stylesheets="css/cardStation.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CardStation">
-
+<AnchorPane prefHeight="320.0" prefWidth="200.0" stylesheets="css/cardStation.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CardStation">
     <children>
-        <VBox fx:id="vboxx" layoutX="-1.0" layoutY="-2.0" prefHeight="300.0" prefWidth="192.0" styleClass="card">
+        <VBox fx:id="vboxx" layoutX="0" layoutY="0" prefHeight="320.0" prefWidth="200.0" styleClass="card">
             <children>
-                <ImageView fx:id="image" fitHeight="117.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true" />
-                <Text fx:id="idStation" text="ID de la station" opacity="0" visible="false"/>
+                <ImageView fx:id="image" fitWidth="200.0" fitHeight="130.0" preserveRatio="false" smooth="true" styleClass="card-image"/>
+                <Text fx:id="idStation" opacity="0" text="ID de la station" visible="false" />
 
-                <Text fx:id="nom" text="Nom de la station">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="10.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Text>
-                <Text fx:id="nbvelo" text="Nombre de vélos">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font size="12.0" />
-                    </font>
-                </Text>
-                <HBox prefHeight="49.0" prefWidth="169.0">
-                    <VBox.margin>
-                        <Insets top="10.0" />
-                    </VBox.margin>
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#reserver" prefHeight="26.0" prefWidth="102.0" text="Reserver" />
-                        <Button mnemonicParsing="false" onAction="#review" prefHeight="26.0" prefWidth="93.0" text="Review" />
-                    </children>
+                <VBox spacing="5" styleClass="card-content">
+                    <Text fx:id="nom" text="Nom de la station" styleClass="card-title" />
+                    <Text fx:id="nbvelo" text="Nombre de vélos" styleClass="card-subtitle" />
+                </VBox>
+
+                <HBox fx:id="ratingContainer" spacing="3.0" alignment="CENTER_LEFT">
+                    <Text text="★" styleClass="star"/>
+                    <Text text="★" styleClass="star"/>
+                    <Text text="★" styleClass="star"/>
+                    <Text text="★" styleClass="star"/>
+                    <Text text="☆" styleClass="star"/>
+                </HBox>
+
+
+                <HBox spacing="10" alignment="CENTER" styleClass="card-buttons">
+                    <Button mnemonicParsing="false" onAction="#reserver" text="Réserver" styleClass="btn-primary" />
+                    <Button mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
                 </HBox>
             </children>
         </VBox>
