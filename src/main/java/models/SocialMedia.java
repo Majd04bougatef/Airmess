@@ -8,39 +8,40 @@ public class SocialMedia {
     private String titre;
     private String contenu;
     private int id_U;
-    private TypeEB category;
     private Date publicationDate;
     private String lieu;
-    private int like;
+    private int likee;
     private int dislike;
+    private String imagemedia;
+
 
     // Constructeur par défaut
     public SocialMedia() {
     }
 
     // Constructeur avec tous les paramètres
-    public SocialMedia(int idEB, String titre, String contenu, int id_U, TypeEB category, Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(int idEB, String titre, String contenu, int id_U,  Date publicationDate, String lieu, int likee, int dislike,String imagemedia) {
         this.idEB = idEB;
         this.titre = titre;
         this.contenu = contenu;
         this.id_U = id_U;
-        this.category = category;
         this.publicationDate = publicationDate;
         this.lieu = lieu;
-        this.like = like;
+        this.likee = likee;
         this.dislike = dislike;
+        this.imagemedia =imagemedia;
     }
 
     // Constructeur sans idEB
-    public SocialMedia(String titre, String contenu, int id_U, TypeEB category, Date publicationDate, String lieu, int like, int dislike) {
+    public SocialMedia(String titre, String contenu, int id_U, Date publicationDate, String lieu, int likee, int dislike,String imagemedia) {
         this.titre = titre;
         this.contenu = contenu;
         this.id_U = id_U;
-        this.category = category;
         this.publicationDate = publicationDate;
         this.lieu = lieu;
-        this.like = like;
+        this.likee = likee;
         this.dislike = dislike;
+        this.imagemedia =imagemedia;
     }
 
     // Getters et Setters
@@ -76,13 +77,13 @@ public class SocialMedia {
         this.id_U = id_U;
     }
 
-    public TypeEB getCategory() {
-        return category;
+    public String getImagemedia() {
+        return imagemedia;
+    }
+    public void setImagemedia(String imagemedia) {
+        this.imagemedia = imagemedia;
     }
 
-    public void setCategory(TypeEB category) {
-        this.category = category;
-    }
 
     public Date getPublicationDate() {
         return publicationDate;
@@ -100,12 +101,12 @@ public class SocialMedia {
         this.lieu = lieu;
     }
 
-    public int getLike() {
-        return like;
+    public int getLikee() {
+        return likee;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public void setLikee(int likee) {
+        this.likee = likee;
     }
 
     public int getDislike() {
@@ -123,11 +124,11 @@ public class SocialMedia {
                 ", titre='" + titre + '\'' +
                 ", contenu='" + contenu + '\'' +
                 ", idU=" + id_U +
-                ", category=" + category +
                 ", publicationDate=" + publicationDate +
                 ", lieu='" + lieu + '\'' +
-                ", like=" + like +
+                ", likee=" + likee +
                 ", dislike=" + dislike +
+                ", imagemedia='" + imagemedia + '\'' +
                 '}';
     }
 }

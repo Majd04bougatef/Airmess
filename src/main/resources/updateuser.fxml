@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Updateuser">
+   <children>
+      <TextField fx:id="modifier_nom_uesr" layoutX="130.0" layoutY="127.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+      <TextField fx:id="modifier_prenom_user" layoutX="130.0" layoutY="227.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+      <Text fill="#1b56a4" layoutX="130.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom" wrappingWidth="48.52618408203119">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fill="#1b56a4" layoutX="130.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prénom">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="modifier_tel_user" layoutX="440.0" layoutY="170.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+      <ComboBox fx:id="modifier_type_user" layoutX="130.0" layoutY="327.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+      <DatePicker fx:id="modifier_dateN_user" layoutX="440.0" layoutY="270.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+      <Text fill="#1b56a4" layoutX="130.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de compte">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fill="#1b56a4" layoutX="440.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="numéro de téléphone">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fill="#1b56a4" layoutX="440.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="date de naissance ">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="modifierfoto" fitHeight="290.0" fitWidth="297.0" layoutX="720.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="349.0" layoutY="457.0" mnemonicParsing="false" onAction="#modifierinfo" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="Modifier les information" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="749.0" layoutY="457.0" mnemonicParsing="false" onAction="#modifierfoto" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="Modifier limage" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Text fill="#406dab" layoutX="397.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier le profil " wrappingWidth="384.3400726318357">
+         <font>
+            <Font name="Aldhabi" size="70.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

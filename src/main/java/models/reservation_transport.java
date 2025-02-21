@@ -3,28 +3,30 @@ package models;
 import java.sql.Timestamp;
 
 public class reservation_transport {
-    private int id,idU,idS;
+    private int id,idU,idS,nombreVelo;
     private Timestamp dateRes,dateFin;
     private double prix;
     private String statut;
 
     public reservation_transport() {}
-    public reservation_transport(int id,int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix) {
+    public reservation_transport(int id,int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
         this.id = id;
         this.idU = idU;
         this.idS = idS;
         this.dateRes = dateRes;
         this.dateFin = dateFin;
         this.prix = prix;
+        this.nombreVelo = nombreVelo;
         this.statut = statut;
     }
 
-    public reservation_transport(int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix) {
+    public reservation_transport(int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
         this.idU = idU;
         this.idS = idS;
         this.dateRes = dateRes;
         this.dateFin = dateFin;
         this.prix = prix;
+        this.nombreVelo = nombreVelo;
         this.statut = statut;
     }
 
@@ -38,6 +40,10 @@ public class reservation_transport {
 
     public int getIdU() {
         return idU;
+    }
+
+    public int getNombreVelo() {
+        return nombreVelo;
     }
 
     public void setIdU(int idU) {
@@ -72,6 +78,10 @@ public class reservation_transport {
         return prix;
     }
 
+    public void setNombreVelo(int nombreVelo) {
+        this.nombreVelo = nombreVelo;
+    }
+
     public void setPrix(double prix) {
         this.prix = prix;
     }
@@ -93,6 +103,7 @@ public class reservation_transport {
                 ", dateRes=" + dateRes +
                 ", dateFin=" + dateFin +
                 ", prix=" + prix +
+                ", nombre Velo =" + nombreVelo +
                 ", statut='" + statut + '\'' +
                 '}';
     }

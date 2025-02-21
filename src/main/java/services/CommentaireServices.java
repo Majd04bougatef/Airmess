@@ -18,19 +18,28 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
     @Override
     public void add(Commentaire commentaire) {
         String sql = "INSERT INTO commentaire (idEB, id_U, description, numberlike, numberdislike) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, commentaire.getIdEB());
             preparedStatement.setInt(2, commentaire.getId_U());
             preparedStatement.setString(3, commentaire.getDescription());
             preparedStatement.setInt(4, commentaire.getNumberLike());
             preparedStatement.setInt(5, commentaire.getNumberDislike());
 
-            preparedStatement.executeUpdate();
-            System.out.println("✅Commentaire ajouté avec succès !");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        commentaire.setIdC(generatedKeys.getInt(1));
+                        System.out.println("Commentaire ajouté avec ID : " + commentaire.getIdC());
+                    }
+                }
+            }
+
         } catch (SQLException e) {
             System.err.println(" Erreur lors de l'ajout : " + e.getMessage());
         }
     }
+
 
     @Override
     public void update(Commentaire commentaire) {
@@ -88,7 +97,6 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
         return commentaires;
     }
 
-    // Ajout de `getById(int id)`
     @Override
     public Commentaire getById(int id) {
         String query = "SELECT * FROM commentaire WHERE idC = ?";
@@ -116,5 +124,45 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
         }
 
         return commentaire;
+    }
+
+    public List<Commentaire> getAllWithPostDetails(int postId) {
+        String query = "SELECT c.idC, c.idEB, c.id_U, c.description, c.numberlike, c.numberdislike, " +
+                "s.titre, s.contenu, s.imagemedia " +
+                "FROM commentaire c " +
+                "JOIN socialmedia s ON c.idEB = s.idEB "  +
+                "WHERE c.idEB = ?"; ;
+
+        List<Commentaire> commentaires = new ArrayList<>();
+
+        try (PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setInt(1, postId);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Commentaire commentaire = new Commentaire();
+                commentaire.setIdC(rs.getInt("idC"));
+                commentaire.setIdEB(rs.getInt("idEB"));
+                commentaire.setId_U(rs.getInt("id_U"));
+                commentaire.setDescription(rs.getString("description"));
+                commentaire.setNumberLike(rs.getInt("numberlike"));
+                commentaire.setNumberDislike(rs.getInt("numberdislike"));
+
+                commentaire.setPostTitre(rs.getString("titre"));
+                commentaire.setPostContenu(rs.getString("contenu"));
+                commentaire.setPostImagemedia(rs.getString("imagemedia"));
+
+                System.out.println("Commentaire ID: " + commentaire.getIdC() +
+                        " | Post: " + commentaire.getPostTitre() +
+                        " | Contenu: " + commentaire.getPostContenu());
+
+                commentaires.add(commentaire);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des commentaires avec posts : " + e.getMessage());
+        }
+
+        return commentaires;
     }
 }

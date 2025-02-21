@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700" prefWidth="900" stylesheets="@css/SocialMediaview.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.SocialMediaview">
+    <children>
+        <!-- Arrière-plan -->
+        <ImageView fitHeight="700" fitWidth="900" pickOnBounds="true" preserveRatio="false"/>
+
+        <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="800"
+                    styleClass="scroll-pane">
+            <content>
+                <VBox fx:id="postContainer" prefWidth="780" spacing="15">
+                    <!-- Un exemple de post (sera généré dynamiquement) -->
+                    <VBox spacing="10" styleClass="post-box">
+                        <HBox spacing="10" styleClass="title-container">
+                            <Label fx:id="postTitle" styleClass="title-label" text="Titre du post" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button fx:id="btnUpdate" onAction="#handleUpdate" styleClass="update-button"
+                                    text="✏ Modifier" />
+                            <Button fx:id="btnDelete" onAction="#handleDelete" styleClass="delete-button"
+                                    text="🗑 Supprimer" />
+                        </HBox>
+
+                        <Label fx:id="postContent" styleClass="content-label" text="Ceci est un exemple de contenu."
+                               wrapText="true" />
+                        <ImageView fx:id="postImage" fitHeight="250.0" fitWidth="600.0" preserveRatio="true"
+                                   styleClass="post-image"/>
+                        <Label fx:id="postLocation" styleClass="location-label" text="📍 Lieu: Exemple" />
+                        <Label fx:id="postDate" styleClass="date-label" text="📅 Date de publication: 01/01/2024" />
+
+                        <HBox alignment="CENTER_RIGHT" spacing="15">
+                            <Button fx:id="btnlike" onAction="#handleLike" styleClass="like-button" text="👍 J'aime" />
+                            <Button fx:id="btnComment" onAction="#handleComment" styleClass="comment-button" text="💬 Commenter" />
+
+
+                        </HBox>
+                        <VBox fx:id="commentSection" spacing="10" visible="true">
+                            <TextArea fx:id="commentText" prefHeight="50" prefWidth="600" promptText="Écrire un commentaire..."
+                                      wrapText="true"/>
+                            <Button fx:id="btnAddComment" onAction="#handleAddComment" styleClass="submit-comment-button"
+                                    text="📩 Publier" />
+
+                            <VBox fx:id="commentList" spacing="10">
+                                <HBox spacing="10" styleClass="comment-box">
+                                    <Label fx:id="commentContent" styleClass="comment-label" text="Un commentaire d'exemple."
+                                           wrapText="true"/>
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Button onAction="#handleUpdateComment" styleClass="update-comment-button" text="✏" />
+                                    <Button onAction="#handleDeleteComment" styleClass="delete-comment-button" text="🗑" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <Button fx:id="btnAjout" layoutX="650" layoutY="620" onAction="#Ajouterpost" prefHeight="45.0"
+                prefWidth="220.0" styleClass="add-button" text="➕ Ajouter une publication" />
+    </children>
+</AnchorPane>

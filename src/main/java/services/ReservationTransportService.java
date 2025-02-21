@@ -21,7 +21,7 @@ public abstract class ReservationTransportService implements GlobalInterface<res
 
     @Override
     public void add(reservation_transport rt) {
-        String sql = "INSERT INTO `reservation_transport`(`id_U`, `idS`, `dateRes`, `dateFin`, `prix`, `statut`) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO `reservation_transport`(`id_U`, `idS`, `dateRes`, `dateFin`, `prix`,`nombreVelo`, `statut`) VALUES (?,?,?,?,?,?,?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, rt.getIdU());
@@ -29,7 +29,8 @@ public abstract class ReservationTransportService implements GlobalInterface<res
             preparedStatement.setTimestamp(3, rt.getDateRes());
             preparedStatement.setTimestamp(4, rt.getDateFin());
             preparedStatement.setDouble(5, rt.getPrix());
-            preparedStatement.setString(6, rt.getStatut());
+            preparedStatement.setDouble(6, rt.getNombreVelo());
+            preparedStatement.setString(7, rt.getStatut());
 
             preparedStatement.executeUpdate();
             System.out.println("Reservation added successfully");
@@ -152,5 +153,17 @@ public abstract class ReservationTransportService implements GlobalInterface<res
         }
 
         return rs;
+    }
+
+
+    public void deletee(int id) {
+        String sql= "DELETE FROM `reservation_transport` WHERE id = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            System.out.println("reservation deleted successfully");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

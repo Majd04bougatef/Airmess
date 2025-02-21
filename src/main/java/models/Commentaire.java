@@ -9,11 +9,17 @@ public class Commentaire {
     private int numberLike;
     private int numberDislike;
 
-    // 🏗️ Constructeur par défaut
+
+    private String postTitre;
+    private String postContenu;
+    private String postImagemedia;
+
+
+    //  Constructeur par défaut
     public Commentaire() {
     }
 
-    // 🏗️ Constructeur avec tous les paramètres
+   //Constructeur avec tous les paramètres
     public Commentaire(int idC, int idEB, int id_U, String description, int numberLike, int numberDislike) {
         this.idC = idC;
         this.idEB = idEB;
@@ -81,6 +87,29 @@ public class Commentaire {
 
     public void setNumberDislike(int numberDislike) {
         this.numberDislike = numberDislike;
+    }
+    public String getPostTitre() {
+        return postTitre;
+    }
+
+    public void setPostTitre(String postTitre) {
+        this.postTitre = postTitre;
+    }
+
+    public String getPostContenu() {
+        return postContenu;
+    }
+
+    public void setPostContenu(String postContenu) {
+        this.postContenu = postContenu;
+    }
+
+    public String getPostImagemedia() {
+        return postImagemedia;
+    }
+
+    public void setPostImagemedia(String postImagemedia) {
+        this.postImagemedia = postImagemedia;
     }
 
 
