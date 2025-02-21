@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Offre;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,10 +14,15 @@ import models.Reservation;
 import services.ReservationService;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class ReservationAdminController implements Initializable {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public VBox deleteConfirmationBox;
     @FXML
@@ -51,10 +56,11 @@ public class ReservationAdminController implements Initializable {
     }
 
     private String formatReservationDisplay(Reservation reservation) {
+        String formattedDate = LocalDateTime.parse(reservation.getDateRes(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER);
         return String.format(
                 "Reservation ID: %d\nDate: %s\nPayment Method: %s\nUser: %d",
                 reservation.getIdO().getIdO(),
-                reservation.getDateRes(),
+                formattedDate,
                 reservation.getModePaiement(),
                 reservation.getId_U()
         );

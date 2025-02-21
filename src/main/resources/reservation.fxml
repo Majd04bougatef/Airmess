@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx/fxml/1" fx:controller="controllers.ReservationController" >
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx/fxml/1" fx:controller="controllers.Offre.ReservationController" >
     <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <FlowPane fx:id="cardsContainer" hgap="20" vgap="20" style="-fx-padding: 20;" />
     </ScrollPane>

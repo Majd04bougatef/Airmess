@@ -1,11 +1,10 @@
-package controllers;
+package controllers.Offre;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -20,11 +19,16 @@ import services.ReservationService;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.mysql.cj.util.TimeUtil.DATE_FORMATTER;
+
 public class ReservationController implements Initializable {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
     private FlowPane cardsContainer;
@@ -38,6 +42,7 @@ public class ReservationController implements Initializable {
     }
 
     private void loadOffreCards() {
+        cardsContainer.getChildren().clear();
         List<Offre> offres = offreService.getAll();
         for (Offre offre : offres) {
             VBox card = createOffreCard(offre);
@@ -57,7 +62,7 @@ public class ReservationController implements Initializable {
         Label priceLabel = new Label(String.format("Price: %.2f -> %.2f", offre.getPriceInit(), offre.getPriceAfter()));
         priceLabel.setFont(new Font(14));
 
-        Label datesLabel = new Label("Dates: " + offre.getStartDate() + " to " + offre.getEndDate());
+        Label datesLabel = new Label("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER) + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
         datesLabel.setFont(new Font(14));
 
         Label placeLabel = new Label("Place: " + offre.getPlace());
@@ -73,7 +78,9 @@ public class ReservationController implements Initializable {
 
         // Add all elements to the card
         card.getChildren().addAll(descriptionLabel, priceLabel, datesLabel, placeLabel, limitLabel, reserveButton);
-
+        if (offre.getNumberLimit() == 0) {
+            reserveButton.setDisable(true);
+        }
         return card;
     }
 
@@ -120,6 +127,10 @@ public class ReservationController implements Initializable {
                 Reservation reservation = new Reservation(offre, selectedDate, paymentMethod, 1);
                 ReservationService reservationService1 = new ReservationService();
                 reservationService1.add(reservation);
+                OffreService offreService = new OffreService();
+                offre.setNumberLimit(offre.getNumberLimit() - 1);
+                offreService.update(offre);
+                loadOffreCards();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
