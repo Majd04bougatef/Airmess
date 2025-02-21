@@ -127,7 +127,7 @@ public class FormUpdateSocialMedia implements Initializable {
     }
 
 
-    private void clearFields() {
+    public void clearFields() {
         Titre.clear();
         contenu.clear();
         Lieu.clear();
@@ -145,4 +145,6 @@ public class FormUpdateSocialMedia implements Initializable {
             image.setImage(new Image(selectedImageFile.toURI().toString()));
         }
     }
+
+
 }

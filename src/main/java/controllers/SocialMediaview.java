@@ -209,6 +209,8 @@ public class SocialMediaview {
         postContainer.getChildren().clear();
         loadPosts();
 
+
+
     }
 
     @FXML
@@ -225,6 +227,14 @@ public class SocialMediaview {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
+                        Object parent = sourceButton.getParent();
+                        if (parent instanceof VBox) {
+                            VBox postBox = (VBox) parent;
+                            postBox.setVisible(false);
+                            postBox.setManaged(false);
+                        } else {
+                            System.out.println("impossible de supprimé la publication.");
+                        }
                         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postToDelete.getIdEB());
                         for (Commentaire commentaire : commentaires) {
                             CommentaireServices.delete(commentaire);
@@ -232,7 +242,7 @@ public class SocialMediaview {
 
                         socialMediaServices.delete(postToDelete);
 
-                        refreshPosts();
+                       refreshPosts();
 
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Succès");
@@ -271,6 +281,8 @@ public class SocialMediaview {
             stage.setTitle("Modifier la publication");
             stage.setScene(scene);
             stage.show();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
