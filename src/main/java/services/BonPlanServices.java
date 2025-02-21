@@ -48,7 +48,7 @@ public abstract class BonPlanServices implements GlobalInterface<bonplan> {
             preparedStatement.setInt(6, bonPlan.getIdP());  // idP est utilisé comme identifiant unique ici
 
             int rowsUpdated = preparedStatement.executeUpdate();
-            if (rowsUpdated > 0) {
+            if (rowsUpdated > 0) {// bon plan modifiée
                 System.out.println("Bon Plan updated successfully!");
             } else {
                 System.out.println("No Bon Plan found with idP: " + bonPlan.getIdP());
