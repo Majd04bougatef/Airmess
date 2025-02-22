@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -128,5 +129,11 @@ public class MesReservationTransportVoyageurs {
             reservationService.deletee(reservationId);
             filterReservations();
         }
+    }
+
+    private Pane panewidget;
+
+    public void setPanewidget(Pane panewidget) {
+        this.panewidget = panewidget;
     }
 }

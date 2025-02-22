@@ -21,16 +21,17 @@ public abstract class ReservationTransportService implements GlobalInterface<res
 
     @Override
     public void add(reservation_transport rt) {
-        String sql = "INSERT INTO `reservation_transport`(`id_U`, `idS`, `dateRes`, `dateFin`, `prix`,`nombreVelo`, `statut`) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO `reservation_transport`(`id_U`, `idS`,`reference`, `dateRes`, `dateFin`, `prix`,`nombreVelo`, `statut`) VALUES (?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, rt.getIdU());
             preparedStatement.setInt(2, rt.getIdS());
-            preparedStatement.setTimestamp(3, rt.getDateRes());
-            preparedStatement.setTimestamp(4, rt.getDateFin());
-            preparedStatement.setDouble(5, rt.getPrix());
-            preparedStatement.setDouble(6, rt.getNombreVelo());
-            preparedStatement.setString(7, rt.getStatut());
+            preparedStatement.setString(3, rt.getReference());
+            preparedStatement.setTimestamp(4, rt.getDateRes());
+            preparedStatement.setTimestamp(5, rt.getDateFin());
+            preparedStatement.setDouble(6, rt.getPrix());
+            preparedStatement.setDouble(7, rt.getNombreVelo());
+            preparedStatement.setString(8, rt.getStatut());
 
             preparedStatement.executeUpdate();
             System.out.println("Reservation added successfully");
@@ -84,6 +85,7 @@ public abstract class ReservationTransportService implements GlobalInterface<res
                 r.setDateFin(rs.getTimestamp("dateFin"));
                 r.setPrix(rs.getDouble("prix"));
                 r.setStatut(rs.getString("statut"));
+                r.setReference(rs.getString("reference"));
                 rt.add(r);
             }
         } catch (SQLException e) {
@@ -114,6 +116,8 @@ public abstract class ReservationTransportService implements GlobalInterface<res
                 rt.setDateFin(rs.getTimestamp("dateFin"));
                 rt.setPrix(rs.getDouble("prix"));
                 rt.setStatut(rs.getString("statut"));
+                rt.setReference(rs.getString("reference"));
+
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());

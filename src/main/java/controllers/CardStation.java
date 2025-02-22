@@ -2,14 +2,15 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import models.reservation_transport;
 import models.station;
 import services.ReservationTransportService;
@@ -17,7 +18,10 @@ import test.Session;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import javafx.scene.image.ImageView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 import javafx.scene.shape.Rectangle;
 
 public class CardStation {
@@ -53,6 +57,20 @@ public class CardStation {
         clip.setArcHeight(radius * 2);
         imageView.setClip(clip);
     }
+
+
+    private String generateReference(int idU, Date dateRes) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String datePart = sdf.format(dateRes);
+
+        int randomNum = new Random().nextInt(9000) + 1000;
+
+        String userIdFormatted = String.format("%04d", idU);
+
+        return "AIR-" + datePart +"-"+ randomNum + "-" + userIdFormatted;
+    }
+
+
     @FXML
     void reserver(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -60,11 +78,19 @@ public class CardStation {
         alert.setHeaderText("Station: " + currentStation.getNom());
         alert.setContentText("Nombre de vélos disponibles: " + currentStation.getNbVelo());
 
+        // Appliquer le style personnalisé
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/alert-style.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialog-pane");
+
         TextField inputField = new TextField();
         inputField.setPromptText("Entrez le nombre de vélos à réserver");
+        inputField.getStyleClass().add("text-field");
 
-        VBox vbox = new VBox();
+        VBox vbox = new VBox(10);
         vbox.getChildren().addAll(new Text("Indiquez le nombre de vélos à réserver :"), inputField);
+        vbox.setStyle("-fx-padding: 10px;");
+
         alert.getDialogPane().setContent(vbox);
 
         ButtonType buttonReserver = new ButtonType("Réserver");
@@ -90,6 +116,7 @@ public class CardStation {
         });
     }
 
+
     private void showErrorAlert(String message) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setTitle("Erreur de réservation");
@@ -99,26 +126,52 @@ public class CardStation {
     }
 
     private void ajouterReservation(int nbVeloRes) {
-        ReservationTransportService service = new ReservationTransportService() {};
+        ReservationTransportService service = new ReservationTransportService(){};
+
+        session.checkLogin();
+        int userId = session.getId_U();
+        Timestamp dateRes = Timestamp.from(Instant.now());
+
+        String reference = generateReference(userId, new Date());
 
         reservation_transport reservation = new reservation_transport();
         reservation.setIdS(currentStation.getIdS());
-        session.checkLogin();
-        reservation.setIdU(session.getId_U());
-        reservation.setDateRes(Timestamp.from(Instant.now()));
+        reservation.setIdU(userId);
+        reservation.setDateRes(dateRes);
         reservation.setDateFin(null);
         reservation.setPrix(0.0);
         reservation.setStatut("en cours");
         reservation.setNombreVelo(nbVeloRes);
+        reservation.setReference(reference);
 
         service.add(reservation);
 
-        Alert confirmation = new Alert(Alert.AlertType.INFORMATION);
-        confirmation.setTitle("Réservation confirmée");
-        confirmation.setHeaderText(null);
-        confirmation.setContentText("Votre réservation de " + nbVeloRes + " vélo(s) a été enregistrée !");
-        confirmation.show();
+        showReservationDialog("Votre réservation de " + nbVeloRes + " vélo(s) a été enregistrée !\nRéférence: " + reference);
     }
+
+    private void showReservationDialog(String message) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationDialog.fxml"));
+            Parent root = loader.load();
+
+            ReservationDialog controller = loader.getController();
+            Stage stage = new Stage();
+            controller.setDialogStage(stage);
+            controller.setMessage(message);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.setTitle("Réservation Confirmée");
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     @FXML

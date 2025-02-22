@@ -14,12 +14,12 @@
                <HBox.margin>
                   <Insets left="350.0" right="20.0" top="15.0" />
                </HBox.margin></Button>
-            <Button mnemonicParsing="false" text="Mes Réservations" onAction="#MesReservation">
+            <Button mnemonicParsing="false" onAction="#MesReservation" text="Mes Réservations">
                <HBox.margin>
                   <Insets left="200.0" top="15.0" />
                </HBox.margin></Button>
          </children>
       </HBox>
-      <Pane fx:id="panewidget" layoutX="24.0" layoutY="74.0" prefHeight="550.0" prefWidth="986.0" />
+      <Pane fx:id="panewidget" layoutX="3.0" layoutY="74.0" prefHeight="550.0" prefWidth="1024.0" />
    </children>
 </AnchorPane>

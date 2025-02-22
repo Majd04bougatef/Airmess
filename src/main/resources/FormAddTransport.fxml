@@ -15,38 +15,46 @@
       <Pane fx:id="form" layoutX="43.0" layoutY="2.0" prefHeight="558.0" prefWidth="940.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;" AnchorPane.leftAnchor="50.0">
          <children>
             <TextField fx:id="Longitude" layoutX="437.0" layoutY="135.0" />
-            <Text fx:id="text1" layoutX="66.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter une station" wrappingWidth="410.13671875">
+            <Text fx:id="text1" layoutX="66.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter une station" wrappingWidth="410.13671875">
                <font>
                   <Font name="Arial Black" size="23.0" />
                </font>
             </Text>
 
-            <Text fx:id="textNom" layoutX="66.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la station" wrappingWidth="130.70703125" />
-            <TextField fx:id="Nom" layoutX="66.0" layoutY="113.0" prefHeight="35.0" prefWidth="341.0" promptText="Entrez un nom" />
-            <Label fx:id="lblNomError" layoutX="66.0" layoutY="150.0" prefHeight="17.0" prefWidth="205.0" text="" textFill="red" />
+            <Text fx:id="textNom" layoutX="62.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la station" wrappingWidth="130.70703125" />
+            <TextField fx:id="Nom" layoutX="62.0" layoutY="79.0" prefHeight="35.0" prefWidth="341.0" promptText="Entrez un nom" />
+            <Label fx:id="lblNomError" layoutX="62.0" layoutY="116.0" prefHeight="17.0" prefWidth="205.0" text="" textFill="red" />
 
 
-            <Text fx:id="textCapacite" layoutX="66.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
-            <TextField fx:id="Capacite" layoutX="66.0" layoutY="269.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
-            <Label fx:id="lblCapaciteError" layoutX="75.0" layoutY="304.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
+            <Text fx:id="textCapacite" layoutX="65.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
+            <TextField fx:id="Capacite" layoutX="66.0" layoutY="215.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
+            <Label fx:id="lblCapaciteError" layoutX="69.0" layoutY="248.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
 
-            <Text fx:id="textNbVelo" layoutX="66.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
-            <TextField fx:id="NbVelo" layoutX="66.0" layoutY="195.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
-            <Label fx:id="lblNbVeloError" layoutX="66.0" layoutY="229.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
+            <Text fx:id="textNbVelo" layoutX="66.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
+            <TextField fx:id="NbVelo" layoutX="63.0" layoutY="145.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
+            <Label fx:id="lblNbVeloError" layoutX="65.0" layoutY="178.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
 
-            <Text fx:id="textTypeVelo" layoutX="66.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de vélo" wrappingWidth="96.70703125" />
-            <ComboBox fx:id="TypeVelo" layoutX="66.0" layoutY="343.0" prefHeight="37.0" prefWidth="300.0" promptText="Typer Velo">
+            <Text fx:id="textTypeVelo" layoutX="68.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de vélo" wrappingWidth="96.70703125" />
+            <ComboBox fx:id="TypeVelo" layoutX="66.0" layoutY="296.0" prefHeight="20.0" prefWidth="300.0" promptText="Type Velo">
                <items>
 
                </items>
             </ComboBox>
-            <Label fx:id="lblPrixHeureError" layoutX="66.0" layoutY="457.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
-            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
-            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="422.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
-            <Label fx:id="lblTypeVeloError" layoutX="70.0" layoutY="380.0" prefHeight="17.0" prefWidth="271.0" text="" textFill="red" />
+            <Text fx:id="textPays" layoutX="67.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pays" wrappingWidth="96.70703125" />
+            <ComboBox fx:id="pays" layoutX="66.0" layoutY="432.0" prefHeight="23.0" prefWidth="300.0" promptText="pays">
+               <items>
+
+               </items>
+            </ComboBox>
+
+            <Label fx:id="lblPrixHeureError" layoutX="70.0" layoutY="396.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
+
+            <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
+            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="360.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
+            <Label fx:id="lblTypeVeloError" layoutX="70.0" layoutY="322.0" prefHeight="17.0" prefWidth="271.0" text="" textFill="red" />
 
 
             <Button layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#btnAjoutTranport" prefHeight="37.0" prefWidth="859.0" styleClass="submit-button" text="Ajouter" />

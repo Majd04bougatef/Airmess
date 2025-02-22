@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.station;
@@ -20,6 +21,12 @@ public class DisplayStationVoyageurs {
     @FXML
     private ScrollPane mainScrollPane;
 
+    private AnchorPane centralAnocherPane;
+
+    public void setCentralAnocherPane(AnchorPane centralAnocherPane) {
+        this.centralAnocherPane = centralAnocherPane;
+    }
+
     public void initialize() {
         StationService service = new StationService(){};
         List<station> stations = service.getAll();
@@ -32,9 +39,9 @@ public class DisplayStationVoyageurs {
             try {
                 Parent card = loader.load();
                 CardStation controller = loader.getController();
-                controller.setData(st);
-                //controller.setParentController(this); // Passer le parent
 
+
+                controller.setData(st);
                 hbox.getChildren().add(card);
                 count++;
 
@@ -47,25 +54,11 @@ public class DisplayStationVoyageurs {
             }
         }
 
+
         if (count % 4 != 0) {
             cardsContainer.getChildren().add(hbox);
         }
     }
 
-
-    private static DisplayStationVoyageurs instance;
-
-
-    public DisplayStationVoyageurs() {
-        instance = this;
-    }
-
-    public static DisplayStationVoyageurs getInstance() {
-        return instance;
-    }
-
-    public void setScrollContent(Parent content) {
-        mainScrollPane.setContent(content);
-    }
 
 }
