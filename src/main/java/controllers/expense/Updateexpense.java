@@ -1,4 +1,4 @@
-package controllers;
+package controllers.expense;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

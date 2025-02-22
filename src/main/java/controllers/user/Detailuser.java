@@ -1,4 +1,4 @@
-package controllers;
+package controllers.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -105,7 +105,7 @@ public class Detailuser implements Initializable {
     @FXML
     void modifierpr(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Updateuser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/updateuser.fxml"));
             Parent updateUserPage = loader.load();
 
             // Ensure centralAnocherPane is not null
@@ -161,7 +161,7 @@ public class Detailuser implements Initializable {
     // Redirect to login page
     private void redirectToLogin(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
@@ -192,6 +192,22 @@ public class Detailuser implements Initializable {
 
     @FXML
     void modifiermotpass(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/Modifiermotpass.fxml"));
+            Parent updateUserPage = loader.load();
+
+            // Ensure centralAnocherPane is not null
+            if (centralAnocherPane != null) {
+                centralAnocherPane.getChildren().clear(); // Clear previous content
+                centralAnocherPane.getChildren().add(updateUserPage);
+                System.out.println("Updateuser.fxml loaded inside centralAnocherPane.");
+            } else {
+                System.err.println("Error: centralAnocherPane is null.");
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading Updateuser.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
 
 
     }

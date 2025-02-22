@@ -1,4 +1,5 @@
-package controllers;
+package controllers.user;
+
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,6 +23,10 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 
 import java.util.regex.Pattern;
+
+
+import javafx.scene.control.Alert;
+
 
 public class Signup {
 
@@ -67,46 +72,58 @@ public class Signup {
         type_user.getItems().addAll("Voyageurs", "Entreprise", "Créateur de contenu");
     }
 
+
     @FXML
     void Ajouterunephotodep(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", ".png", ".jpg", "*.jpeg"));
-        File file = fileChooser.showOpenDialog(null);
+
+        // Configuration du filtre d'extensions
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
+                "Fichiers image (*.png, *.jpg, *.jpeg)",
+                "*.png",
+                "*.jpg",
+                "*.jpeg"
+        );
+
+        fileChooser.getExtensionFilters().add(imageFilter);
+        fileChooser.setTitle("Sélectionner une photo de profil");
+
+        // Démarre dans le dossier Images par défaut
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Pictures"));
+
+        File file = fileChooser.showOpenDialog(user_photo.getScene().getWindow());
 
         if (file == null) {
-            System.out.println("No file selected!");
+            showAlert("Aucun fichier sélectionné", "Veuillez sélectionner une image.");
             return;
         }
 
-        System.out.println("Selected file: " + file.getAbsolutePath());
-
+        // Configuration du dossier de destination
         String destinationDirectory = "C:/xampp/htdocs/imguser/";
-        File dir = new File(destinationDirectory);
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String destinationPath = destinationDirectory + file.getName();
-        File destinationFile = new File(destinationPath);
+        File destDir = new File(destinationDirectory);
 
         try {
-            Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            // Crée le dossier s'il n'existe pas
+            if (!destDir.exists()) Files.createDirectories(destDir.toPath());
 
-            if (destinationFile.exists()) {
-                // ✅ Set imagePath correctly
-                imagePath = destinationFile.getAbsolutePath();
+            // Copie le fichier
+            File destinationFile = new File(destinationDirectory + file.getName());
+            Files.copy(
+                    file.toPath(),
+                    destinationFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
 
-                Platform.runLater(() -> {
-                    Image image = new Image(destinationFile.toURI().toString());
-                    user_photo.setImage(image);
-                });
-                System.out.println("Image saved and displayed: " + imagePath);
-            } else {
-                System.out.println("Error: File was not copied successfully.");
-            }
+            // Met à jour l'interface
+            imagePath = destinationFile.getAbsolutePath();
+            Image image = new Image(destinationFile.toURI().toString());
+            user_photo.setImage(image);
+
+            System.out.println("Image enregistrée avec succès : " + imagePath);
+
         } catch (IOException e) {
-            System.out.println("Error saving image: " + e.getMessage());
+            showAlert("Erreur de traitement", "Erreur lors de la copie du fichier : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -244,7 +261,7 @@ public class Signup {
     }
 
     private void navigateToLogin(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/user/login.fxml"));
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

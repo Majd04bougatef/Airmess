@@ -1,4 +1,4 @@
-package controllers;
+package controllers.expense;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -174,7 +174,7 @@ public class Displayexpense implements Initializable {
 
     private void editExpense(Expense expense) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Updateexpense.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/expense/updateexpense.fxml"));
             Parent updateExpensePage = loader.load();
 
             Updateexpense controller = loader.getController();
@@ -200,7 +200,7 @@ public class Displayexpense implements Initializable {
     @FXML
     void addeqpense(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Addexpense.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/expense/addexpense.fxml"));
             Parent addExpensePage = loader.load();
 
             if (centralAnocherPane != null) {

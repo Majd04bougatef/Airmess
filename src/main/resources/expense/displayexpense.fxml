@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="css/Cardexpen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Displayexpense">
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="../css/Cardexpen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.expense.Displayexpense">
    <children>
       <Button layoutX="828.0" layoutY="33.0" mnemonicParsing="false" onAction="#addeqpense" style="-fx-background-color: #db7093; -fx-background-radius: 50;" text="ajouter dépenses" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="20" fitWidth="20">
                <image>
-                  <Image url="@image/menu_voyageurs/icons8-budget-96.png" />
+                  <Image url="@../image/menu_voyageurs/icons8-budget-96.png" />
                </image>
             </ImageView>
          </graphic>

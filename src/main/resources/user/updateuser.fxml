@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Updateuser">
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.user.Updateuser">
    <children>
       <TextField fx:id="modifier_nom_uesr" layoutX="130.0" layoutY="127.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
       <TextField fx:id="modifier_prenom_user" layoutX="130.0" layoutY="227.0" prefHeight="45.0" prefWidth="250.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />

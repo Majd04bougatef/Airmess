@@ -1,4 +1,4 @@
-package controllers;
+package controllers.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -138,7 +138,7 @@ public class Login {
 
         try {
             // Load the Signup FXML
-            Parent signupView = FXMLLoader.load(getClass().getResource("/Signup.fxml"));
+            Parent signupView = FXMLLoader.load(getClass().getResource("/user/signup.fxml"));
             Scene signupScene = new Scene(signupView);
 
             // Get the current stage from the event source
