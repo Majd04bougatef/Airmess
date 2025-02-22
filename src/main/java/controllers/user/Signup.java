@@ -1,6 +1,8 @@
 package controllers.user;
 
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +28,10 @@ import java.util.regex.Pattern;
 
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import test.Session;
+import models.EmailService;
+
 
 
 public class Signup {
@@ -128,6 +134,7 @@ public class Signup {
     }
 
 
+
     @FXML
     void enregistrer(ActionEvent event) {
         if (!validateForm()) return;
@@ -140,11 +147,20 @@ public class Signup {
                 return;
             }
 
-            userService.add(user);
-            showAlert("Succès", "Inscription réussie !");
+            userService.add(user); // Save the user in the database
+
+            // Send confirmation email
+            String subject = "Welcome to Our Application!";
+            String messageBody = "Hello " + user.getName() + ",\n\n" +
+                    "Thank you for signing up! Your account has been successfully created.\n\n" +
+                    "Best regards,\nThe Team";
+            EmailService.sendConfirmationEmail(user.getEmail(), subject, messageBody);
+
+            showAlert("Succès", "Inscription réussie ! Un email de confirmation a été envoyé.");
             navigateToLogin(event);
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'inscription : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
