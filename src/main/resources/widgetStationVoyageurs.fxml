@@ -8,18 +8,18 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WidgetStationVoyageurs">
    <children>
-      <HBox prefHeight="60.0" prefWidth="1030.0">
+      <HBox alignment="TOP_RIGHT" prefHeight="60.0" prefWidth="1030.0">
          <children>
             <Button mnemonicParsing="false" onAction="#reserver" text="Réserver">
                <HBox.margin>
-                  <Insets left="350.0" right="20.0" top="15.0" />
+                  <Insets top="15.0" />
                </HBox.margin></Button>
             <Button mnemonicParsing="false" onAction="#MesReservation" text="Mes Réservations">
                <HBox.margin>
-                  <Insets left="200.0" top="15.0" />
+                  <Insets left="20.0" right="20.0" top="15.0" />
                </HBox.margin></Button>
          </children>
       </HBox>
-      <Pane fx:id="panewidget" layoutX="3.0" layoutY="74.0" prefHeight="550.0" prefWidth="1024.0" />
+      <Pane fx:id="panewidget" layoutY="74.0" prefHeight="567.0" prefWidth="1027.0" />
    </children>
 </AnchorPane>

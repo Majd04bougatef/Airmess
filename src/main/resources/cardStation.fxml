@@ -33,7 +33,7 @@
 
                 <HBox spacing="10" alignment="CENTER" styleClass="card-buttons">
                     <Button mnemonicParsing="false" onAction="#reserver" text="Réserver" styleClass="btn-primary" />
-                    <Button mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
+                    <Button fx:id="btnAvis" mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
                 </HBox>
             </children>
         </VBox>

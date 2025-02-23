@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.station;
@@ -16,15 +15,24 @@ import java.util.List;
 public class DisplayStationVoyageurs {
 
     @FXML
-    private VBox cardsContainer;
+    public VBox cardsContainer;
 
     @FXML
     private ScrollPane mainScrollPane;
 
-    private AnchorPane centralAnocherPane;
+    private static DisplayStationVoyageurs instance;
 
-    public void setCentralAnocherPane(AnchorPane centralAnocherPane) {
-        this.centralAnocherPane = centralAnocherPane;
+    public DisplayStationVoyageurs() {
+        instance = this;
+    }
+
+    public static DisplayStationVoyageurs getInstance() {
+        return instance;
+    }
+
+    public void showAvisForm(Parent formAvis) {
+        cardsContainer.getChildren().clear();
+        cardsContainer.getChildren().add(formAvis);
     }
 
     public void initialize() {

@@ -14,15 +14,21 @@ public class WidgetStationVoyageurs {
     private Pane panewidget;
 
     @FXML
+    public void initialize() {
+        loadPage("/DisplayStationVoyageurs.fxml");
+    }
+
+    @FXML
     void reserver(ActionEvent event) {
-        laodPage("/DisplayStationVoyageurs.fxml");
+        loadPage("/DisplayStationVoyageurs.fxml");
     }
 
+    @FXML
     public void MesReservation(ActionEvent actionEvent) {
-        laodPage("/MesReservationTransportVoyageurs.fxml");
+        loadPage("/MesReservationTransportVoyageurs.fxml");
     }
 
-    private void laodPage(String s) {
+    private void loadPage(String s) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(s));
             Parent userPage = loader.load();
@@ -33,7 +39,4 @@ public class WidgetStationVoyageurs {
             System.out.println("Erreur de chargement du FXML : " + s);
         }
     }
-
-
-
 }
