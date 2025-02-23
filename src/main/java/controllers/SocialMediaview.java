@@ -14,9 +14,11 @@ import javafx.scene.image.ImageView;
 import models.Commentaire;
 import models.SocialMedia;
 import models.Users;
+import services.AiServices;
 import services.CommentaireServices;
 import services.UsersService;
 import services.SocialMediaServices;
+
 
 
 import java.util.Arrays;
@@ -65,6 +67,7 @@ public class SocialMediaview {
     };
     private final CommentaireServices CommentaireServices = new CommentaireServices() {
     };
+    private final AiServices aiServices = new AiServices();
 
     @FXML
     public void initialize() {
@@ -321,6 +324,7 @@ public class SocialMediaview {
         TextArea commentText = null;
         VBox commentList = null;
 
+        // Trouver les composants de la section commentaire
         for (javafx.scene.Node node : commentSection.getChildren()) {
             if (node instanceof TextArea) {
                 commentText = (TextArea) node;
@@ -329,6 +333,7 @@ public class SocialMediaview {
             }
         }
 
+        // Vérification des composants
         if (commentText == null || commentList == null) {
             System.out.println("Erreur : Impossible de trouver les champs de commentaire.");
             return;
@@ -342,32 +347,49 @@ public class SocialMediaview {
 
         String newComment = commentText.getText().trim();
 
-
-
-        if (!validateContent(newComment)) {
-            return;
-        }
-
+        // Vérifier si le commentaire est vide
         if (newComment.isEmpty()) {
             showAlert("Erreur", "Le commentaire ne peut pas être vide.", Alert.AlertType.ERROR);
             return;
         }
+
+        // Vérifier la longueur du commentaire
         if (newComment.length() > 500) {
             showAlert("Erreur", "Le commentaire ne peut pas dépasser 500 caractères.", Alert.AlertType.ERROR);
             return;
         }
 
-        Commentaire commentaire = new Commentaire(post.getIdEB(), 1, newComment, 0, 0);
+        // Validation du contenu avant l'appel de l'IA
+        if (!validateContent(newComment)) {
+            return;
+        }
+
+        // Modération du commentaire avec l'IA
+        AiServices aiServices = new AiServices();
+        String filteredText;
+        try {
+            filteredText = aiServices.moderateContent(newComment);
+        } catch (Exception e) {
+            System.out.println("⚠ Erreur lors de la modération du commentaire : " + e.getMessage());
+            showAlert("Erreur", "Impossible de vérifier le commentaire pour le moment.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Commentaire commentaire = new Commentaire(post.getIdEB(), 1, filteredText, 0, 0);
         CommentaireServices.add(commentaire);
 
-        if (commentaire.getIdC() != 0) {
-            System.out.println("Commentaire ajouté : " + newComment);
+// Vérifier si le commentaire est bien inséré (ex: récupérer par ID)
+        if (commentaire.getIdC() > 0) {
+            System.out.println("✅ Commentaire ajouté : " + filteredText);
             refreshCommentList(commentList, post.getIdEB());
             commentText.clear();
         } else {
             System.out.println("⚠ Erreur lors de l'ajout du commentaire.");
+            showAlert("Erreur", "Une erreur est survenue lors de l'ajout du commentaire.", Alert.AlertType.ERROR);
         }
+
     }
+
 
 
     public void refreshCommentList(VBox commentList, int postId) {
@@ -498,6 +520,8 @@ public class SocialMediaview {
 
         return true;
     }
+
+
 
 
 }
