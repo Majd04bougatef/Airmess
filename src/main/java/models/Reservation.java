@@ -2,12 +2,12 @@ package models;
 
 public class Reservation {
     private int idR;
-    private int idO;
+    private Offre idO;
     private String dateRes;
     private ModePaiement modePaiement;
     private int id_U;
 
-    public Reservation(int idR, int idO, String dateRes, String modePaiement, int id_U) {
+    public Reservation(int idR, Offre idO, String dateRes, String modePaiement, int id_U) {
         this.idR = idR;
         this.idO = idO;
         this.dateRes = dateRes;
@@ -15,7 +15,7 @@ public class Reservation {
         this.id_U = id_U;
     }
 
-    public Reservation(int idO, String dateRes, String modePaiement, int id_U) {
+    public Reservation(Offre idO, String dateRes, String modePaiement, int id_U) {
         this.idO = idO;
         this.dateRes = dateRes;
         this.modePaiement = ModePaiement.valueOf(modePaiement);
@@ -34,11 +34,11 @@ public class Reservation {
         this.idR = idR;
     }
 
-    public int getIdO() {
+    public Offre getIdO() {
         return idO;
     }
 
-    public void setIdO(int idO) {
+    public void setIdO(Offre idO) {
         this.idO = idO;
     }
 

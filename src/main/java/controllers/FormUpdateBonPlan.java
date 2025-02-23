@@ -33,11 +33,10 @@ public class FormUpdateBonPlan implements Initializable {
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
     private bonplan selectedBonPlan;
-    private File selectedImageFile; // Pour stocker l'image choisie
+    private File selectedImageFile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialisation des événements pour la sélection du type de lieu
         for (MenuItem item : type.getItems()) {
             item.setOnAction(event -> type.setText(item.getText()));
         }
@@ -50,15 +49,15 @@ public class FormUpdateBonPlan implements Initializable {
         LocalistionBP.setText(bp.getLocalisation());
         type.setText(bp.getTypePlace());
 
-        // Charger l'image existante si elle est présente
+        // Charger image
         if (bp.getImageBP() != null && !bp.getImageBP().isEmpty()) {
             String imagePath = bp.getImageBP();
             if (imagePath != null && !imagePath.isEmpty()) {
                 File file = new File("C:/xampp/htdocs/ImageBonPlan/" + bp.getImageBP());
                 if (file.exists()) {
-                    imgPB.setImage(new Image(file.toURI().toString())); // ✅ Correction pour un chemin local
+                    imgPB.setImage(new Image(file.toURI().toString()));
                 } else {
-                    System.out.println("Image introuvable : " + imagePath); // Debugging
+                    System.out.println("Image introuvable : " + imagePath);
                 }
             }
 
@@ -73,14 +72,13 @@ public class FormUpdateBonPlan implements Initializable {
             selectedBonPlan.setLocalisation(LocalistionBP.getText());
             selectedBonPlan.setTypePlace(type.getText());
 
-            // Mise à jour du chemin de l'image si une nouvelle image a été sélectionnée
             if (selectedImageFile != null) {
-                selectedBonPlan.setImageBP(selectedImageFile.getName()); // Stocker seulement le nom de fichier
+                selectedBonPlan.setImageBP(selectedImageFile.getName());
             }
 
             bonPlanServices.update(selectedBonPlan);
 
-            // Fermer la fenêtre après mise à jour
+
             Stage stage = (Stage) bttnBP.getScene().getWindow();
             stage.close();
         } else {

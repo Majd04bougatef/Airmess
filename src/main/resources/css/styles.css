@@ -1,0 +1,99 @@
+/* Root style for the entire application */
+.root {
+    -fx-background-color: #f4f4f4;
+    -fx-font-family: "Arial";
+}
+
+/* Style for the VBox container */
+.vbox-container {
+    -fx-padding: 20;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+/* Style for the ListView */
+.list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+}
+
+.list-view .list-cell {
+    -fx-padding: 10;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #eeeeee;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-view .list-cell:filled:selected {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #333333;
+}
+
+/* Style for the HBox container */
+.hbox-container {
+    -fx-alignment: center;
+    -fx-padding: 10;
+}
+
+/* General button style */
+.button {
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+/* Update button style */
+.update-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.update-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Delete button style */
+.delete-button {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+.delete-button:hover {
+    -fx-background-color: #e53935;
+}
+
+.add-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}
+.add-button:hover {
+    -fx-background-color: #1e87f0;
+}
+.confirm-button:hover {
+    -fx-background-color: #45a049; /* Darker green */
+}
+
+/* Cancel button style */
+.cancel-button {
+    -fx-background-color: #f44336; /* Red */
+    -fx-text-fill: white;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #e53935; /* Darker red */
+}
+
+.show-button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}
