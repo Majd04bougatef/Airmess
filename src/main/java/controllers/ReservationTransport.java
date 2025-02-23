@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import models.reservation_transport;
 import models.station;
 import services.ReservationTransportService;
+import services.StationService;
 import test.Session;
 
 import java.sql.Timestamp;
@@ -123,6 +124,7 @@ public class ReservationTransport {
 
     @FXML
     public void payerReservation(ActionEvent actionEvent) {
+        StationService st = new StationService() {};
         try {
             int nbVeloRes = Integer.parseInt(nombreVelo.getText());
 
@@ -132,6 +134,7 @@ public class ReservationTransport {
             }
 
             ajouterReservation(nbVeloRes);
+            st.updateNombreVelo(currentStation.getIdS(), nbVeloRes);
         } catch (NumberFormatException e) {
             showAlert("Erreur", "Veuillez entrer un nombre valide pour les vélos.");
         }
