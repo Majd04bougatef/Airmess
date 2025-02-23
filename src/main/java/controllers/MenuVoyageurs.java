@@ -1,5 +1,7 @@
 package controllers;
 
+import controllers.expense.Displayexpense;
+import controllers.user.Detailuser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +21,7 @@ import test.Session;
 import javafx.scene.image.Image;
 
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -66,7 +69,7 @@ public class MenuVoyageurs {
     @FXML
     void depense(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Displayexpense.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/expense/displayexpense.fxml"));
             Parent expensePage = loader.load();
 
             // Get the correct controller and pass the centralAnchorPane reference
@@ -110,7 +113,7 @@ public class MenuVoyageurs {
     @FXML
     void Offre(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/test.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservation.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
@@ -164,7 +167,7 @@ public class MenuVoyageurs {
             Session.getInstance().logout();
 
             // Load the login screen
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/login.fxml"));
             Parent loginPage = loader.load();
 
             // Get the current stage safely
@@ -189,7 +192,7 @@ public class MenuVoyageurs {
     @FXML
     void compt(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Detailuser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/detailuser.fxml"));
             Parent userPage = loader.load();
 
             // Get the controller and pass the centralAnocherPane reference
@@ -216,14 +219,24 @@ public class MenuVoyageurs {
         }
 
         if (session.getCurrentUser() != null && session.getCurrentUser().getImagesU() != null) {
-            Image userImage = new Image(session.getCurrentUser().getImagesU());
-            fotouser.setImage(userImage);
+            try {
+                File imageFile = new File(session.getCurrentUser().getImagesU());
+                if (imageFile.exists()) {
+                    Image userImage = new Image(imageFile.toURI().toString()); // Convert to valid URL
+                    fotouser.setImage(userImage);
 
-            fotouser.setFitWidth(100);
-            fotouser.setFitHeight(58);
-            fotouser.setPreserveRatio(true);
+                    fotouser.setFitWidth(100);
+                    fotouser.setFitHeight(58);
+                    fotouser.setPreserveRatio(true);
+                } else {
+                    System.out.println("Image file not found: " + imageFile.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
 
 }

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -84,7 +84,6 @@ public class Login {
         System.out.println(email);
         System.out.println(password);
 
-
         // Validate inputs
         if (email.isEmpty() || password.isEmpty()) {
             showAlert(AlertType.ERROR, "Error", "Authentication Failed",
@@ -100,10 +99,27 @@ public class Login {
             Session.getInstance().login(loggedInUser);
 
             try {
-                // Load appropriate view based on user role
-                String viewPath = "/menu_voyageurs.fxml";
-                if ("ADMIN".equals(loggedInUser.getRoleUser())) {
-                    viewPath = "/admin_dashboard.fxml";
+                // Determine view path based on user role
+                String viewPath;
+                String windowTitle;
+
+                switch (loggedInUser.getRoleUser()) {
+                    case "ADMIN":
+                        viewPath = "/admin_dashboard.fxml";
+                        windowTitle = "Admin Dashboard";
+                        break;
+                    case "Voyageurs":
+                        viewPath = "/menu_voyageurs.fxml";
+                        windowTitle = "Menu Voyageurs";
+                        break;
+                    case "Entreprise":
+                        viewPath = "/menu_entreprise.fxml";
+                        windowTitle = "Menu Entreprise";
+                        break;
+                    default:
+                        showAlert(AlertType.ERROR, "Error", "Role Error",
+                                "Unknown user role: " + loggedInUser.getRoleUser());
+                        return;
                 }
 
                 Parent mainView = FXMLLoader.load(getClass().getResource(viewPath));
@@ -111,8 +127,7 @@ public class Login {
 
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 currentStage.setScene(mainScene);
-                currentStage.setTitle(loggedInUser.getRoleUser().equals("ADMIN") ?
-                        "Admin Dashboard" : "Menu Principal");
+                currentStage.setTitle(windowTitle);
                 currentStage.show();
 
             } catch (IOException e) {
@@ -126,8 +141,6 @@ public class Login {
                     "Invalid email or password. Please try again.");
         }
     }
-
-
     @FXML
     void oubliemotpasse(ActionEvent event) {
     }
@@ -138,7 +151,7 @@ public class Login {
 
         try {
             // Load the Signup FXML
-            Parent signupView = FXMLLoader.load(getClass().getResource("/Signup.fxml"));
+            Parent signupView = FXMLLoader.load(getClass().getResource("/user/signup.fxml"));
             Scene signupScene = new Scene(signupView);
 
             // Get the current stage from the event source

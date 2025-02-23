@@ -64,7 +64,7 @@
                      <graphic>
                         <ImageView fitHeight="20" fitWidth="20">
                            <image>
-                              <Image url="@image/menu_voyageurs/budget.png" />
+                              <Image url="@image/menu_voyageurs/icons8-budget-96.png" />
                            </image>
                         </ImageView>
                      </graphic>

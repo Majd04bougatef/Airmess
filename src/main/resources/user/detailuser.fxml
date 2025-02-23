@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Detailuser">
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.user.Detailuser">
    <children>
       <ImageView fx:id="imguser" fitHeight="310.0" fitWidth="278.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="name" fill="#918c8c" layoutX="300.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="277.99999999999994">

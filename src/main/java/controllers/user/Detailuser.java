@@ -1,4 +1,4 @@
-package controllers;
+package controllers.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import test.Session;
 import models.Users;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,6 +50,7 @@ public class Detailuser implements Initializable {
         this.centralAnocherPane = centralAnocherPane;
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Load user data into UI components
@@ -68,11 +70,31 @@ public class Detailuser implements Initializable {
 
             if (currentUser.getImagesU() != null && !currentUser.getImagesU().isEmpty()) {
                 try {
-                    Image userImage = new Image(currentUser.getImagesU());
+                    String imagePath = currentUser.getImagesU();
+                    System.out.println("User Image Path: " + imagePath);
+
+                    Image userImage;
+                    if (imagePath.startsWith("http") || imagePath.startsWith("https")) {
+                        // Load from a URL
+                        userImage = new Image(imagePath, true);
+                    } else {
+                        // Load from a local file
+                        File file = new File(imagePath);
+                        if (file.exists()) {
+                            userImage = new Image(file.toURI().toString());
+                        } else {
+                            System.err.println("Image file not found: " + imagePath);
+                            return; // Exit if image not found
+                        }
+                    }
+
                     imguser.setImage(userImage);
                 } catch (Exception e) {
                     System.err.println("Error loading user image: " + e.getMessage());
+                    e.printStackTrace();
                 }
+            } else {
+                System.err.println("No image path provided for user.");
             }
         } else {
             System.err.println("No user found in session");
@@ -83,7 +105,7 @@ public class Detailuser implements Initializable {
     @FXML
     void modifierpr(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Updateuser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/updateuser.fxml"));
             Parent updateUserPage = loader.load();
 
             // Ensure centralAnocherPane is not null
@@ -139,7 +161,7 @@ public class Detailuser implements Initializable {
     // Redirect to login page
     private void redirectToLogin(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
@@ -170,6 +192,22 @@ public class Detailuser implements Initializable {
 
     @FXML
     void modifiermotpass(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/Modifiermotpass.fxml"));
+            Parent updateUserPage = loader.load();
+
+            // Ensure centralAnocherPane is not null
+            if (centralAnocherPane != null) {
+                centralAnocherPane.getChildren().clear(); // Clear previous content
+                centralAnocherPane.getChildren().add(updateUserPage);
+                System.out.println("Updateuser.fxml loaded inside centralAnocherPane.");
+            } else {
+                System.err.println("Error: centralAnocherPane is null.");
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading Updateuser.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
 
 
     }

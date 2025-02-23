@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Login">
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.user.Login">
     <children>
         <AnchorPane layoutX="98.0" layoutY="50.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: white; -fx-background-radius: 50; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
             <children>
@@ -18,7 +18,7 @@
                     <children>
                         <ImageView fitHeight="454.0" fitWidth="185.0" layoutX="86.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@image/475494119_1136555244298328_1961476089771408060_n$$.png" />
+                                <Image url="@../image/475494119_1136555244298328_1961476089771408060_n$$.png" />
                             </image>
                         </ImageView>
                     </children>
@@ -35,7 +35,7 @@
                 </ImageView>
                 <ImageView fitHeight="441.0" fitWidth="310.0" layoutX="511.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/3d-casual-life-young-man-holding-paper-map.png" />
+                        <Image url="@../image/3d-casual-life-young-man-holding-paper-map.png" />
                     </image>
                 </ImageView>
                 <Text fill="#406dab" layoutX="122.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S'identifier" wrappingWidth="383.9999999999999">
@@ -60,12 +60,12 @@
                 <PasswordField fx:id="mot_isentifier" layoutX="121.0" layoutY="309.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
                 <ImageView fx:id="googl" fitHeight="40.0" fitWidth="70.0" layoutX="189.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/icons8-google-48.png" />
+                        <Image url="@../image/icons8-google-48.png" />
                     </image>
                 </ImageView>
                 <ImageView fx:id="facebook" fitHeight="40.0" fitWidth="70.0" layoutX="274.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/icons8-facebook-48.png" />
+                        <Image url="@../image/icons8-facebook-48.png" />
                     </image>
                 </ImageView>
             </children>

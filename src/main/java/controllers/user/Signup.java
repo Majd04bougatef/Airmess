@@ -1,5 +1,8 @@
-package controllers;
+package controllers.user;
 
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,42 +16,59 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Users;
 import services.UsersService;
-import util.MyDatabase;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import java.util.regex.Pattern;
+
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import test.Session;
+import models.EmailService;
+
+
 
 public class Signup {
 
     // Champs FXML
-    @FXML private TextField Email_user;
-    @FXML private DatePicker dateN_user;
-    @FXML private TextField nom_user;
-    @FXML private TextField password_user;
-    @FXML private TextField prenom_user;
-    @FXML private TextField tel_user;
-    @FXML private ComboBox<String> type_user;
-    @FXML private ImageView user_photo;
+    @FXML
+    private TextField Email_user;
+    @FXML
+    private DatePicker dateN_user;
+    @FXML
+    private TextField nom_user;
+    @FXML
+    private TextField password_user;
+    @FXML
+    private TextField prenom_user;
+    @FXML
+    private TextField tel_user;
+    @FXML
+    private ComboBox<String> type_user;
+    @FXML
+    private ImageView user_photo;
 
     // Labels de validation
-    @FXML private Label validationemail;
-    @FXML private Label validationmotdepass;
-    @FXML private Label validationnaiss;
-    @FXML private Label validationnom;
-    @FXML private Label validationnumero;
-    @FXML private Label validationprenom;
-    @FXML private Label validationroleuser;
+    @FXML
+    private Label validationemail;
+    @FXML
+    private Label validationmotdepass;
+    @FXML
+    private Label validationnaiss;
+    @FXML
+    private Label validationnom;
+    @FXML
+    private Label validationnumero;
+    @FXML
+    private Label validationprenom;
+    @FXML
+    private Label validationroleuser;
 
     private UsersService userService = new UsersService();
     private String imagePath;
@@ -58,65 +78,60 @@ public class Signup {
         type_user.getItems().addAll("Voyageurs", "Entreprise", "Créateur de contenu");
     }
 
+
     @FXML
     void Ajouterunephotodep(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", ".png", ".jpg", "*.jpeg"));
-        File file = fileChooser.showOpenDialog(null);
+
+        // Configuration du filtre d'extensions
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
+                "Fichiers image (*.png, *.jpg, *.jpeg)",
+                "*.png",
+                "*.jpg",
+                "*.jpeg"
+        );
+
+        fileChooser.getExtensionFilters().add(imageFilter);
+        fileChooser.setTitle("Sélectionner une photo de profil");
+
+        // Démarre dans le dossier Images par défaut
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Pictures"));
+
+        File file = fileChooser.showOpenDialog(user_photo.getScene().getWindow());
 
         if (file == null) {
-            System.out.println("No file selected!");
+            showAlert("Aucun fichier sélectionné", "Veuillez sélectionner une image.");
             return;
         }
 
-        System.out.println("Selected file: " + file.getAbsolutePath());
-
+        // Configuration du dossier de destination
         String destinationDirectory = "C:/xampp/htdocs/imguser/";
-        File dir = new File(destinationDirectory);
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String destinationPath = destinationDirectory + file.getName();
-        File destinationFile = new File(destinationPath);
+        File destDir = new File(destinationDirectory);
 
         try {
-            Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            // Crée le dossier s'il n'existe pas
+            if (!destDir.exists()) Files.createDirectories(destDir.toPath());
 
-            if (destinationFile.exists()) {
-                // ✅ Set imagePath correctly
-                imagePath = destinationFile.getAbsolutePath();
+            // Copie le fichier
+            File destinationFile = new File(destinationDirectory + file.getName());
+            Files.copy(
+                    file.toPath(),
+                    destinationFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
 
-                Platform.runLater(() -> {
-                    Image image = new Image(destinationFile.toURI().toString());
-                    user_photo.setImage(image);
-                });
-                System.out.println("Image saved and displayed: " + imagePath);
-            } else {
-                System.out.println("Error: File was not copied successfully.");
-            }
+            // Met à jour l'interface
+            imagePath = destinationFile.getAbsolutePath();
+            Image image = new Image(destinationFile.toURI().toString());
+            user_photo.setImage(image);
+
+            System.out.println("Image enregistrée avec succès : " + imagePath);
+
         } catch (IOException e) {
-            System.out.println("Error saving image: " + e.getMessage());
+            showAlert("Erreur de traitement", "Erreur lors de la copie du fichier : " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -132,11 +147,20 @@ public class Signup {
                 return;
             }
 
-            userService.add(user);
-            showAlert("Succès", "Inscription réussie !");
+            userService.add(user); // Save the user in the database
+
+            // Send confirmation email
+            String subject = "Welcome to Our Application!";
+            String messageBody = "Hello " + user.getName() + ",\n\n" +
+                    "Thank you for signing up! Your account has been successfully created.\n\n" +
+                    "Best regards,\nThe Team";
+            EmailService.sendConfirmationEmail(user.getEmail(), subject, messageBody);
+
+            showAlert("Succès", "Inscription réussie ! Un email de confirmation a été envoyé.");
             navigateToLogin(event);
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'inscription : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -253,7 +277,7 @@ public class Signup {
     }
 
     private void navigateToLogin(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/user/login.fxml"));
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

@@ -11,13 +11,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Signup">
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to right, #a1c4fd, #fbc2eb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.user.Signup">
     <children>
         <AnchorPane layoutX="104.0" layoutY="60.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: white; -fx-background-radius: 50; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
             <children>
                 <ImageView fitHeight="70.0" fitWidth="77.0" layoutX="36.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/AirMess copie.png" />
+                        <Image url="@../image/AirMess copie.png" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="40.0" fitWidth="179.0" layoutX="107.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
@@ -59,7 +59,7 @@
                 <graphic>
                     <ImageView fitHeight="40" fitWidth="40">
                         <image>
-                            <Image url="@image/abb.png" />
+                            <Image url="@../image/abb.png" />
                         </image>
                     </ImageView>
                 </graphic>
