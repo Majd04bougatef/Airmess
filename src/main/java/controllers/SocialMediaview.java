@@ -5,25 +5,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
+
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import models.Commentaire;
 import models.SocialMedia;
 import models.Users;
 import services.CommentaireServices;
 import services.UsersService;
 import services.SocialMediaServices;
+
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-
-import javafx.scene.layout.HBox;
 
 
 public class SocialMediaview {
@@ -88,12 +87,20 @@ public class SocialMediaview {
             contentLabel.setWrapText(true);
             contentLabel.getStyleClass().add("content-label");
 
+            Label locationLabel = new Label("\uD83D\uDCCD Lieu : " + (post.getLieu() != null ? post.getLieu() : "Lieu inconnu"));
+            locationLabel.getStyleClass().add("location-label");
+
+            String publicationDate = post.getPublicationDate() != null ? post.getPublicationDate().toString() : "Date inconnue";
+            Label dateLabel = new Label("Publié le : " + publicationDate);
+            dateLabel.getStyleClass().add("date-label");
+
+
             Users user = usersService.getById(post.getId_U());
             Label usernameLabel = new Label(user != null ? "Posté par: " + user.getName() : "Posté par: Utilisateur inconnu");
             usernameLabel.getStyleClass().add("username-label");
 
+            postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel,dateLabel,locationLabel);
 
-            postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel);
 
 
 
@@ -222,6 +229,16 @@ public class SocialMediaview {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
+
+                        Object parent = sourceButton.getParent();
+                        if (parent instanceof VBox) {
+                            VBox postBox = (VBox) parent;
+                            postBox.setVisible(false);
+                            postBox.setManaged(false);
+                        } else {
+                            System.out.println("impossible de supprimé la publication.");
+                        }
+
                         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postToDelete.getIdEB());
                         for (Commentaire commentaire : commentaires) {
                             CommentaireServices.delete(commentaire);
@@ -229,7 +246,8 @@ public class SocialMediaview {
 
                         socialMediaServices.delete(postToDelete);
 
-                        refreshPosts();
+                       refreshPosts();
+
 
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Succès");
@@ -323,19 +341,31 @@ public class SocialMediaview {
         }
 
         String newComment = commentText.getText().trim();
-        if (!newComment.isEmpty()) {
-            Commentaire commentaire = new Commentaire(post.getIdEB(), 1, newComment, 0, 0);
-            CommentaireServices.add(commentaire);
 
-            if (commentaire.getIdC() != 0) {
-                System.out.println("Commentaire ajouté : " + newComment);
 
-                refreshCommentList(commentList, post.getIdEB());
 
-                commentText.clear();
-            } else {
-                System.out.println("⚠ Erreur lors de l'ajout du commentaire.");
-            }
+        if (!validateContent(newComment)) {
+            return;
+        }
+
+        if (newComment.isEmpty()) {
+            showAlert("Erreur", "Le commentaire ne peut pas être vide.", Alert.AlertType.ERROR);
+            return;
+        }
+        if (newComment.length() > 500) {
+            showAlert("Erreur", "Le commentaire ne peut pas dépasser 500 caractères.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Commentaire commentaire = new Commentaire(post.getIdEB(), 1, newComment, 0, 0);
+        CommentaireServices.add(commentaire);
+
+        if (commentaire.getIdC() != 0) {
+            System.out.println("Commentaire ajouté : " + newComment);
+            refreshCommentList(commentList, post.getIdEB());
+            commentText.clear();
+        } else {
+            System.out.println("⚠ Erreur lors de l'ajout du commentaire.");
         }
     }
 
@@ -362,6 +392,13 @@ public class SocialMediaview {
                 deleteButton.getStyleClass().add("delete-comment-button");
                 deleteButton.setOnAction(this::handleDeleteComment);
 
+                updateButton.setPrefSize(60, 25);
+                deleteButton.setPrefSize(60, 25);
+
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+
+
                 commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
 
                 commentList.getChildren().add(commentBox);
@@ -384,12 +421,26 @@ public class SocialMediaview {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newText -> {
-            if (!newText.trim().isEmpty()) {
-                commentaire.setDescription(newText);
-                CommentaireServices.update(commentaire);
-                commentLabel.setText(newText);
-                System.out.println("Commentaire mis à jour !");
+
+            if (newText.trim().isEmpty()) {
+                showAlert("Erreur", "Le commentaire ne peut pas être vide.", Alert.AlertType.ERROR);
+                return;
             }
+
+            if (newText.length() > 500) {
+                showAlert("Erreur", "Le commentaire ne peut pas dépasser 500 caractères.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            if (!validateContent(newText)) {
+                showAlert("Erreur", "Le commentaire contient des caractères non autorisés.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            commentaire.setDescription(newText);
+            CommentaireServices.update(commentaire);
+            commentLabel.setText(newText);
+            System.out.println("Commentaire mis à jour !");
         });
     }
 
@@ -406,15 +457,48 @@ public class SocialMediaview {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Suppression de commentaire");
         alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
-        alert.setContentText("Cette action est irréversible.");
+        alert.setContentText("Cette action est irréversible. Le commentaire sera définitivement supprimé.");
+
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             CommentaireServices.delete(commentaire);
             ((VBox) commentBox.getParent()).getChildren().remove(commentBox);
             System.out.println("Commentaire supprimé !");
+        } else {
+            System.out.println("Suppression annulée.");
         }
     }
 
 
+    public void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.showAndWait();
+    }
+
+
+    List<String> forbiddenWords = Arrays.asList("ccc", "bbb");
+
+    public  boolean validateContent(String content) {
+        if (content.isEmpty() || content.trim().isEmpty()) {
+            showAlert("Erreur", "Le contenu ne peut pas être vide ou composé uniquement d'espaces.", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        for (String word : forbiddenWords) {
+            if (content.toLowerCase().contains(word)) {
+                showAlert("Erreur", "Le contenu contient des mots interdits.", Alert.AlertType.ERROR);
+                return false;
+            }
+        }
+
+
+
+        return true;
+    }
+
+
 }
+
