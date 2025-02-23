@@ -4,13 +4,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.MesReservationTransportVoyageurs"
-            prefHeight="400.0" prefWidth="600.0" stylesheets="css/MesReservationTransport.css">
+<AnchorPane prefHeight="620.0" prefWidth="1020.0" stylesheets="css/MesReservationTransport.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MesReservationTransportVoyageurs">
 
-    <ComboBox fx:id="statusFilter" layoutX="20.0" layoutY="20.0" prefWidth="200.0" onAction="#filterReservations"/>
-    <ListView fx:id="reservationListView" layoutX="20.0" layoutY="60.0" prefHeight="450.0" prefWidth="900.0" styleClass="custom-list-view"/>
+    <ComboBox fx:id="statusFilter" layoutX="20.0" layoutY="20.0" onAction="#filterReservations" prefWidth="200.0" />
+    <ListView fx:id="reservationListView" layoutX="20.0" layoutY="60.0" prefHeight="498.0" prefWidth="987.0" styleClass="custom-list-view" />
 
 </AnchorPane>
-

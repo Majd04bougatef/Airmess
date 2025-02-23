@@ -30,6 +30,14 @@ public class Session {
         return currentUser != null ? currentUser.getEmail() : null;
     }
 
+    public String getName() {
+        return currentUser != null ? currentUser.getName() : null;
+    }
+
+    public String getPrnom() {
+        return currentUser != null ? currentUser.getPrenom() : null;
+    }
+
     public String getRoleUser() {
         return currentUser != null ? currentUser.getRoleUser() : null;
     }

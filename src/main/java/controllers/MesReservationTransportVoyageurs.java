@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -63,14 +64,22 @@ public class MesReservationTransportVoyageurs {
     }
 
     private void loadReservations(String status) {
-        List<reservation_transport> reservations = reservationService.getAll().stream().filter(r -> r.getIdU() == session.getId_U() && r.getStatut().trim().equalsIgnoreCase(status.trim())).collect(Collectors.toList());
+        List<reservation_transport> reservations = reservationService.getAll().stream()
+                .filter(r -> r.getIdU() == session.getId_U() && r.getStatut().trim().equalsIgnoreCase(status.trim()))
+                .collect(Collectors.toList());
 
         ObservableList<HBox> reservationItems = FXCollections.observableArrayList();
 
         for (reservation_transport r : reservations) {
-            StationService st = new StationService(){};
+            StationService st = new StationService() {};
             station s = st.getById(r.getIdS());
-            String reservationText = String.format("📍 %s | 📅 %s | 💰 %.2f€/h | 🏷 %s", s.getNom(), r.getDateRes(), s.getPrixheure(), r.getStatut());
+            String reservationText = String.format("Réf: %s | 📍 %s | 📅 %s - %s | 💰 %.2f€/h | 🏷 %s",
+                    r.getReference(),
+                    s.getNom(),
+                    r.getDateRes(),
+                    r.getDateFin(),
+                    r.getPrix(),
+                    r.getStatut());
 
             HBox hbox = new HBox();
             Text reservationLabel = new Text(reservationText);
@@ -98,6 +107,7 @@ public class MesReservationTransportVoyageurs {
             reservationListView.refresh();
         });
     }
+
 
     public void loadDetailPage(int reservationId) {
         try {
@@ -129,4 +139,5 @@ public class MesReservationTransportVoyageurs {
             filterReservations();
         }
     }
+
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="640.0" prefWidth="1020.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReservationTransport">
+
+   <HBox prefWidth="1000.0" spacing="20" style="-fx-padding: 20;">
+
+      <!-- Partie Gauche : Formulaire -->
+      <ScrollPane prefHeight="600.0" prefWidth="600.0" style="-fx-border-radius: 50;">
+         <VBox prefHeight="598.0" prefWidth="598.0" spacing="20" style="-fx-padding: 20;-fx-border-radius: 50;">
+
+            <!-- Titre -->
+            <Text fill="#406dab" text="Réserver un Vélo" wrappingWidth="383.9999999999999">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+
+            <!-- Informations de la station -->
+            <Text fx:id="infoStation" fill="#000000" text="Nom de la station : \nNombre de vélos disponibles : \nPrix par heure : " wrappingWidth="520.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+
+            <!-- Nombre de vélos -->
+            <Label text="Nombre de Vélos" />
+            <TextField fx:id="nombreVelo" onKeyReleased="#updatePrixTotal" prefHeight="35.0" prefWidth="326.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+
+            <!-- Date de réservation -->
+            <Label text="Date de Réservation" />
+            <TextField fx:id="dateRes" editable="false" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
+
+            <!-- Date de Fin avec Heure -->
+            <Label text="Date et Heure de Fin" />
+            <HBox spacing="10">
+               <DatePicker fx:id="dateFin" onAction="#updatePrixTotal" prefWidth="160.0" />
+               <TextField fx:id="heureFin" promptText="HH:MM" onKeyReleased="#updatePrixTotal" prefWidth="80.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
+            </HBox>
+
+
+            <!-- Prix total -->
+            <Label alignment="TOP_LEFT" contentDisplay="CENTER" text="Prix Total">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></Label>
+            <Text fx:id="prixTotal" fill="#d62828" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="0 €" />
+
+            <!-- Bouton Réserver -->
+            <Button fx:id="btnReserver" onAction="#reserverTransport" prefHeight="40.0" prefWidth="240.0" style="-fx-background-color: #2a9d8f; -fx-text-fill: white; -fx-font-size: 14px;" text="Réserver" />
+         </VBox>
+      </ScrollPane>
+
+      <!-- Partie Droite : Récapitulatif -->
+      <VBox alignment="TOP_CENTER" prefWidth="300" spacing="15" style="-fx-background-color: #f8f8f8; -fx-padding: 20; -fx-border-radius: 10; -fx-border-color: #d1d1d1;">
+
+         <Text style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Récapitulatif" />
+
+         <Separator />
+
+         <Text fx:id="recapitulatifDetails" style="-fx-font-size: 14px;" text="Aucune réservation en cours..." wrappingWidth="260" />
+
+         <Separator />
+
+         <HBox spacing="5">
+            <Text text="Total :" />
+            <Text fx:id="recapPrixTotal" style="-fx-font-weight: bold;" text="0 €" />
+         </HBox>
+
+         <Button onAction="#payerReservation" style="-fx-background-color: #406dab; -fx-text-fill: white;" text="Confirmer" />
+      </VBox>
+
+   </HBox>
+
+</AnchorPane>

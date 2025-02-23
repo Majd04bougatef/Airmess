@@ -150,10 +150,12 @@ public class MenuVoyageurs {
     @FXML
     void Velo(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/WidgetStationVoyageurs.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/widgetStationVoyageurs.fxml"));
             Parent userPage = loader.load();
 
-            centralAnocherPane.getChildren().setAll(userPage);
+
+            centralAnocherPane.getChildren().clear();
+            centralAnocherPane.getChildren().add(userPage);
         } catch (IOException e) {
             e.printStackTrace();
         }

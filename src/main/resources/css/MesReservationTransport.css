@@ -1,24 +1,45 @@
 .custom-list-view {
-    -fx-background-color: #f8f9fa;
-    -fx-border-radius: 10px;
-    -fx-padding: 5px;
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-radius: 12px;
+    -fx-padding: 10px;
+    -fx-border-width: 1px;
+    -fx-border-color: #e0e0e0; /* Bordure gris clair */
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI", sans-serif; /* Police moderne */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 2, 2); /* Ombre douce */
 }
 
 .list-cell {
-    -fx-padding: 10px;
-    -fx-font-size: 14px;
-    -fx-text-fill: #333;
-    -fx-background-color: #ffffff;
-    -fx-border-color: #dddddd;
+    -fx-padding: 12px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #333; /* Texte gris foncé */
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-color: #f0f0f0; /* Bordure très claire */
     -fx-border-width: 1px;
-    -fx-border-radius: 5px;
+    -fx-border-radius: 8px; /* Coins arrondis */
+    -fx-background-insets: 0, 0, 0, 0;
 }
 
 .list-cell:filled:hover {
-    -fx-background-color: #f1f1f1;
+    -fx-background-color: #f7f7f7; /* Fond gris clair au survol */
+    -fx-cursor: hand; /* Change le curseur en main */
 }
 
 .list-cell:filled:selected {
-    -fx-background-color: #007bff;
-    -fx-text-fill: white;
+    -fx-background-color: #007bff; /* Bleu vif pour la sélection */
+    -fx-text-fill: white; /* Texte blanc pour l'élément sélectionné */
+    -fx-border-color: #0056b3; /* Bordure bleue plus foncée */
+}
+
+.custom-list-view .scroll-bar {
+    -fx-opacity: 0;
+}
+
+.custom-list-view .scroll-bar:horizontal,
+.custom-list-view .scroll-bar:vertical {
+    -fx-background-color: transparent; /* Masque la barre */
+}
+
+.custom-list-view:focused {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 2);
 }

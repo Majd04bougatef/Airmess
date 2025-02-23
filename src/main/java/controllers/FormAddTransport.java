@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import models.station;
 import netscape.javascript.JSObject;
@@ -13,10 +14,13 @@ import java.net.URL;
 
 public class FormAddTransport {
 
+    public Text textPays;
     @FXML
     private TextField Capacite, NbVelo, Nom, PrixHeure, Latitude, Longitude;
     @FXML
     private ComboBox<String> TypeVelo;
+    @FXML
+    private ComboBox<String> pays;
     @FXML
     private WebView mapView;
     @FXML
@@ -29,6 +33,11 @@ public class FormAddTransport {
         if (TypeVelo != null) {
             TypeVelo.getItems().addAll("Vélo urbain", "Vélo de route", "Vélo électrique");
         }
+
+        if (pays != null) {
+            pays.getItems().addAll("Algérie", "Allemgna", "Tunisie");
+        }
+
 
         WebEngine webEngine = mapView.getEngine();
         URL url = getClass().getResource("/html/map.html");
@@ -115,7 +124,7 @@ public class FormAddTransport {
             return;
         }
 
-        station newStation = new station(2, nom, lat, lng, prixHeure, nbVelo, capacite, typeVelo);
+        station newStation = new station(2, nom, lat, lng, prixHeure, capacite,nbVelo,typeVelo);
         StationService stService = new StationService(){};
         stService.add(newStation);
 

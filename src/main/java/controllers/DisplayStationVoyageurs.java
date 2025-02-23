@@ -15,10 +15,25 @@ import java.util.List;
 public class DisplayStationVoyageurs {
 
     @FXML
-    private VBox cardsContainer;
+    public VBox cardsContainer;
 
     @FXML
     private ScrollPane mainScrollPane;
+
+    private static DisplayStationVoyageurs instance;
+
+    public DisplayStationVoyageurs() {
+        instance = this;
+    }
+
+    public static DisplayStationVoyageurs getInstance() {
+        return instance;
+    }
+
+    public void showAvisForm(Parent formAvis) {
+        cardsContainer.getChildren().clear();
+        cardsContainer.getChildren().add(formAvis);
+    }
 
     public void initialize() {
         StationService service = new StationService(){};
@@ -32,9 +47,9 @@ public class DisplayStationVoyageurs {
             try {
                 Parent card = loader.load();
                 CardStation controller = loader.getController();
-                controller.setData(st);
-                //controller.setParentController(this); // Passer le parent
 
+
+                controller.setData(st);
                 hbox.getChildren().add(card);
                 count++;
 
@@ -47,25 +62,11 @@ public class DisplayStationVoyageurs {
             }
         }
 
+
         if (count % 4 != 0) {
             cardsContainer.getChildren().add(hbox);
         }
     }
 
-
-    private static DisplayStationVoyageurs instance;
-
-
-    public DisplayStationVoyageurs() {
-        instance = this;
-    }
-
-    public static DisplayStationVoyageurs getInstance() {
-        return instance;
-    }
-
-    public void setScrollContent(Parent content) {
-        mainScrollPane.setContent(content);
-    }
 
 }

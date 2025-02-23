@@ -19,6 +19,7 @@
                 <VBox spacing="5" styleClass="card-content">
                     <Text fx:id="nom" text="Nom de la station" styleClass="card-title" />
                     <Text fx:id="nbvelo" text="Nombre de vélos" styleClass="card-subtitle" />
+                    <Text fx:id="prixH" text="Prix par Heure" styleClass="card-subtitle" />
                 </VBox>
 
                 <HBox fx:id="ratingContainer" spacing="3.0" alignment="CENTER_LEFT">
@@ -32,7 +33,7 @@
 
                 <HBox spacing="10" alignment="CENTER" styleClass="card-buttons">
                     <Button mnemonicParsing="false" onAction="#reserver" text="Réserver" styleClass="btn-primary" />
-                    <Button mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
+                    <Button fx:id="btnAvis" mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
                 </HBox>
             </children>
         </VBox>
