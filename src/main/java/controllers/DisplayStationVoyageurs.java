@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.transport.CardStation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -43,7 +44,7 @@ public class DisplayStationVoyageurs {
         int count = 0;
 
         for (station st : stations) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardStation.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/cardStation.fxml"));
             try {
                 Parent card = loader.load();
                 CardStation controller = loader.getController();

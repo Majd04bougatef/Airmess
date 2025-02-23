@@ -1,5 +1,6 @@
-package controllers;
+package controllers.transport;
 
+import controllers.DisplayStationVoyageurs;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +48,7 @@ public class CardStation {
     @FXML
     void review(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/formAvis.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/formAvis.fxml"));
             Parent formAvis = loader.load();
 
             FormAvis controller = loader.getController();
@@ -71,7 +72,7 @@ public class CardStation {
     @FXML
     void reserver(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservationTransport.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/reservationTransport.fxml"));
             Parent reservationForm = loader.load();
 
             ReservationTransport controller = loader.getController();

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,17 +15,17 @@ public class WidgetStationVoyageurs {
 
     @FXML
     public void initialize() {
-        loadPage("/DisplayStationVoyageurs.fxml");
+        loadPage("/transport/DisplayStationVoyageurs.fxml");
     }
 
     @FXML
     void reserver(ActionEvent event) {
-        loadPage("/DisplayStationVoyageurs.fxml");
+        loadPage("/transport/DisplayStationVoyageurs.fxml");
     }
 
     @FXML
     public void MesReservation(ActionEvent actionEvent) {
-        loadPage("/MesReservationTransportVoyageurs.fxml");
+        loadPage("/transport/MesReservationTransportVoyageurs.fxml");
     }
 
     private void loadPage(String s) {
