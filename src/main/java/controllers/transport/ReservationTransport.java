@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Random;
 
 public class ReservationTransport {
@@ -169,7 +168,7 @@ public class ReservationTransport {
 
     private void showReservationDialog(String message) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/ReservationDialog.fxml"));
             Parent root = loader.load();
 
             ReservationDialog controller = loader.getController();

@@ -150,7 +150,7 @@ public class MenuVoyageurs {
     @FXML
     void Velo(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/widgetStationVoyageurs.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/widgetStationVoyageurs.fxml"));
             Parent userPage = loader.load();
 
 

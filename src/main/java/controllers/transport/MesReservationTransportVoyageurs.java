@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -111,7 +110,7 @@ public class MesReservationTransportVoyageurs {
 
     public void loadDetailPage(int reservationId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierReservationVoyageurs.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/ModifierReservationVoyageurs.fxml"));
             Parent root = loader.load();
 
             ModifierReservationVoyageurs controller = loader.getController();

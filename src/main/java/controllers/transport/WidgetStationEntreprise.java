@@ -1,7 +1,6 @@
-package controllers;
+package controllers.transport;
 
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,17 +15,17 @@ public class WidgetStationEntreprise {
 
     @FXML
     public void initialize() {
-        loadPage("/DisplayStationEntreprise.fxml");
+        loadPage("/transport/DisplayStationEntreprise.fxml");
     }
 
     @FXML
     void btnFormAdd() {
-        loadPage("/FormAddTransport.fxml");
+        loadPage("/transport/FormAddTransport.fxml");
     }
 
     @FXML
     void btnGettStation() {
-        loadPage("/DisplayStationEntreprise.fxml");
+        loadPage("/transport/DisplayStationEntreprise.fxml");
     }
 
     private void loadPage(String fxmlFile) {

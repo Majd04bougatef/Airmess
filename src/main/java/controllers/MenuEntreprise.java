@@ -4,9 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -17,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
 public class MenuEntreprise {
 
@@ -63,7 +59,7 @@ public class MenuEntreprise {
 
     public void Velo(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/widgetStationEntreprise.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/widgetStationEntreprise.fxml"));
             Parent userPage = loader.load();
 
             centralAnocherPane.getChildren().setAll(userPage);
