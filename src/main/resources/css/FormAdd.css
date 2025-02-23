@@ -6,7 +6,7 @@
 }
 
 .text-field {
-    -fx-pref-width: 780px;
+    -fx-pref-width: 350px;
     -fx-padding: 8px;
     -fx-background-color: white;
     -fx-border-color: #e5e7eb;

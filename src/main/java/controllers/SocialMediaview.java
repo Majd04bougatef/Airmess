@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -17,9 +18,11 @@ import services.CommentaireServices;
 import services.UsersService;
 import services.SocialMediaServices;
 
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 
 
 public class SocialMediaview {
@@ -91,12 +94,13 @@ public class SocialMediaview {
             Label dateLabel = new Label("Publié le : " + publicationDate);
             dateLabel.getStyleClass().add("date-label");
 
+
             Users user = usersService.getById(post.getId_U());
             Label usernameLabel = new Label(user != null ? "Posté par: " + user.getName() : "Posté par: Utilisateur inconnu");
             usernameLabel.getStyleClass().add("username-label");
 
-
             postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel,dateLabel,locationLabel);
+
 
 
 
@@ -209,8 +213,6 @@ public class SocialMediaview {
         postContainer.getChildren().clear();
         loadPosts();
 
-
-
     }
 
     @FXML
@@ -227,6 +229,7 @@ public class SocialMediaview {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
+
                         Object parent = sourceButton.getParent();
                         if (parent instanceof VBox) {
                             VBox postBox = (VBox) parent;
@@ -235,6 +238,7 @@ public class SocialMediaview {
                         } else {
                             System.out.println("impossible de supprimé la publication.");
                         }
+
                         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postToDelete.getIdEB());
                         for (Commentaire commentaire : commentaires) {
                             CommentaireServices.delete(commentaire);
@@ -243,6 +247,7 @@ public class SocialMediaview {
                         socialMediaServices.delete(postToDelete);
 
                        refreshPosts();
+
 
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Succès");
@@ -281,8 +286,6 @@ public class SocialMediaview {
             stage.setTitle("Modifier la publication");
             stage.setScene(scene);
             stage.show();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -340,6 +343,7 @@ public class SocialMediaview {
         String newComment = commentText.getText().trim();
 
 
+
         if (!validateContent(newComment)) {
             return;
         }
@@ -364,7 +368,6 @@ public class SocialMediaview {
             System.out.println("⚠ Erreur lors de l'ajout du commentaire.");
         }
     }
-
 
 
     public void refreshCommentList(VBox commentList, int postId) {
@@ -394,6 +397,7 @@ public class SocialMediaview {
 
                 Region spacer = new Region();
                 HBox.setHgrow(spacer, Priority.ALWAYS);
+
 
                 commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
 
@@ -440,7 +444,6 @@ public class SocialMediaview {
         });
     }
 
-
     @FXML
     private void handleDeleteComment(ActionEvent event) {
         HBox commentBox = (HBox) ((Button) event.getSource()).getParent();
@@ -455,6 +458,7 @@ public class SocialMediaview {
         alert.setTitle("Suppression de commentaire");
         alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
         alert.setContentText("Cette action est irréversible. Le commentaire sera définitivement supprimé.");
+
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -497,3 +501,4 @@ public class SocialMediaview {
 
 
 }
+

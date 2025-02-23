@@ -17,6 +17,8 @@ import test.Session;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 
 public class CardStation {
 
@@ -40,6 +42,17 @@ public class CardStation {
 
     private station currentStation;
 
+
+    public void initialize() {
+        applyRoundedImage(image, 20);
+    }
+
+    private void applyRoundedImage(ImageView imageView, double radius) {
+        Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+        clip.setArcWidth(radius * 2);
+        clip.setArcHeight(radius * 2);
+        imageView.setClip(clip);
+    }
     @FXML
     void reserver(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

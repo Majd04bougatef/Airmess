@@ -77,12 +77,14 @@ AnchorPane {
     -fx-font-size: 12px;
     margin-left: 20px;
     -fx-margin-left: 50px;
+
 }
 
 .delete-comment-button {
     -fx-background-color: #d32f2f;
     -fx-text-fill: white;
     -fx-background-radius: 5px;
+
     -fx-padding: 3px 8px;
     -fx-min-width: 70px;
     -fx-font-size: 12px;
@@ -106,6 +108,7 @@ AnchorPane {
 
 .separator {
     -fx-background-color: #363434;
+
     -fx-padding: 5px 0;
 }
 
