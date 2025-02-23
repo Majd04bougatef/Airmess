@@ -4,39 +4,23 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import javafx.scene.web.WebView;
 import models.station;
 import netscape.javascript.JSObject;
 import services.StationService;
-
 import javafx.scene.web.WebEngine;
+import java.net.URL;
 
-import java.net.URL;public class FormAddTransport {
-
-    @FXML
-    private TextField Capacite;
+public class FormAddTransport {
 
     @FXML
-    private TextField NbVelo;
-
-    @FXML
-    private TextField Nom;
-
-    @FXML
-    private TextField PrixHeure;
-
+    private TextField Capacite, NbVelo, Nom, PrixHeure, Latitude, Longitude;
     @FXML
     private ComboBox<String> TypeVelo;
-
-    @FXML
-    private TextField Latitude;
-
-    @FXML
-    private TextField Longitude;
-
     @FXML
     private WebView mapView;
+    @FXML
+    private Label lblNomError, lblCapaciteError, lblNbVeloError, lblPrixHeureError, lblTypeVeloError;
 
     private double lat = 51.1;
     private double lng = -0.3;
@@ -69,56 +53,86 @@ import java.net.URL;public class FormAddTransport {
         }
     }
 
-
     public void btnAjoutTranport(ActionEvent actionEvent) {
-        try {
-            String nom = Nom.getText();
-            int capacite = Integer.parseInt(Capacite.getText());
-            int nbVelo = Integer.parseInt(NbVelo.getText());
-            String typeVelo = TypeVelo.getValue();
-            double prixHeure = Double.parseDouble(PrixHeure.getText());
+        boolean isValid = true;
+        lblNomError.setText("");
+        lblCapaciteError.setText("");
+        lblNbVeloError.setText("");
+        lblPrixHeureError.setText("");
 
-            lat = Double.parseDouble(Latitude.getText());
-            lng = Double.parseDouble(Longitude.getText());
-
-            if (lat == 0 || lng == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur de saisie");
-                alert.setHeaderText(null);
-                alert.setContentText("Veuillez sélectionner un emplacement sur la carte.");
-                alert.showAndWait();
-                return;
-            }
-
-            System.out.println("test") ;
-            station newStation = new station(2, nom, lat, lng, prixHeure,  nbVelo,capacite, typeVelo);
-
-            StationService stService = new StationService(){};
-            stService.add(newStation);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("La station a été ajoutée avec succès !");
-            alert.showAndWait();
-            System.out.println("test2") ;
-            Nom.clear();
-            Capacite.clear();
-            NbVelo.clear();
-            PrixHeure.clear();
-            TypeVelo.getSelectionModel().clearSelection();
-            Latitude.clear();
-            Longitude.clear();
-            lat = 0;
-            lng = 0;
-            System.out.println("test 3") ;
-
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de saisie");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez entrer des valeurs valides pour les champs numériques.");
-            alert.showAndWait();
+        String nom = Nom.getText().trim();
+        if (!nom.matches("[a-zA-Z0-9 ]+")) {
+            lblNomError.setText("Nom invalide (lettres, chiffres et espaces seulement)");
+            lblNomError.setStyle("-fx-text-fill: red;");
+            isValid = false;
         }
+
+        int capacite = 0;
+        try {
+            capacite = Integer.parseInt(Capacite.getText().trim());
+            if (capacite <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            lblCapaciteError.setText("Capacité doit être un nombre strictement positif");
+            lblCapaciteError.setStyle("-fx-text-fill: red;");
+            isValid = false;
+        }
+
+        int nbVelo = 0;
+        try {
+            nbVelo = Integer.parseInt(NbVelo.getText().trim());
+            if (nbVelo < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            lblNbVeloError.setText("Nombre de vélos doit être un nombre positif");
+            lblNbVeloError.setStyle("-fx-text-fill: red;");
+            isValid = false;
+        }
+
+        double prixHeure = 0;
+        try {
+            prixHeure = Double.parseDouble(PrixHeure.getText().trim());
+            if (prixHeure < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            lblPrixHeureError.setText("Prix par heure doit être un nombre positif");
+            lblPrixHeureError.setStyle("-fx-text-fill: red;");
+            isValid = false;
+        }
+
+        String typeVelo = TypeVelo.getValue();
+        if (typeVelo == null || typeVelo.isEmpty()) {
+            lblTypeVeloError.setText("Veuillez sélectionner un type de vélo");
+            lblTypeVeloError.setStyle("-fx-text-fill: red;");
+            isValid = false;
+        }
+
+
+        if (!isValid) {
+            return;
+        }
+
+        station newStation = new station(2, nom, lat, lng, prixHeure, nbVelo, capacite, typeVelo);
+        StationService stService = new StationService(){};
+        stService.add(newStation);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText("La station a été ajoutée avec succès !");
+        alert.showAndWait();
+
+        Nom.clear();
+        Capacite.clear();
+        NbVelo.clear();
+        PrixHeure.clear();
+        TypeVelo.getSelectionModel().clearSelection();
+        Latitude.clear();
+        Longitude.clear();
+        lat = 0;
+        lng = 0;
     }
 }

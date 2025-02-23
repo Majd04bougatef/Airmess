@@ -137,3 +137,38 @@ TextField {
 .label-bold {
     -fx-font-weight: bold;
 }
+/* Section des commentaires */
+.comments-section {
+    -fx-padding: 10px 0 0 0; /* Espace au-dessus des commentaires */
+    -fx-spacing: 5px; /* Espacement entre les commentaires */
+    -fx-border-color: #dddddd; /* Couleur du trait */
+    -fx-border-width: 1px 0 0 0; /* Trait uniquement en haut */
+    -fx-border-style: solid;
+}
+
+/* Style des commentaires individuels */
+.comment-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #444444;
+    -fx-padding: 5px;
+}
+
+/* Zone de texte pour ajouter un commentaire */
+.comment-field {
+    -fx-pref-width: 200px; /* Largeur du champ de saisie */
+    -fx-font-size: 12px;
+}
+
+/* Bouton pour ajouter un commentaire */
+.add-comment-button {
+    -fx-background-color: #4CAF50; /* Vert */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+}
+
+.add-comment-button:hover {
+    -fx-background-color: #45a049;
+}

@@ -25,8 +25,10 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
+
 import java.util.Arrays;
 import java.util.List;
+
 
 
 public class FormAddSocialMedia {
@@ -95,6 +97,7 @@ public class FormAddSocialMedia {
         SocialMedia socialMedia = new SocialMedia();
 
 
+
         if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() ) {
             showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
             return;
@@ -113,7 +116,8 @@ public class FormAddSocialMedia {
         socialMedia.setContenu(contenu.getText());
         socialMedia.setLieu(Lieu.getText());
         socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
-        socialMedia.setId_U(1);
+
+        socialMedia.setId_U(2);
 
 
         if (imageName != null) {
@@ -155,6 +159,7 @@ public class FormAddSocialMedia {
 
         return true;
     }
+
 
 
     private void showAlert(String title, String message, AlertType alertType) {

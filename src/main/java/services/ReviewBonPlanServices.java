@@ -145,5 +145,32 @@ public abstract class ReviewBonPlanServices implements GlobalInterface<ReviewBon
 
         return b;
     }
+    public List<ReviewBonplan> getCommentsByBonPlan(int idP) {
+        List<ReviewBonplan> comments = new ArrayList<>();
+        String query = "SELECT * FROM reviewbonplan WHERE idP = ? ORDER BY dateR DESC";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, idP);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                ReviewBonplan review = new ReviewBonplan();
+                review.setIdR(rs.getInt("idR"));
+                review.setIdU(rs.getInt("id_U"));
+                review.setIdP(rs.getInt("idP"));
+                review.setRating(rs.getInt("rating"));
+                review.setCommente(rs.getString("commente"));
+                Timestamp timestamp = rs.getTimestamp("dateR");
+                if (timestamp != null) {
+                    review.setDateR(timestamp.toLocalDateTime());
+                }
+                comments.add(review);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching comments: " + e.getMessage());
+        }
+        return comments;
+    }
+
 
 }

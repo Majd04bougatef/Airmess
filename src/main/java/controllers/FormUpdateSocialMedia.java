@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+
 import javafx.stage.FileChooser;
 import models.SocialMedia;
 import services.SocialMediaServices;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
 import java.util.ResourceBundle;
 
 public class FormUpdateSocialMedia implements Initializable {
@@ -31,8 +33,10 @@ public class FormUpdateSocialMedia implements Initializable {
     private Button bttnUpdate;
     @FXML
     private ImageView image;
+
     @FXML
     private Text text1;
+
 
     private final SocialMediaServices socialMediaServices = new SocialMediaServices(){};
     private SocialMedia currentPost;
