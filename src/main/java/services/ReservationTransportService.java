@@ -85,6 +85,7 @@ public abstract class ReservationTransportService implements GlobalInterface<res
                 r.setDateFin(rs.getTimestamp("dateFin"));
                 r.setPrix(rs.getDouble("prix"));
                 r.setStatut(rs.getString("statut"));
+                r.setNombreVelo(rs.getInt("nombreVelo"));
                 r.setReference(rs.getString("reference"));
                 rt.add(r);
             }
@@ -116,6 +117,7 @@ public abstract class ReservationTransportService implements GlobalInterface<res
                 rt.setDateFin(rs.getTimestamp("dateFin"));
                 rt.setPrix(rs.getDouble("prix"));
                 rt.setStatut(rs.getString("statut"));
+                rt.setNombreVelo(rs.getInt("nombreVelo"));
                 rt.setReference(rs.getString("reference"));
 
             }

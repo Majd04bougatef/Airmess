@@ -124,7 +124,7 @@ public class FormAddTransport {
             return;
         }
 
-        station newStation = new station(2, nom, lat, lng, prixHeure, nbVelo, capacite, typeVelo);
+        station newStation = new station(2, nom, lat, lng, prixHeure, capacite,nbVelo,typeVelo);
         StationService stService = new StationService(){};
         stService.add(newStation);
 

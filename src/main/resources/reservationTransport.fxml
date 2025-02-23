@@ -43,9 +43,13 @@
             <Label text="Date de Réservation" />
             <TextField fx:id="dateRes" editable="false" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
 
-            <!-- Date de fin -->
-            <Label text="Date de Fin" />
-            <DatePicker fx:id="dateFin" onAction="#updatePrixTotal" prefWidth="240.0" />
+            <!-- Date de Fin avec Heure -->
+            <Label text="Date et Heure de Fin" />
+            <HBox spacing="10">
+               <DatePicker fx:id="dateFin" onAction="#updatePrixTotal" prefWidth="160.0" />
+               <TextField fx:id="heureFin" promptText="HH:MM" onKeyReleased="#updatePrixTotal" prefWidth="80.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
+            </HBox>
+
 
             <!-- Prix total -->
             <Label alignment="TOP_LEFT" contentDisplay="CENTER" text="Prix Total">

@@ -64,14 +64,22 @@ public class MesReservationTransportVoyageurs {
     }
 
     private void loadReservations(String status) {
-        List<reservation_transport> reservations = reservationService.getAll().stream().filter(r -> r.getIdU() == session.getId_U() && r.getStatut().trim().equalsIgnoreCase(status.trim())).collect(Collectors.toList());
+        List<reservation_transport> reservations = reservationService.getAll().stream()
+                .filter(r -> r.getIdU() == session.getId_U() && r.getStatut().trim().equalsIgnoreCase(status.trim()))
+                .collect(Collectors.toList());
 
         ObservableList<HBox> reservationItems = FXCollections.observableArrayList();
 
         for (reservation_transport r : reservations) {
-            StationService st = new StationService(){};
+            StationService st = new StationService() {};
             station s = st.getById(r.getIdS());
-            String reservationText = String.format("📍 %s | 📅 %s | 💰 %.2f€/h | 🏷 %s", s.getNom(), r.getDateRes(), s.getPrixheure(), r.getStatut());
+            String reservationText = String.format("Réf: %s | 📍 %s | 📅 %s - %s | 💰 %.2f€/h | 🏷 %s",
+                    r.getReference(),
+                    s.getNom(),
+                    r.getDateRes(),
+                    r.getDateFin(),
+                    r.getPrix(),
+                    r.getStatut());
 
             HBox hbox = new HBox();
             Text reservationLabel = new Text(reservationText);
@@ -99,6 +107,7 @@ public class MesReservationTransportVoyageurs {
             reservationListView.refresh();
         });
     }
+
 
     public void loadDetailPage(int reservationId) {
         try {
@@ -131,9 +140,4 @@ public class MesReservationTransportVoyageurs {
         }
     }
 
-    private Pane panewidget;
-
-    public void setPanewidget(Pane panewidget) {
-        this.panewidget = panewidget;
-    }
 }
