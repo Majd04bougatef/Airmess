@@ -47,23 +47,6 @@ public class UsersService implements GlobalInterface<Users> {
     }
 
 
-    public void updatepassword(Users user) {
-        String sql = "UPDATE users SET password = ? WHERE id_U = ?";
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = user.getPassword() != null ? encoder.encode(user.getPassword()) : null;
-        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
-            if (hashedPassword != null) {
-                preparedStatement.setString(1, hashedPassword);
-            } else {
-                preparedStatement.setNull(1, Types.VARCHAR);
-            }
-            preparedStatement.setInt(2, user.getId_U());
-            preparedStatement.executeUpdate();
-            System.out.println("User password updated successfully!");
-        } catch (SQLException e) {
-            System.err.println("Error updating user password: " + e.getMessage());
-        }
-    }
 
 
     @Override
@@ -283,5 +266,69 @@ public class UsersService implements GlobalInterface<Users> {
         }
 
         return false;
+    }
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(newPassword);
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setString(1, hashedPassword);
+            preparedStatement.setString(2, email);
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
+    public void updatepassword(Users user) {
+        String sql = "UPDATE users SET password = ? WHERE id_U = ?";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = user.getPassword() != null ? encoder.encode(user.getPassword()) : null;
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            if (hashedPassword != null) {
+                preparedStatement.setString(1, hashedPassword);
+            } else {
+                preparedStatement.setNull(1, Types.VARCHAR);
+            }
+            preparedStatement.setInt(2, user.getId_U());
+            preparedStatement.executeUpdate();
+            System.out.println("User password updated successfully!");
+        } catch (SQLException e) {
+            System.err.println("Error updating user password: " + e.getMessage());
+        }
+    }
+
+    // Add the new method to fetch user by email
+    public Users getUserByEmail(String email) {
+        String query = "SELECT * FROM users WHERE email=?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Users(
+                            rs.getInt("id_U"),
+                            rs.getString("name"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            null, // password is null as you are not retrieving it here
+                            rs.getString("roleUser"),
+                            rs.getDate("dateNaiss") != null ? rs.getDate("dateNaiss").toLocalDate() : null,
+                            rs.getString("phoneNumber"),
+                            rs.getString("statut"),
+                            rs.getInt("diamond"),
+                            rs.getInt("deleteFlag"),
+                            rs.getString("imagesU")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving user by email: " + e.getMessage());
+        }
+        return null;
     }
 }
