@@ -12,34 +12,35 @@
 <body>
 <div id="map"></div>
 <script>
-    var map = L.map('map').setView([51.505, -0.09], 13); // Exemple de coordonnées de départ
+    var map = L.map('map').setView([51.505, -0.09], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Créer un groupe de couches pour les marqueurs
     var markerLayer = L.layerGroup().addTo(map);
 
-    var javaConnector = window.javaConnector; // Assurez-vous que javaConnector est défini ici
+    var javaConnector = window.javaConnector;
 
     map.on('click', function(e) {
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
 
-        // Effacer tous les anciens marqueurs
-        markerLayer.clearLayers();
+        console.log("Coordonnées cliquées:", lat, lng);
 
-        // Ajouter un nouveau marqueur
+        markerLayer.clearLayers();
         L.marker([lat, lng]).addTo(markerLayer)
             .bindPopup("Nouvelle station ici !<br>Latitude: " + lat + "<br>Longitude: " + lng)
             .openPopup();
 
-        // Envoie les coordonnées à Java via javaConnector
-        if (javaConnector) {
-            javaConnector.receiveCoordinates(lat, lng);
+        if (window.javaConnector) {
+            console.log("javaConnector trouvé, envoi des coordonnées...");
+            window.javaConnector.receiveCoordinates(lat, lng);
+        } else {
+            console.error("javaConnector est undefined !");
         }
     });
+
 </script>
 </body>
 </html>

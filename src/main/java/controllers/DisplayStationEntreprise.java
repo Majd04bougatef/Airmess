@@ -10,12 +10,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import models.station;
 import services.StationService;
+import test.Session;
+
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class DisplayStationEntreprise implements Initializable {
+
+    private Session session = Session.getInstance();
 
     @FXML
     private TableColumn<station, Integer> colCapacite;
@@ -42,6 +47,8 @@ public class DisplayStationEntreprise implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+
+        System.out.println(session.getId_U());
         loadData();
 
 
@@ -56,7 +63,7 @@ public class DisplayStationEntreprise implements Initializable {
     }
 
     private void loadData() {
-        List<station> listStation = stationService.getAll();
+        List<station> listStation = stationService.getAll().stream().filter(station -> station.getIdU() == session.getId_U()).collect(Collectors.toList());
         ObservableList<station> observableList = FXCollections.observableArrayList(listStation);
 
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
