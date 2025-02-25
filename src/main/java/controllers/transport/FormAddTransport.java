@@ -11,8 +11,10 @@ import netscape.javascript.JSObject;
 import services.StationService;
 import javafx.scene.web.WebEngine;
 import java.net.URL;
-
+import test.Session;
 public class FormAddTransport {
+
+    private Session session = Session.getInstance();
 
     public Text textPays;
     @FXML
@@ -35,30 +37,35 @@ public class FormAddTransport {
         }
 
         if (pays != null) {
-            pays.getItems().addAll("Algérie", "Allemgna", "Tunisie");
+            pays.getItems().addAll("Algérie", "Allemagne", "Tunisie");
         }
-
 
         WebEngine webEngine = mapView.getEngine();
         URL url = getClass().getResource("/html/map.html");
         if (url != null) {
             webEngine.load(url.toExternalForm());
-
             webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    System.out.println("Carte chargée avec succès !");
                     JSObject window = (JSObject) webEngine.executeScript("window");
-                    window.setMember("javaConnector", new JavaConnector());
+                    JavaConnector javaConnectorInstance = new JavaConnector();
+                    window.setMember("javaConnector", javaConnectorInstance);
+                    System.out.println("javaConnector défini !");
                 }
             });
+
+        } else {
+            System.err.println("Erreur : fichier map.html introuvable !");
         }
     }
 
     public class JavaConnector {
         public void receiveCoordinates(double latitude, double longitude) {
-            Platform.runLater(() -> {
-                Latitude.setText(String.valueOf(latitude));
-                Longitude.setText(String.valueOf(longitude));
-            });
+            System.out.println("Coordonnées reçues : " + latitude + ", " + longitude);
+            lat = latitude;
+            lng = longitude;
+            Latitude.setText(String.valueOf(lat));
+            Longitude.setText(String.valueOf(lng));
         }
     }
 
@@ -119,13 +126,13 @@ public class FormAddTransport {
             isValid = false;
         }
 
-
         if (!isValid) {
             return;
         }
 
-        station newStation = new station(2, nom, lat, lng, prixHeure, capacite,nbVelo,typeVelo);
-        StationService stService = new StationService(){};
+        // Créer la station avec les coordonnées récupérées
+        station newStation = new station(session.getId_U(), nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo);
+        StationService stService = new StationService() {};
         stService.add(newStation);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -134,6 +141,7 @@ public class FormAddTransport {
         alert.setContentText("La station a été ajoutée avec succès !");
         alert.showAndWait();
 
+        // Réinitialiser les champs
         Nom.clear();
         Capacite.clear();
         NbVelo.clear();

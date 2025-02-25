@@ -104,7 +104,8 @@ public class CardStation {
             default -> "/image/default.png";
         };
 
-        image.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+        image.setImage(new Image(imagePath));
+        //image.setImage(new Image(getClass().getResourceAsStream(imagePath)));
     }
 
 
