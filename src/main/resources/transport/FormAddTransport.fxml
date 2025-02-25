@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="592.0" prefWidth="1030.0" stylesheets="@../css/FormAddStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.FormAddTransport">
+<AnchorPane prefHeight="592.0" prefWidth="1030.0" stylesheets="/css/FormAddStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.FormAddTransport">
    <children>
       <Pane fx:id="form" layoutX="43.0" layoutY="2.0" prefHeight="558.0" prefWidth="940.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;" AnchorPane.leftAnchor="50.0">
          <children>

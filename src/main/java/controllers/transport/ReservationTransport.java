@@ -1,5 +1,6 @@
 package controllers.transport;
 
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import services.ReservationTransportService;
 import services.StationService;
 import test.Session;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -21,6 +23,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.awt.Desktop;
+
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Image;
+
+import java.awt.Color;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class ReservationTransport {
 
@@ -134,6 +157,7 @@ public class ReservationTransport {
 
             ajouterReservation(nbVeloRes);
             st.updateNombreVelo(currentStation.getIdS(), nbVeloRes);
+            genererPDF();
         } catch (NumberFormatException e) {
             showAlert("Erreur", "Veuillez entrer un nombre valide pour les vélos.");
         }
@@ -202,4 +226,79 @@ public class ReservationTransport {
 
         return String.format("AIR-%s-%s%s-%d-%s", datePart, nomPart, prenomPart, randomNum, userIdFormatted);
     }
+
+
+    @FXML
+    public void genererPDF() {
+        try {
+            String pdfPath = "reservation_" + reference + ".pdf";
+            Document document = new Document();
+
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
+
+            document.open();
+
+            String qrCodeText = "Référence: " + reference;
+            Image qrCodeImage = createQRCodeImage(qrCodeText);
+
+            float xPosition = document.getPageSize().getWidth() - qrCodeImage.getScaledWidth() - 20;
+            float yPosition = document.getPageSize().getHeight() - qrCodeImage.getScaledHeight() - 20;
+            qrCodeImage.setAbsolutePosition(xPosition, yPosition);
+            document.add(qrCodeImage);
+
+            Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
+            Paragraph title = new Paragraph("Détails de la Réservation", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            document.add(new Paragraph("\nRéférence : " + reference));
+            document.add(new Paragraph("Station : " + currentStation.getNom()));
+            document.add(new Paragraph("Nombre de vélos : " + nombreVelo.getText()));
+            document.add(new Paragraph("Date de fin : " + dateFin.getValue()));
+            document.add(new Paragraph("Prix total : " + String.format("%.2f €", prixTotalValue)));
+            document.add(new Paragraph("\nStatut : En attente"));
+
+            document.close();
+
+            showAlert("PDF généré", "Le PDF de votre réservation a été généré avec succès.");
+
+            ouvrirPDF(pdfPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur s'est produite lors de la génération du PDF.");
+        }
+    }
+
+    private void ouvrirPDF(String pdfPath) {
+        try {
+            File pdfFile = new File(pdfPath);
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le fichier PDF.");
+        }
+    }
+
+    private Image createQRCodeImage(String text) {
+        try {
+            Map<EncodeHintType, Object> hintMap = new HashMap<>();
+            hintMap.put(EncodeHintType.MARGIN, 1);
+
+            BitMatrix matrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 200, 200, hintMap);
+
+            File qrCodeFile = new File("QRCode.png");
+            MatrixToImageWriter.writeToFile(matrix, "PNG", qrCodeFile);
+
+            Image qrCodeImage = Image.getInstance(qrCodeFile.getAbsolutePath());
+            qrCodeImage.scaleToFit(100, 100);
+            return qrCodeImage;
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur s'est produite lors de la génération du QR code.");
+            return null;
+        }
+    }
+
 }
