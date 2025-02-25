@@ -15,7 +15,7 @@ import services.ReservationTransportService;
 import services.StationService;
 import test.Session;
 
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -25,8 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
-import java.io.FileOutputStream;
-import java.io.File;
+
 import java.awt.Desktop;
 
 
@@ -231,11 +230,10 @@ public class ReservationTransport {
     @FXML
     public void genererPDF() {
         try {
-            String pdfPath = "reservation_" + reference + ".pdf";
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             Document document = new Document();
 
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
-
+            PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
 
             String qrCodeText = "Référence: " + reference;
@@ -261,23 +259,26 @@ public class ReservationTransport {
             document.close();
 
             showAlert("PDF généré", "Le PDF de votre réservation a été généré avec succès.");
+            afficherPDF(byteArrayOutputStream.toByteArray());
 
-            ouvrirPDF(pdfPath);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Une erreur s'est produite lors de la génération du PDF.");
         }
     }
 
-    private void ouvrirPDF(String pdfPath) {
+    private void afficherPDF(byte[] pdfData) {
         try {
-            File pdfFile = new File(pdfPath);
-            if (pdfFile.exists()) {
-                Desktop.getDesktop().open(pdfFile);
+            File tempFile = File.createTempFile("reservation_", ".pdf");
+            tempFile.deleteOnExit();
+
+            try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
+                fileOutputStream.write(pdfData);
             }
+            Desktop.getDesktop().open(tempFile);
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir le fichier PDF.");
+            showAlert("Erreur", "Impossible d'afficher le fichier PDF.");
         }
     }
 
@@ -286,12 +287,14 @@ public class ReservationTransport {
             Map<EncodeHintType, Object> hintMap = new HashMap<>();
             hintMap.put(EncodeHintType.MARGIN, 1);
 
+            // Génération du QR code en mémoire
             BitMatrix matrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 200, 200, hintMap);
 
-            File qrCodeFile = new File("QRCode.png");
-            MatrixToImageWriter.writeToFile(matrix, "PNG", qrCodeFile);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(matrix, "PNG", byteArrayOutputStream);
 
-            Image qrCodeImage = Image.getInstance(qrCodeFile.getAbsolutePath());
+            // Créer l'image à partir de la mémoire
+            Image qrCodeImage = Image.getInstance(byteArrayOutputStream.toByteArray());
             qrCodeImage.scaleToFit(100, 100);
             return qrCodeImage;
         } catch (Exception e) {
@@ -300,5 +303,6 @@ public class ReservationTransport {
             return null;
         }
     }
+
 
 }
