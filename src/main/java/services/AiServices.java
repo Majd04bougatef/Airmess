@@ -1,16 +1,37 @@
 package services;
 
-import java.io.IOException;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.AccessToken;
 import okhttp3.*;
 import org.json.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class AiServices {
 
-    // Remplace par ta clé API (et pense à la stocker dans une variable d'environnement pour plus de sécurité)
-    private static final String API_KEY = ("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");  // Utilise une variable d'environnement pour plus de sécurité
-    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    // URL correcte de l'API
+    private static final String API_URL = "https://aiplatform.googleapis.com/v1/projects/socialmedia-452018/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:generateContent";
 
-    // Fonction principale pour modérer le contenu
+    // Chemin vers le fichier de clé de service (à externaliser idéalement)
+    private static final String SERVICE_ACCOUNT_KEY_PATH = "src/main/resources/json/socialmedia-452018-092a9a2ee5e6.json";
+
+    // Méthode pour obtenir un token d'accès
+    public static String getAccessToken() throws IOException {
+        // Charger les informations de la clé de service
+        GoogleCredentials credentials = GoogleCredentials
+                .fromStream(new FileInputStream(SERVICE_ACCOUNT_KEY_PATH))
+                .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+
+        // Rafraîchir et obtenir le token d'accès
+        credentials.refreshIfExpired();
+        AccessToken accessToken = credentials.getAccessToken();
+
+        return accessToken.getTokenValue();
+    }
+
+    // Fonction pour modérer le contenu via l'API Gemini
     public String processPost(String postContent) {
         try {
             return moderateContent(postContent);
@@ -20,103 +41,116 @@ public class AiServices {
         }
     }
 
-    // Fonction pour modérer le contenu (appelle l'API OpenAI)
+    // Fonction pour modérer le contenu
     public String moderateContent(String content) throws Exception {
-        // On vérifie si le contenu est vide
+        // Vérifie si le contenu est vide
         if (content == null || content.trim().isEmpty()) {
             return null;
         }
 
-        // Appel à l'API OpenAI pour modérer le contenu
-        String response = callOpenAiApi(content);
+        // Appel à l'API Gemini pour modérer le contenu
+        String response = callGeminiApi(content);
 
-        // Si la réponse est vide, ou identique au contenu original, on la rejette
+        // Si la réponse est vide ou identique au contenu original, la rejeter
         if (response == null || response.trim().isEmpty() || response.equals(content)) {
             System.err.println("Le contenu n'a pas été modéré ou est identique à l'original.");
             return null;
         }
 
-        // Vérification supplémentaire pour des mots offensants
-        if (containsOffensiveContent(response)) {
-            System.err.println("Contenu modéré détecté comme offensant.");
-            return null; // Le contenu modéré est inacceptable
-        }
-
         return response; // Retourne le contenu modéré
     }
 
-    // Fonction qui appelle l'API OpenAI pour reformuler le contenu
-    private String callOpenAiApi(String content) throws IOException {
-        if (API_KEY == null || API_KEY.isEmpty()) {
-            throw new IllegalStateException("Clé API OpenAI non définie !");
-        }
+    private String callGeminiApi(String content) throws IOException {
+        // Récupérer le token d'accès
+        String accessToken = getAccessToken();
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)  // Augmenter le délai de connexion
+                .readTimeout(60, TimeUnit.SECONDS)     // Augmenter le délai de lecture
                 .build();
 
+        // Construction de la requête JSON avec la structure correcte
         JSONObject json = new JSONObject();
-        json.put("model", "gpt-3.5-turbo");
 
-        JSONArray messages = new JSONArray();
-        messages.put(new JSONObject().put("role", "system")
-                .put("content", "Tu es un assistant qui reformule du texte en supprimant tout contenu raciste ou offensant."));
-        messages.put(new JSONObject().put("role", "user").put("content", content));
+        // Contenu à envoyer
+        JSONArray contents = new JSONArray();
+        JSONObject contentObj = new JSONObject();
+        contentObj.put("role", "user");
+        JSONArray parts = new JSONArray();
+        JSONObject part = new JSONObject();
+        //Add prompt to tell the Model to remove inappropriate content
+        part.put("text", "Please rewrite the following text to remove any offensive, hateful, or inappropriate content. Keep the overall meaning as similar as possible to the original: " + content);
+        parts.put(part);
+        contentObj.put("parts", parts);
+        contents.put(contentObj);
 
-        json.put("messages", messages);
-        json.put("temperature", 0.7);
+        json.put("contents", contents);
 
+        // Paramètres additionnels (exemple de configuration de génération, à ajuster selon tes besoins)
+        JSONObject generationConfig = new JSONObject();
+        generationConfig.put("temperature", 0.7);
+        generationConfig.put("topP", 1.0);
+        generationConfig.put("topK", 50);
+        generationConfig.put("candidateCount", 1);
+        generationConfig.put("maxOutputTokens", 800); //Increased maxOutputTokens
+        generationConfig.put("presencePenalty", 0.0);
+        generationConfig.put("frequencyPenalty", 0.0);
+        generationConfig.put("stopSequences", new JSONArray());
+        //  generationConfig.put("responseMimeType", "text/plain");  //Removed as it's not required
+
+        json.put("generationConfig", generationConfig);
+
+        //Example for removing safety settings as its not supported in this model
+        //**REMOVE SAFETY SETTINGS BLOCK ENTIRELY**
+        // Création du corps de la requête
         RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json"));
 
+        // Construction de la requête HTTP
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization", "Bearer " + API_KEY)
+                .header("Authorization", "Bearer " + accessToken)
                 .header("Content-Type", "application/json")
                 .post(body)
                 .build();
 
+        // Exécution de la requête et traitement de la réponse
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                String errorResponse = response.body().string();
-                JSONObject errorJson = new JSONObject(errorResponse);
-                // Vérification si le message d'erreur correspond à un quota insuffisant
-                if (errorJson.has("error") && errorJson.getJSONObject("error").getString("code").equals("insufficient_quota")) {
-                    System.err.println("Quota d'API dépassé. Veuillez vérifier votre plan et vos détails de facturation.");
-                    return null;
-                }
-                throw new IOException("Erreur API OpenAI : " + errorResponse);
+                throw new IOException("Erreur API Gemini : " + response.code() + " " + response.body().string()); //Included response code
             }
 
+            // Traitement de la réponse JSON de l'API
             JSONObject responseBody = new JSONObject(response.body().string());
-            JSONArray choices = responseBody.optJSONArray("choices");
+            JSONArray candidates = responseBody.getJSONArray("candidates");
 
-            if (choices != null && choices.length() > 0) {
-                return choices.getJSONObject(0).getJSONObject("message").getString("content").trim();
+            if (candidates != null && candidates.length() > 0) {
+                JSONObject candidate = candidates.getJSONObject(0);
+                JSONArray contentParts = candidate.getJSONObject("content").getJSONArray("parts");
+                StringBuilder moderatedContent = new StringBuilder();
+                for (int i = 0; i < contentParts.length(); i++) {
+                    moderatedContent.append(contentParts.getJSONObject(i).getString("text"));
+                }
+                return moderatedContent.toString().trim();
             } else {
                 throw new IOException("Réponse vide de l'API.");
             }
-        } catch (IOException e) {
-            // Affichage détaillé de l'erreur pour aider à résoudre le problème
-            System.err.println("Erreur lors de l'appel à l'API OpenAI : " + e.getMessage());
-            return null;  // Retourne null en cas d'erreur
         }
     }
 
+  /*  public static void main(String[] args) {
+        AiServices aiServices = new AiServices();
+        String postContent = "This is a test post with some potentially offensive content.  I hate everyone!"; //Test Content
 
-    // Fonction pour vérifier si le contenu contient des mots offensants
-    private boolean containsOffensiveContent(String content) {
-        // Liste des mots-clés offensants (exemples, à personnaliser)
-        String[] offensiveWords = {"raciste", "haine", "violence", "insulte"};
-
-        // Recherche des mots-clés dans le texte
-        for (String word : offensiveWords) {
-            if (content.toLowerCase().contains(word)) {
-                return true;
+        try {
+            // Processus de modération du contenu
+            String result = aiServices.processPost(postContent);
+            if (result != null) {
+                System.out.println("Contenu modéré : " + result);
+            } else {
+                System.out.println("Le contenu n'a pas été modéré.");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return false;
-    }
+    }*/
 }

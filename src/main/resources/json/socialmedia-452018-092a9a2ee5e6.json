@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "socialmedia-452018",
+  "private_key_id": "092a9a2ee5e6fae50bc21f17b4f9cbaba296574a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCKe2aH10QLXEov\ntpH5lOPPQ9SEgMsUHym19Z01Wkm8u3ta5jyYvprRTmxECzJID0BSuynwSkDN6yeV\n6LyzW0NkmITRG/E143b7MxqTABLugZX3V+CDtTgiX83BecGeF9MgcRcciHD99rmx\nQzXzAdpNTyTJ5CI4SBf3b1bg+LllO45uUBkkfIAghGraTomHJxmMRHUmT63k8pTG\nLluR4ZnQ+eOpJFAyNauU2JhIXTiWo16aZ1hk45NNxYOu+9QwqXp2YQPAuxV5sTx0\nKzzkXS6HncUOwiJn2epa1yBQJZL8sZpsUqca2/9ob3jsJ/P0F3C0eY4hho0mnkWT\nQc2uOWz3AgMBAAECggEAHMM8rII9k857aiWVdC1Ek8wW296UT32ZgD2fhXFXV2fp\nWxvvAhq0tTyAqDFbJDRmu8g8EbiadSqecjiA2Q/fk4lKLNSM6RBxqgMXRekCBZ/M\nsi8CZtjA7ALSDZloaZmxNE/I6Rg9v8H7F6JKFksQOHZzwassoFv4/l+Vv+xpNWk3\nGP80FU2ZikgSTKQvCERDvGWkjQMHV06gQjeYtUhdCxTNQPSeEBZROC/DLy4vSN6L\nIPnPTDIh8KhVRWcC37jZopHqOwV8N/zWBK134+jjZg5w8DonkGbReGBSx0aFGoEv\nph8jrGDRewNehcSxA+Uwiiu4eWVj9ilFejOt4XEeYQKBgQC89gn/s+nPeiqexnk/\nQLnofSKth7QHlNudd7EhR5edpj3HZGcGBuFsP1XgKnjSgrkUu+FwtD9mZa5m/Rl2\nBw1/iDKQsbdUaJMmz8RTFJTIMf5vwAoN2X3IpfVzW99BXqmdG9rGk4mK9iT/C+Oo\nZJpkYlKY7XVJ+nlKgP6zKMHXtQKBgQC7nLdL+7Zx6X+zdu/GxL9D2oWW0nKk1u+h\nTjDkSdFGpyB1OtlxgAdDzPQsqhdIFGhLiIUlyleg7jdZOHYcIutR55HirdNlozCg\nyPjrcNSsxHk2MDGTt9c+iLBq1ii/R7OxpfMkPh3Cr7xqzyEvylmu0ymxBquHaZUT\nrkNApAdFewKBgQCDMF5oxMQDY9HLQghTveBUZOx6hcibquF+RecYL9g3f39Mu4w7\nRvOib6ZzZ4lSvac5mec+lCWgNeALaJUQuHzKmghhJMEfPStMutqWw6c4Bl2bwDw6\nuVD2ySHL4XDytYIUrY4KZ8wKSjINUHfSJWZ7YzftLI9NuTQUYdJzGEzcMQKBgBSE\nU+tEULRuY5+9rwUeuQfzms5en1j1hGkwgtpEVFWUq1EGqYbnCGRawo0r4LXqPWmd\nOWpjkWexBW6FZS04iGGBoIuYlNi1mvjKYaZlxWxLZDIP3SwZW7mj+x8D4prgfX88\n9bUN8fU7gLBxjGCMkXgz8YhBgXqiikIHuaUVCxKHAoGAX4lL7iqveuNKkv+EwMT/\ngwcbJsz4aQZyY20+kc3JZbHD2pI0rboPUyqXXaiOUUoeVZL+2ZCSj0+87OWyKWqL\nBcCuEa4KjruqIwX7DkDZfXcPFhoeTpD3v/25yu99EC8gJxSkFn5xeWwwPpehmaLC\n40vHhAqFCO4O17J62GGtaL4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gemini-api-service@socialmedia-452018.iam.gserviceaccount.com",
+  "client_id": "105334805863659235088",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gemini-api-service%40socialmedia-452018.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

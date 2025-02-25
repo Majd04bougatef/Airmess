@@ -62,7 +62,6 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
                         }
                     }
                 }
-
             }
         } catch (SQLException e) {
             System.err.println("❌ Erreur lors de l'ajout du commentaire : " + e.getMessage());
@@ -72,7 +71,6 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
             e.printStackTrace();  // Afficher la stack trace pour déboguer
         }
     }
-
 
 
 
