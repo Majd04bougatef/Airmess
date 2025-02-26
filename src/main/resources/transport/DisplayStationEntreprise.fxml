@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="580.0" prefWidth="1030.0" stylesheets="/css/DisplayStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.DisplayStationEntreprise">
+   <children>
+      <Pane layoutX="-1.0" prefHeight="611.0" prefWidth="1030.0">
+         <children>
+             <TableView fx:id="stationTable" layoutX="45.0" layoutY="28.0" prefHeight="543.0" prefWidth="940.0">
+                 <columns>
+                     <TableColumn fx:id="colNom" prefWidth="95.99996948242188" text="Nom" />
+                     <TableColumn fx:id="colPrixHeure" prefWidth="135.1999969482422" text="Prix/Hr" />
+                     <TableColumn fx:id="colCapacite" minWidth="0.0" prefWidth="160.800048828125" text="Capacité" />
+                     <TableColumn fx:id="colNbVelo" minWidth="0.0" prefWidth="195.199951171875" text="Nb Vélos" />
+                     <TableColumn fx:id="colTypeVelo" minWidth="5.5999755859375" prefWidth="188.0" text="Type Vélo" />
+                     <TableColumn fx:id="colAction" prefWidth="208.00006103515625" text="Action" />
+
+                 </columns>
+             </TableView>
+         </children></Pane>
+   </children>
+</AnchorPane>
