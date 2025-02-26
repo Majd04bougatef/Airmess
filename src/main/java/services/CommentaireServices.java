@@ -3,6 +3,7 @@ package services;
 import interfaces.GlobalInterface;
 import models.Commentaire;
 import util.MyDatabase;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,72 +18,106 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
         aiServices = new AiServices();
     }
 
-    @Override
+    public Commentaire processPost(Commentaire commentaire) {
+        try {
+            return moderateAndPropose(commentaire);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la modération du commentaire : " + e.getMessage());
+            Commentaire proposedComment = new Commentaire(
+                    commentaire.getIdEB(),
+                    commentaire.getId_U(),
+                    commentaire.getDescription(),
+                    commentaire.getDescription(),
+                    commentaire.getNumberLike(),
+                    commentaire.getNumberDislike(),
+                    true
+            );
+
+
+            return proposedComment;
+        }
+    }
+
+    private Commentaire moderateAndPropose(Commentaire commentaire) throws Exception {
+        String descriptionModeree = aiServices.moderateContent(commentaire.getDescription());
+
+        if (descriptionModeree == null || descriptionModeree.trim().isEmpty()) {
+            System.out.println(" Le commentaire contient du contenu inapproprié et n'a pas été ajouté.");
+            return null;
+        }
+        Commentaire proposedComment = new Commentaire(
+                commentaire.getIdEB(),
+                commentaire.getId_U(),
+                commentaire.getDescription(),
+                descriptionModeree,
+                commentaire.getNumberLike(),
+                commentaire.getNumberDislike(),
+                false
+        );
+
+
+        return proposedComment;
+    }
     public void add(Commentaire commentaire) {
         try {
-            // 🔥 Modération de la description avant insertion
-            String descriptionModeree = aiServices.moderateContent(commentaire.getDescription());
 
-            // Vérifie si le contenu est acceptable après modération
-            if (descriptionModeree == null || descriptionModeree.trim().isEmpty()) {
-                System.out.println("❌ Le commentaire contient du contenu inapproprié et n'a pas été ajouté.");
-                return;  // Ne pas insérer en base de données
-            }
-
-            // Vérifie si le commentaire a été modifié par l'IA
-            if (descriptionModeree.equals(commentaire.getDescription())) {
-                System.out.println("❌ Le commentaire n'a pas été modifié par l'IA, donc il est rejeté.");
+            if (!commentaire.isApproved()) {
+                System.out.println(" Cannot add unapproved comment.");
                 return;
             }
 
-            // Met à jour la description avec la version modérée
-            commentaire.setDescription(descriptionModeree);
-
-            // Vérification de la connexion à la base de données
             if (con == null) {
-                System.err.println("❌ La connexion à la base de données est nulle.");
+                System.err.println(" La connexion à la base de données est nulle.");
                 return;
             }
 
-            // Insertion du commentaire dans la base de données
-            String sql = "INSERT INTO commentaire (idEB, id_U, description, numberlike, numberdislike) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO commentaire (idEB, id_U, description, proposedDescription, numberlike, numberdislike, isApproved) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setInt(1, commentaire.getIdEB());
                 preparedStatement.setInt(2, commentaire.getId_U());
                 preparedStatement.setString(3, commentaire.getDescription());
-                preparedStatement.setInt(4, commentaire.getNumberLike());
-                preparedStatement.setInt(5, commentaire.getNumberDislike());
+                preparedStatement.setString(4, commentaire.getProposedDescription());
+                preparedStatement.setInt(5, commentaire.getNumberLike());
+                preparedStatement.setInt(6, commentaire.getNumberDislike());
+                preparedStatement.setBoolean(7, commentaire.isApproved());
 
                 int affectedRows = preparedStatement.executeUpdate();
                 if (affectedRows > 0) {
                     try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             commentaire.setIdC(generatedKeys.getInt(1));
-                            System.out.println("✅ Commentaire ajouté avec IA : " + commentaire.getDescription());
+                            System.out.println(" Commentaire ajouté avec succes : " + commentaire.getDescription());
                         }
                     }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de l'ajout du commentaire : " + e.getMessage());
-            e.printStackTrace();  // Afficher la stack trace pour déboguer
-        } catch (Exception e) {
-            System.err.println("⚠️ Erreur IA : " + e.getMessage());
-            e.printStackTrace();  // Afficher la stack trace pour déboguer
+            System.err.println(" Erreur lors de l'ajout du commentaire : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public void approveCommentaire(Commentaire commentaire) {
+        String sql = "UPDATE commentaire SET isApproved = ? WHERE idC = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setInt(2, commentaire.getIdC());
+            preparedStatement.executeUpdate();
+            System.out.println(" Commentaire approuvé avec succès !");
+        } catch (SQLException e) {
+            System.err.println(" Erreur lors de l'approbation du commentaire : " + e.getMessage());
         }
     }
 
-
-
-
     @Override
     public void update(Commentaire commentaire) {
-        String sql = "UPDATE commentaire SET description = ?, numberlike = ?, numberdislike = ? WHERE idC = ?";
+        String sql = "UPDATE commentaire SET description = ?, proposedDescription = ?, numberlike = ?, numberdislike = ?, isApproved = ? WHERE idC = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, commentaire.getDescription());
-            preparedStatement.setInt(2, commentaire.getNumberLike());
-            preparedStatement.setInt(3, commentaire.getNumberDislike());
-            preparedStatement.setInt(4, commentaire.getIdC());
+            preparedStatement.setString(2, commentaire.getProposedDescription());
+            preparedStatement.setInt(3, commentaire.getNumberLike());
+            preparedStatement.setInt(4, commentaire.getNumberDislike());
+            preparedStatement.setBoolean(5, commentaire.isApproved());
+            preparedStatement.setInt(6, commentaire.getIdC());
 
             preparedStatement.executeUpdate();
             System.out.println(" Commentaire mis à jour avec succès !");
@@ -117,8 +152,10 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
                 commentaire.setIdEB(rs.getInt("idEB"));
                 commentaire.setId_U(rs.getInt("id_U"));
                 commentaire.setDescription(rs.getString("description"));
+                commentaire.setProposedDescription(rs.getString("proposedDescription"));
                 commentaire.setNumberLike(rs.getInt("numberlike"));
                 commentaire.setNumberDislike(rs.getInt("numberdislike"));
+                commentaire.setApproved(rs.getBoolean("isApproved"));
 
                 commentaires.add(commentaire);
             }
@@ -146,8 +183,10 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
                 commentaire.setIdEB(rs.getInt("idEB"));
                 commentaire.setId_U(rs.getInt("id_U"));
                 commentaire.setDescription(rs.getString("description"));
+                commentaire.setProposedDescription(rs.getString("proposedDescription"));
                 commentaire.setNumberLike(rs.getInt("numberlike"));
                 commentaire.setNumberDislike(rs.getInt("numberdislike"));
+                commentaire.setApproved(rs.getBoolean("isApproved"));
 
                 System.out.println(" Commentaire trouvé : " + commentaire);
             } else {
@@ -161,7 +200,7 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
     }
 
     public List<Commentaire> getAllWithPostDetails(int postId) {
-        String query = "SELECT c.idC, c.idEB, c.id_U, c.description, c.numberlike, c.numberdislike, " +
+        String query = "SELECT c.idC, c.idEB, c.id_U, c.description, c.proposedDescription, c.numberlike, c.numberdislike,c.isApproved, " +
                 "s.titre, s.contenu, s.imagemedia " +
                 "FROM commentaire c " +
                 "JOIN socialmedia s ON c.idEB = s.idEB "  +
@@ -179,8 +218,10 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
                 commentaire.setIdEB(rs.getInt("idEB"));
                 commentaire.setId_U(rs.getInt("id_U"));
                 commentaire.setDescription(rs.getString("description"));
+                commentaire.setProposedDescription(rs.getString("proposedDescription"));
                 commentaire.setNumberLike(rs.getInt("numberlike"));
                 commentaire.setNumberDislike(rs.getInt("numberdislike"));
+                commentaire.setApproved(rs.getBoolean("isApproved"));
 
                 commentaire.setPostTitre(rs.getString("titre"));
                 commentaire.setPostContenu(rs.getString("contenu"));
