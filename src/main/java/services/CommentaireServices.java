@@ -240,4 +240,58 @@ public abstract class CommentaireServices implements GlobalInterface<Commentaire
 
         return commentaires;
     }
+
+
+    public List<Commentaire> getAllCommentsForPost(int postId) {
+        String query = "SELECT * FROM commentaire WHERE idEB = ?";
+        List<Commentaire> commentaires = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, postId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Commentaire commentaire = new Commentaire();
+                commentaire.setIdC(rs.getInt("idC"));
+                commentaire.setIdEB(rs.getInt("idEB"));
+                commentaire.setId_U(rs.getInt("id_U"));
+                commentaire.setDescription(rs.getString("description"));
+                commentaire.setProposedDescription(rs.getString("proposedDescription"));
+                commentaire.setNumberLike(rs.getInt("numberlike"));
+                commentaire.setNumberDislike(rs.getInt("numberdislike"));
+                commentaire.setApproved(rs.getBoolean("isApproved"));
+
+                commentaires.add(commentaire);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting comments for post: " + e.getMessage());
+        }
+
+        return commentaires;
+    }
+    public Commentaire getLatestCommentForPost(int postId) {
+        String query = "SELECT * FROM commentaire WHERE idEB = ? ORDER BY idC DESC LIMIT 1";
+        Commentaire commentaire = null;
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, postId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                commentaire = new Commentaire();
+                commentaire.setIdC(rs.getInt("idC"));
+                commentaire.setIdEB(rs.getInt("idEB"));
+                commentaire.setId_U(rs.getInt("id_U"));
+                commentaire.setDescription(rs.getString("description"));
+                commentaire.setProposedDescription(rs.getString("proposedDescription"));
+                commentaire.setNumberLike(rs.getInt("numberlike"));
+                commentaire.setNumberDislike(rs.getInt("numberdislike"));
+                commentaire.setApproved(rs.getBoolean("isApproved"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting latest comment for post: " + e.getMessage());
+        }
+
+        return commentaire;
+    }
 }
