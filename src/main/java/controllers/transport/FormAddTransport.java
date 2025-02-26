@@ -31,7 +31,11 @@ public class FormAddTransport {
     private double lat = 51.1;
     private double lng = -0.3;
 
+    private JavaConnector javaConnector;
+
     public void initialize() {
+        mapView.getEngine().setJavaScriptEnabled(true);
+        mapView.getEngine().setConfirmHandler(param -> true);
         if (TypeVelo != null) {
             TypeVelo.getItems().addAll("Vélo urbain", "Vélo de route", "Vélo électrique");
         }
@@ -46,16 +50,14 @@ public class FormAddTransport {
             webEngine.load(url.toExternalForm());
             webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    System.out.println("Carte chargée avec succès !");
+                    javaConnector = new JavaConnector();
                     JSObject window = (JSObject) webEngine.executeScript("window");
-                    JavaConnector javaConnectorInstance = new JavaConnector();
-                    window.setMember("javaConnector", javaConnectorInstance);
-                    System.out.println("javaConnector défini !");
+                    window.setMember("javaConnector", javaConnector);
+
+                    // Débogage : vérifiez si le membre est défini
+                    webEngine.executeScript("console.log('javaConnector défini ?', typeof window.javaConnector);");
                 }
             });
-
-        } else {
-            System.err.println("Erreur : fichier map.html introuvable !");
         }
     }
 
@@ -64,8 +66,10 @@ public class FormAddTransport {
             System.out.println("Coordonnées reçues : " + latitude + ", " + longitude);
             lat = latitude;
             lng = longitude;
-            Latitude.setText(String.valueOf(lat));
-            Longitude.setText(String.valueOf(lng));
+            Platform.runLater(() -> {
+                Latitude.setText(String.valueOf(lat));
+                Longitude.setText(String.valueOf(lng));
+            });
         }
     }
 

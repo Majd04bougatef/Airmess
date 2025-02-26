@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="592.0" prefWidth="1030.0" stylesheets="/css/FormAddStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.FormAddTransport">
    <children>
-      <Pane fx:id="form" layoutX="43.0" layoutY="2.0" prefHeight="558.0" prefWidth="940.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;" AnchorPane.leftAnchor="50.0">
+      <Pane fx:id="form" layoutX="43.0" layoutY="21.0" prefHeight="557.0" prefWidth="940.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;" AnchorPane.leftAnchor="50.0">
          <children>
             <TextField fx:id="Longitude" layoutX="455.0" layoutY="160.0" prefHeight="16.0" />
             <Text fx:id="text1" layoutX="66.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter une station" wrappingWidth="410.13671875">
@@ -27,12 +27,12 @@
 
 
             <Text fx:id="textCapacite" layoutX="65.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" wrappingWidth="96.70703125" />
-            <TextField fx:id="Capacite" layoutX="66.0" layoutY="215.0" prefHeight="32.0" prefWidth="374.0" promptText="Entrez la capacité" />
+            <TextField fx:id="Capacite" layoutX="66.0" layoutY="215.0" prefHeight="32.0" prefWidth="341.0" promptText="Entrez la capacité" />
             <Label fx:id="lblCapaciteError" layoutX="69.0" layoutY="248.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
 
             <Text fx:id="textNbVelo" layoutX="66.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de vélos" wrappingWidth="130.70703125" />
-            <TextField fx:id="NbVelo" layoutX="63.0" layoutY="145.0" prefHeight="32.0" prefWidth="366.0" promptText="Entrez le nombre de vélos" />
+            <TextField fx:id="NbVelo" layoutX="63.0" layoutY="145.0" prefHeight="32.0" prefWidth="341.0" promptText="Entrez le nombre de vélos" />
             <Label fx:id="lblNbVeloError" layoutX="65.0" layoutY="178.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
 
@@ -53,7 +53,7 @@
             <Label fx:id="lblPrixHeureError" layoutX="70.0" layoutY="396.0" prefHeight="17.0" prefWidth="253.0" text="" textFill="red" />
 
             <Text fx:id="textPrixHeure" layoutX="66.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix par heure" wrappingWidth="96.70703125" />
-            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="360.0" prefHeight="32.0" prefWidth="774.0" promptText="Entrez le prix par heure" />
+            <TextField fx:id="PrixHeure" layoutX="66.0" layoutY="360.0" prefHeight="32.0" prefWidth="341.0" promptText="Entrez le prix par heure" />
             <Label fx:id="lblTypeVeloError" layoutX="70.0" layoutY="322.0" prefHeight="17.0" prefWidth="271.0" text="" textFill="red" />
 
 

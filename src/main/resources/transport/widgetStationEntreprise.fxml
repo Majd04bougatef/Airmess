@@ -20,6 +20,11 @@
                   <Insets left="50.0" right="20.0" top="15.0" />
                </HBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#btnStation" text="Mes Stations">
+               <HBox.margin>
+                  <Insets left="30.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
       <Pane fx:id="panewidget" layoutY="59.0" prefHeight="580.0" prefWidth="1030.0" />
