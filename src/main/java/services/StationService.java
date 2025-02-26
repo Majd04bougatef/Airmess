@@ -133,4 +133,44 @@ public abstract class StationService implements GlobalInterface<station> {
 
         return st;
     }
+
+    public void updateNombreVelo(int stationId, int nbVeloRes) {
+        String sql = "UPDATE station SET nombreVelo = nombreVelo - ? WHERE idS = ? AND nombreVelo >= ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, nbVeloRes);
+            preparedStatement.setInt(2, stationId);
+            preparedStatement.setInt(3, nbVeloRes);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Le nombre de vélos a été mis à jour avec succès.");
+            } else {
+                System.out.println("Erreur lors de la mise à jour du nombre de vélos disponibles.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL: " + e.getMessage());
+        }
+    }
+
+    public void updateRetourVelo(int stationId, int nbVeloRes) {
+        String sql = "UPDATE station SET nombreVelo = nombreVelo + ? WHERE idS = ? ";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, nbVeloRes);
+            preparedStatement.setInt(2, stationId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Le nombre de vélos a été mis à jour avec succès.");
+            } else {
+                System.out.println("Erreur lors de la mise à jour du nombre de vélos disponibles.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL: " + e.getMessage());
+        }
+    }
+
 }

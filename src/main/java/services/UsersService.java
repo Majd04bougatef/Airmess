@@ -266,4 +266,22 @@ public class UsersService implements GlobalInterface<Users> {
         }
         return false;
     }
+    public boolean verifyPassword(Users user, String currentPassword) {
+        String sql = "SELECT password FROM users WHERE id_U = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, user.getId_U());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password");
+                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                    return encoder.matches(currentPassword, hashedPassword);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error verifying password: " + e.getMessage());
+        }
+
+        return false;
+    }
 }

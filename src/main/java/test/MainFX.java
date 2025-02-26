@@ -12,7 +12,7 @@ public class MainFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu_voyageurs.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/login.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/image/Airmess copie.png")));

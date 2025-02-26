@@ -6,26 +6,28 @@ public class reservation_transport {
     private int id,idU,idS,nombreVelo;
     private Timestamp dateRes,dateFin;
     private double prix;
-    private String statut;
+    private String statut,reference;
 
     public reservation_transport() {}
-    public reservation_transport(int id,int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
+    public reservation_transport(int id,int idU, int idS, String statut,String reference, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
         this.id = id;
         this.idU = idU;
         this.idS = idS;
         this.dateRes = dateRes;
         this.dateFin = dateFin;
         this.prix = prix;
+        this.reference = reference;
         this.nombreVelo = nombreVelo;
         this.statut = statut;
     }
 
-    public reservation_transport(int idU, int idS, String statut, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
+    public reservation_transport(int idU, int idS, String statut,String reference, Timestamp dateRes, Timestamp dateFin, double prix,int nombreVelo) {
         this.idU = idU;
         this.idS = idS;
         this.dateRes = dateRes;
         this.dateFin = dateFin;
         this.prix = prix;
+        this.reference = reference;
         this.nombreVelo = nombreVelo;
         this.statut = statut;
     }
@@ -92,6 +94,14 @@ public class reservation_transport {
 
     public void setStatut(String statut) {
         this.statut = statut;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     @Override
