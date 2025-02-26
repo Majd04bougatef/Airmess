@@ -1,6 +1,7 @@
 package controllers.transport;
 
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,6 +29,11 @@ public class WidgetStationEntreprise {
         loadPage("/transport/DisplayStationEntreprise.fxml");
     }
 
+    @FXML
+    public void btnStation(ActionEvent actionEvent) {
+        loadPage("/transport/AllStationEntreprise.fxml");
+    }
+
     private void loadPage(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -39,5 +45,6 @@ public class WidgetStationEntreprise {
             System.out.println("Erreur de chargement du FXML : " + fxmlFile);
         }
     }
+
 
 }
