@@ -16,7 +16,7 @@ import models.SocialMedia;
 import services.UsersService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-
+import services.AiServices;
 import javafx.stage.FileChooser;
 import javafx.scene.image.Image;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class FormAddSocialMedia {
     private int id_u;
 
     private final SocialMediaServices socialMediaServices = new SocialMediaServices() {};
-
+    private final AiServices aiServices = new AiServices();
 
     @FXML
     public void initialize() {
@@ -109,6 +109,16 @@ public class FormAddSocialMedia {
         }
 
         if (!validateContent(Titre.getText()) || !validateContent(contenu.getText()) || !validateContent(Lieu.getText())) {
+            return;
+        }
+
+        try {
+            System.out.println("Modération du contenu : " + contenu.getText());  // Logging
+            String filteredContent = aiServices.moderateContent(contenu.getText());
+            System.out.println("Contenu modéré : " + filteredContent);  // Affiche le contenu modéré
+            contenu.setText(filteredContent); // Met à jour le champ de contenu avec le texte modéré
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible de modérer le contenu.", AlertType.ERROR);
             return;
         }
 
