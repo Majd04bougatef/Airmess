@@ -33,11 +33,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.Image;
 
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.util.HashMap;
@@ -73,7 +70,7 @@ public class ReservationTransport {
         dateRes.setText(LocalDateTime.now().toString().substring(0, 16));
     }
 
-    public void setReservationData(int nbVeloDispo, double prixHeure, station selectedStation) {
+    public void setReservationData(int nbVeloDispo, double prixHeure, String pays, station selectedStation) {
         this.currentStation = selectedStation;
         this.nbVeloDispo = nbVeloDispo;
         this.prixParHeure = prixHeure;

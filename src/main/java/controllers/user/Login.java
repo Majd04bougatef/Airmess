@@ -143,6 +143,27 @@ public class Login {
     }
     @FXML
     void oubliemotpasse(ActionEvent event) {
+        try {
+            // Load the Signup FXML
+            Parent signupView = FXMLLoader.load(getClass().getResource("/user/passeoublié .fxml"));
+            Scene signupScene = new Scene(signupView);
+
+            // Get the current stage from the event source
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene on the current stage
+            currentStage.setScene(signupScene);
+            currentStage.setTitle("Sign Up");
+            currentStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Error", "Navigation Error",
+                    "Could not load the signup page: " + e.getMessage());
+        }
+
+
+
     }
 
     @FXML

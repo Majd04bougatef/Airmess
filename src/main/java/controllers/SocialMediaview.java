@@ -851,5 +851,4 @@ public class SocialMediaview {
     public void handleSeeAllComments(ActionEvent event) {
     }
 
-
 }

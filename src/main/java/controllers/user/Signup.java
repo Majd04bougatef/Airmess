@@ -34,6 +34,48 @@ import models.EmailService;
 
 
 
+
+
+
+
+
+
+
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import models.Users;
+import models.EmailService;
+import services.UsersService;
+
+import javax.mail.MessagingException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.util.Random;
+import java.util.regex.Pattern;
+
+
+
 public class Signup {
 
     // Champs FXML
@@ -72,6 +114,30 @@ public class Signup {
 
     private UsersService userService = new UsersService();
     private String imagePath;
+
+
+
+
+
+
+
+
+
+    private String verificationCode;
+    private Timeline codeExpirationTimer;
+    private Stage verificationStage;
+    private Users pendingUser;
+
+
+
+
+
+
+
+
+
+
+
 
     @FXML
     public void initialize() {
@@ -135,29 +201,132 @@ public class Signup {
 
 
 
+
+
+
+
+
+    private String generateVerificationCode() {
+        return String.format("%06d", new Random().nextInt(999999));
+    }
+
+    private void sendVerificationEmail(String email, String code) throws MessagingException {
+        String subject = "Code de vérification";
+        String messageBody = "Votre code de vérification est : " + code + "\n\n" +
+                "Ce code expirera dans 2 minutes.\n\n" +
+                "Si vous n'avez pas demandé ce code, veuillez ignorer cet email.";
+        EmailService.sendConfirmationEmail(email, subject, messageBody);
+    }
+
+    private void showVerificationWindow(ActionEvent originalEvent) {
+        try {
+            verificationStage = new Stage();
+            verificationStage.initModality(Modality.APPLICATION_MODAL);
+
+            VBox layout = new VBox(10);
+            layout.setPadding(new Insets(20));
+            layout.setAlignment(Pos.CENTER);
+
+            Label timerLabel = new Label("Temps restant: 2:00");
+            TextField codeField = new TextField();
+            codeField.setPromptText("Entrez le code de vérification");
+
+            Button verifyButton = new Button("Vérifier");
+            Label messageLabel = new Label("");
+            messageLabel.setTextFill(Color.RED);
+
+            layout.getChildren().addAll(
+                    timerLabel,
+                    new Label("Un code a été envoyé à votre email."),
+                    codeField,
+                    verifyButton,
+                    messageLabel
+            );
+
+            startVerificationTimer(timerLabel, messageLabel, verificationStage);
+
+            verifyButton.setOnAction(e -> {
+                if (codeField.getText().equals(verificationCode)) {
+                    try {
+                        if (codeExpirationTimer != null) {
+                            codeExpirationTimer.stop();
+                        }
+
+                        // Add user using existing service method (no database changes)
+                        userService.add(pendingUser);
+
+                        verificationStage.close();
+                        showAlert("Succès", "Inscription réussie !");
+                        navigateToLogin(originalEvent);
+                    } catch (Exception ex) {
+                        showAlert("Erreur", "Échec de l'inscription : " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                } else {
+                    messageLabel.setText("Code incorrect. Veuillez réessayer.");
+                }
+            });
+
+            Scene scene = new Scene(layout, 300, 250);
+            verificationStage.setScene(scene);
+            verificationStage.setTitle("Vérification Email");
+            verificationStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de l'ouverture de la fenêtre de vérification");
+        }
+    }
+
+
+
+    private void startVerificationTimer(Label timerLabel, Label messageLabel, Stage stage) {
+        final int[] timeLeft = {120}; // 2 minutes in seconds
+
+        codeExpirationTimer = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    timeLeft[0]--;
+                    int minutes = timeLeft[0] / 60;
+                    int seconds = timeLeft[0] % 60;
+                    timerLabel.setText(String.format("Temps restant: %d:%02d", minutes, seconds));
+
+                    if (timeLeft[0] <= 0) {
+                        codeExpirationTimer.stop();
+                        verificationCode = null;
+                        messageLabel.setText("Le code a expiré. Veuillez recommencer l'inscription.");
+
+                        Timeline closeWindow = new Timeline(new KeyFrame(Duration.seconds(2), event -> stage.close()));
+                        closeWindow.play();
+                    }
+                })
+        );
+
+        codeExpirationTimer.setCycleCount(Timeline.INDEFINITE);
+        codeExpirationTimer.play();
+    }
+
+
+
+
     @FXML
     void enregistrer(ActionEvent event) {
         if (!validateForm()) return;
 
-        Users user = createUserFromForm();
+        pendingUser = createUserFromForm();
 
         try {
-            if (userService.emailExists(user.getEmail())) {
+            if (userService.emailExists(pendingUser.getEmail())) {
                 showAlert("Erreur", "Cet email est déjà utilisé !");
                 return;
             }
 
-            userService.add(user); // Save the user in the database
+            // Generate and send verification code
+            verificationCode = generateVerificationCode();
+            sendVerificationEmail(pendingUser.getEmail(), verificationCode);
 
-            // Send confirmation email
-            String subject = "Welcome to Our Application!";
-            String messageBody = "Hello " + user.getName() + ",\n\n" +
-                    "Thank you for signing up! Your account has been successfully created.\n\n" +
-                    "Best regards,\nThe Team";
-            EmailService.sendConfirmationEmail(user.getEmail(), subject, messageBody);
+            // Show verification window
+            showVerificationWindow(event);
 
-            showAlert("Succès", "Inscription réussie ! Un email de confirmation a été envoyé.");
-            navigateToLogin(event);
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'inscription : " + e.getMessage());
             e.printStackTrace();
@@ -305,3 +474,28 @@ public class Signup {
         return birthDate.plusYears(15).isBefore(LocalDate.now());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

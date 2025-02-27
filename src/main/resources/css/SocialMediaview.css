@@ -1,6 +1,8 @@
 /* ==================== General Styles ==================== */
 AnchorPane {
+
     -fx-background-color: #E9F7EF; /* Soft mint background */
+
 }
 
 /* --- Scroll Pane --- */
@@ -21,6 +23,7 @@ AnchorPane {
     -fx-border-radius: 22px; /* Match background radius */
     -fx-border-width: 1px; /* Add a subtle border */
     -fx-border-color: #D4E6F1; /* Light blue border color */
+
 }
 
 /* --- Title Container --- */
@@ -39,17 +42,21 @@ AnchorPane {
 
 /* --- Content --- */
 .content-label {
+
     -fx-font-size: 18px; /* Slightly larger content font */
     -fx-text-fill: #34495E; /* Dark charcoal content text color */
     -fx-line-spacing: 6px; /* Further improved readability */
+
 }
 
 /* --- Location and Date --- */
 .location-label,
 .date-label {
+
     -fx-font-size: 15px; /* Slightly larger */
     -fx-text-fill: #5D6D7E; /* More sophisticated text color */
     -fx-padding: 5px 0; /* Add some padding */
+
 }
 
 /* ==================== Buttons ==================== */
@@ -63,6 +70,7 @@ AnchorPane {
 
 /* --- Add Button --- */
 .add-button {
+
     -fx-background-color: #A3D9FF; /* Light sky blue */
     -fx-text-fill: #212F3D; /* Dark charcoal text */
     -fx-background-radius: 30px; /* More rounded */
@@ -72,10 +80,12 @@ AnchorPane {
 .add-button:hover {
     -fx-background-color: #7FB3D5; /* Medium sky blue on hover */
     -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
+
 }
 
 /* --- Like Button --- */
 .like-button {
+
     -fx-background-color: #FFBABA; /* Light coral */
     -fx-text-fill: #212F3D; /* Dark charcoal text */
     -fx-background-radius: 30px; /* More rounded */
@@ -104,6 +114,7 @@ AnchorPane {
 .delete-button:hover {
     -fx-background-color: #E6B0AA; /* Light rose on hover */
     -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
+
 }
 
 /* ==================== Images ==================== */

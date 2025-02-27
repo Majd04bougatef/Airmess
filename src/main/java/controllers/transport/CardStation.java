@@ -1,6 +1,5 @@
 package controllers.transport;
 
-import controllers.DisplayStationVoyageurs;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +18,8 @@ import javafx.scene.shape.Rectangle;
 public class CardStation {
 
     public Button btnAvis;
+    public Text prixH;
+    public Text pays;
 
     private Session session = Session.getInstance();
 
@@ -80,6 +81,7 @@ public class CardStation {
             controller.setReservationData(
                     currentStation.getNbVelo(),
                     currentStation.getPrixheure(),
+                    currentStation.getPays(),
                     currentStation
             );
 
@@ -94,6 +96,8 @@ public class CardStation {
         this.currentStation = st;
         nom.setText(st.getNom());
         nbvelo.setText("Vélos disponibles: " + st.getNbVelo());
+        prixH.setText(String.valueOf(st.getPrixheure()));
+        pays.setText("Pays : " +st.getPays());
 
         idStation.setText(String.valueOf(st.getIdS()));
 
@@ -101,7 +105,7 @@ public class CardStation {
             case "velo de route" -> "/image/locationveloVoyageurs/velo de route.jpeg";
             case "velo urbain" -> "/image/locationveloVoyageurs/velo urbain.jpeg";
             case "velo electrique" -> "/image/locationveloVoyageurs/velo elect.jpeg";
-            default -> "/image/default.png";
+            default -> "/image/AirMess copie.png";
         };
 
         image.setImage(new Image(imagePath));
