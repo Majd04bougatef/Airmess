@@ -3,28 +3,27 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import models.Commentaire;
 import models.SocialMedia;
 import models.Users;
+import services.AiServices;
 import services.CommentaireServices;
 import services.UsersService;
 import services.SocialMediaServices;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
-import javafx.scene.layout.HBox;
-
+import javafx.scene.Node;
+import javafx.stage.Modality;
 
 public class SocialMediaview {
 
@@ -64,8 +63,8 @@ public class SocialMediaview {
     };
     private final UsersService usersService = new UsersService() {
     };
-    private final CommentaireServices CommentaireServices = new CommentaireServices() {
-    };
+    private final CommentaireServices CommentaireServices = new CommentaireServices() {};
+    private final AiServices aiServices = new AiServices();
 
     @FXML
     public void initialize() {
@@ -88,12 +87,20 @@ public class SocialMediaview {
             contentLabel.setWrapText(true);
             contentLabel.getStyleClass().add("content-label");
 
+            Label locationLabel = new Label("\uD83D\uDCCD Lieu : " + (post.getLieu() != null ? post.getLieu() : "Lieu inconnu"));
+            locationLabel.getStyleClass().add("location-label");
+
+            String publicationDate = post.getPublicationDate() != null ? post.getPublicationDate().toString() : "Date inconnue";
+            Label dateLabel = new Label("Publié le : " + publicationDate);
+            dateLabel.getStyleClass().add("date-label");
+
+
             Users user = usersService.getById(post.getId_U());
             Label usernameLabel = new Label(user != null ? "Posté par: " + user.getName() : "Posté par: Utilisateur inconnu");
             usernameLabel.getStyleClass().add("username-label");
 
+            postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel,dateLabel,locationLabel);
 
-            postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel);
 
 
 
@@ -222,6 +229,16 @@ public class SocialMediaview {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
+
+                        Object parent = sourceButton.getParent();
+                        if (parent instanceof VBox) {
+                            VBox postBox = (VBox) parent;
+                            postBox.setVisible(false);
+                            postBox.setManaged(false);
+                        } else {
+                            System.out.println("impossible de supprimé la publication.");
+                        }
+
                         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postToDelete.getIdEB());
                         for (Commentaire commentaire : commentaires) {
                             CommentaireServices.delete(commentaire);
@@ -230,6 +247,7 @@ public class SocialMediaview {
                         socialMediaServices.delete(postToDelete);
 
                         refreshPosts();
+
 
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Succès");
@@ -294,7 +312,6 @@ public class SocialMediaview {
         }
     }
 
-
     @FXML
     public void handleAddComment(ActionEvent event) {
         Button btn = (Button) event.getSource();
@@ -322,23 +339,82 @@ public class SocialMediaview {
             return;
         }
 
-        String newComment = commentText.getText().trim();
-        if (!newComment.isEmpty()) {
-            Commentaire commentaire = new Commentaire(post.getIdEB(), 1, newComment, 0, 0);
-            CommentaireServices.add(commentaire);
+        String originalCommentText = commentText.getText().trim();
+        String finalCommentText = originalCommentText;
 
-            if (commentaire.getIdC() != 0) {
-                System.out.println("Commentaire ajouté : " + newComment);
-
-                refreshCommentList(commentList, post.getIdEB());
-
-                commentText.clear();
-            } else {
-                System.out.println("⚠ Erreur lors de l'ajout du commentaire.");
-            }
+        if (originalCommentText.isEmpty()) {
+            showAlert("Erreur", "Le commentaire ne peut pas être vide.", Alert.AlertType.ERROR);
+            return;
         }
+
+        if (originalCommentText.length() > 500) {
+            showAlert("Erreur", "Le commentaire ne peut pas dépasser 500 caractères.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        if (!validateContent(originalCommentText)) {
+            return;
+        }
+
+        try {
+            String proposedComment = aiServices.moderateContent(originalCommentText);
+
+            if(proposedComment == null){
+                proposedComment = originalCommentText;
+            }
+
+            if (proposedComment != null && !proposedComment.equals(originalCommentText)) {
+                boolean approved = showApprovalDialog(originalCommentText, proposedComment);
+
+                if (!approved) {
+                    showAlert("Comment Rejected", "The comment was rejected and will not be added.", Alert.AlertType.INFORMATION);
+                    commentText.clear();
+                    return;
+                }
+
+                originalCommentText = proposedComment;
+            }
+        } catch (Exception e) {
+            System.out.println("⚠ Erreur lors de la modération du commentaire : " + e.getMessage());
+            showAlert("Erreur", "Impossible de vérifier le commentaire pour le moment.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Commentaire commentaire = new Commentaire();
+        commentaire.setIdEB(post.getIdEB());
+        commentaire.setId_U(1);
+        commentaire.setDescription(originalCommentText);
+        commentaire.setProposedDescription(originalCommentText);
+        commentaire.setNumberLike(0);
+        commentaire.setNumberDislike(0);
+        commentaire.setApproved(true);
+
+        CommentaireServices.add(commentaire);
+        refreshCommentList(commentList, post.getIdEB());
+        commentText.clear();
     }
 
+    private boolean showApprovalDialog(String original, String proposed) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentApproval.fxml"));
+            Parent root = loader.load();
+
+            CommentApprovalController controller = loader.getController();
+            controller.setCommentData(original, proposed);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Comment Approval");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            return controller.isApproved();
+        } catch (IOException e) {
+            System.err.println("Error loading CommentApproval.fxml: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public void refreshCommentList(VBox commentList, int postId) {
         commentList.getChildren().clear();
@@ -346,7 +422,7 @@ public class SocialMediaview {
         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postId);
 
         for (Commentaire commentaire : commentaires) {
-            if (commentaire.getIdEB() == postId) {
+            if (commentaire.getIdEB() == postId && commentaire.isApproved())  {
                 HBox commentBox = new HBox(10);
                 commentBox.setAlignment(Pos.CENTER_LEFT);
                 commentBox.setUserData(commentaire);
@@ -362,6 +438,13 @@ public class SocialMediaview {
                 deleteButton.getStyleClass().add("delete-comment-button");
                 deleteButton.setOnAction(this::handleDeleteComment);
 
+                updateButton.setPrefSize(60, 25);
+                deleteButton.setPrefSize(60, 25);
+
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+
+
                 commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
 
                 commentList.getChildren().add(commentBox);
@@ -373,7 +456,7 @@ public class SocialMediaview {
 
     @FXML
     private void handleUpdateComment(ActionEvent event) {
-        HBox commentBox = (HBox) ((javafx.scene.control.Button) event.getSource()).getParent();
+        HBox commentBox = (HBox) ((Button) event.getSource()).getParent();
         Label commentLabel = (Label) commentBox.getChildren().get(0);
         Commentaire commentaire = (Commentaire) commentBox.getUserData();
 
@@ -384,12 +467,26 @@ public class SocialMediaview {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newText -> {
-            if (!newText.trim().isEmpty()) {
-                commentaire.setDescription(newText);
-                CommentaireServices.update(commentaire);
-                commentLabel.setText(newText);
-                System.out.println("Commentaire mis à jour !");
+
+            if (newText.trim().isEmpty()) {
+                showAlert("Erreur", "Le commentaire ne peut pas être vide.", Alert.AlertType.ERROR);
+                return;
             }
+
+            if (newText.length() > 500) {
+                showAlert("Erreur", "Le commentaire ne peut pas dépasser 500 caractères.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            if (!validateContent(newText)) {
+                showAlert("Erreur", "Le commentaire contient des caractères non autorisés.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            commentaire.setDescription(newText);
+            CommentaireServices.update(commentaire);
+            commentLabel.setText(newText);
+            System.out.println("Commentaire mis à jour !");
         });
     }
 
@@ -406,15 +503,49 @@ public class SocialMediaview {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Suppression de commentaire");
         alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
-        alert.setContentText("Cette action est irréversible.");
+        alert.setContentText("Cette action est irréversible. Le commentaire sera définitivement supprimé.");
+
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             CommentaireServices.delete(commentaire);
             ((VBox) commentBox.getParent()).getChildren().remove(commentBox);
             System.out.println("Commentaire supprimé !");
+        } else {
+            System.out.println("Suppression annulée.");
         }
     }
 
 
+    public void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.showAndWait();
+    }
+
+
+    List<String> forbiddenWords = Arrays.asList("ccc", "bbb");
+
+    public  boolean validateContent(String content) {
+        if (content.isEmpty() || content.trim().isEmpty()) {
+            showAlert("Erreur", "Le contenu ne peut pas être vide ou composé uniquement d'espaces.", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        for (String word : forbiddenWords) {
+            if (content.toLowerCase().contains(word)) {
+                showAlert("Erreur", "Le contenu contient des mots interdits.", Alert.AlertType.ERROR);
+                return false;
+            }
+        }
+
+
+
+        return true;
+    }
+
+
+    public void handleSeeAllComments(ActionEvent event) {
+    }
 }

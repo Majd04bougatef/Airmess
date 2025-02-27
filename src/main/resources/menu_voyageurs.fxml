@@ -64,7 +64,7 @@
                      <graphic>
                         <ImageView fitHeight="20" fitWidth="20">
                            <image>
-                              <Image url="@image/menu_voyageurs/budget.png" />
+                              <Image url="@image/menu_voyageurs/icons8-budget-96.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -194,7 +194,7 @@
                   </Pane>
                </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="43.0" prefHeight="642.0" prefWidth="1023.0">
+            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1020.0">
               </AnchorPane>
          </children>
       </AnchorPane>

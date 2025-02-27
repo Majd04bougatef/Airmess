@@ -1,46 +1,49 @@
 package models;
+
 import java.util.Date;
 
 public class Commentaire {
     private int idC;
     private int idEB;
     private int id_U;
-    private String description;
+    private String description; // Original description
+    private String proposedDescription; // AI-moderated description
     private int numberLike;
     private int numberDislike;
-
+    private boolean isApproved; // NEW: Approval status
 
     private String postTitre;
     private String postContenu;
     private String postImagemedia;
 
-
     //  Constructeur par défaut
     public Commentaire() {
+        this.isApproved = false;
     }
 
-   //Constructeur avec tous les paramètres
-    public Commentaire(int idC, int idEB, int id_U, String description, int numberLike, int numberDislike) {
+    //Constructeur avec tous les paramètres
+    public Commentaire(int idC, int idEB, int id_U, String description, String proposedDescription, int numberLike, int numberDislike, boolean isApproved) {
         this.idC = idC;
         this.idEB = idEB;
         this.id_U = id_U;
         this.description = description;
+        this.proposedDescription = proposedDescription;
         this.numberLike = numberLike;
         this.numberDislike = numberDislike;
-
+        this.isApproved = isApproved;
     }
 
-    // 🏗️ Constructeur sans idC
-    public Commentaire(int idEB, int id_U, String description, int numberLike, int numberDislike) {
+    //  Constructeur sans idC
+    public Commentaire(int idEB, int id_U, String description, String proposedDescription, int numberLike, int numberDislike, boolean isApproved) {
         this.idEB = idEB;
         this.id_U = id_U;
         this.description = description;
+        this.proposedDescription = proposedDescription;
         this.numberLike = numberLike;
         this.numberDislike = numberDislike;
-
+        this.isApproved = isApproved;
     }
 
-    // 🎯 Getters et Setters
     public int getIdC() {
         return idC;
     }
@@ -73,6 +76,15 @@ public class Commentaire {
         this.description = description;
     }
 
+    public String getProposedDescription() {
+        return proposedDescription;
+    }
+
+    public void setProposedDescription(String proposedDescription) {
+        this.proposedDescription = proposedDescription;
+    }
+
+
     public int getNumberLike() {
         return numberLike;
     }
@@ -88,6 +100,15 @@ public class Commentaire {
     public void setNumberDislike(int numberDislike) {
         this.numberDislike = numberDislike;
     }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
+
     public String getPostTitre() {
         return postTitre;
     }
@@ -114,7 +135,6 @@ public class Commentaire {
 
 
 
-    // 🔍 Méthode toString()
     @Override
     public String toString() {
         return "Commentaire{" +
@@ -122,9 +142,10 @@ public class Commentaire {
                 ", idEB=" + idEB +
                 ", id_U=" + id_U +
                 ", description='" + description + '\'' +
+                ", proposedDescription='" + proposedDescription + '\'' +
                 ", numberLike=" + numberLike +
                 ", numberDislike=" + numberDislike +
-
+                ", isApproved=" + isApproved +
                 '}';
     }
 }

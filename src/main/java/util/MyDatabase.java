@@ -37,4 +37,12 @@ public class MyDatabase {
         return con;
     }
 
+    public void reconnect() {
+        try {
+            con.close();
+            con = DriverManager.getConnection(URL,USERNAME,PWD);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }
