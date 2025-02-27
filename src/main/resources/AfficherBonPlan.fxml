@@ -13,16 +13,30 @@
             <content>
                 <FlowPane fx:id="flowPaneBonPlans" hgap="30" vgap="30" prefWrapLength="900" style="-fx-padding: 10;">
                     <VBox fx:id="bonPlanCard" prefWidth="250.0" prefHeight="400.0" styleClass="bonplan-card">
-                        <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250" />
+
+                        <!-- Conteneur pour l'image et le menu (⋮) -->
+                        <HBox alignment="TOP_RIGHT" spacing="5">
+                            <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250"/>
+
+                            <!-- MenuButton avec les options Modifier/Supprimer -->
+                            <MenuButton text="⋮" styleClass="menu-button">
+                                <items>
+                                    <MenuItem fx:id="editComment" text="Modifier"/>
+                                    <MenuItem fx:id="deleteComment" text="Supprimer"/>
+                                </items>
+                            </MenuButton>
+                        </HBox>
+
                         <Label fx:id="nameLabel" text="Nom du Bon Plan" styleClass="bonplan-title label-bold" />
                         <Label fx:id="descriptionLabel" text="Description" styleClass="bonplan-description label-bold" />
 
+                        <!-- Boutons Modifier et Supprimer du bon plan -->
                         <HBox spacing="10" alignment="CENTER">
                             <Button fx:id="btnModifier" text="Modifier" styleClass="update-button"/>
                             <Button fx:id="btnSupprimer" text="Supprimer" styleClass="delete-button"/>
                         </HBox>
 
-                        <!--Commentaires -->
+                        <!-- Commentaires -->
                         <VBox fx:id="commentsSection" spacing="5" style="-fx-padding: 10;">
                             <Label text="Commentaires :" styleClass="comment-title"/>
                             <VBox fx:id="commentsList" spacing="5" styleClass="comments-list"/>
