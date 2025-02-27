@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="640.0" prefWidth="1030.0"
             xmlns="http://javafx.com/javafx/23.0.1"
@@ -52,10 +53,13 @@
                 <Button fx:id="bttnBP" layoutX="66.0" layoutY="450.0" prefHeight="37.0" prefWidth="780.0"
                         styleClass="submit-button" text="Modifier" onAction="#updateBonPlan" />
 
-                <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" layoutX="587.0" layoutY="124.0"
+                <!-- ImageView et WebView placés côte à côte -->
+                <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" layoutX="510.0" layoutY="124.0"
                            pickOnBounds="true" preserveRatio="true" />
 
-                <Button fx:id="addImageButton" layoutX="640.0" layoutY="364.0" prefHeight="32.0" prefWidth="139.0"
+                <WebView fx:id="mapView" layoutX="770.0" layoutY="124.0" prefWidth="300.0" prefHeight="215.0" />
+
+                <Button fx:id="addImageButton" layoutX="550.0" layoutY="364.0" prefHeight="32.0" prefWidth="139.0"
                         text="Changer Image" onAction="#addImageBP" />
             </children>
         </Pane>
