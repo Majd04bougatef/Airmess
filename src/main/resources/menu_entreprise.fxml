@@ -73,6 +73,18 @@
                         <Font size="15.0" />
                      </font>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#reservation" style="-fx-background-color: #4292bf;" text="Réservations" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20" fitWidth="20">
+                           <image>
+                              <Image url="@image/menu_voyageurs/reservation.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
 
 
                     <Button mnemonicParsing="false" onAction="#BonPlan" style="-fx-background-color: #4292bf;" text="Bons Plans" textFill="WHITE">
@@ -180,7 +192,7 @@
                     </Pane>
                 </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1030.0" />
+            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1024.0" />
         </children>
     </AnchorPane>
 </center>

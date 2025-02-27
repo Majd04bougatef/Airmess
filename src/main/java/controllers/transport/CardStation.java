@@ -101,7 +101,7 @@ public class CardStation {
             case "velo de route" -> "/image/locationveloVoyageurs/velo de route.jpeg";
             case "velo urbain" -> "/image/locationveloVoyageurs/velo urbain.jpeg";
             case "velo electrique" -> "/image/locationveloVoyageurs/velo elect.jpeg";
-            default -> "/image/default.png";
+            default -> "/image/AirMess copie.png";
         };
 
         image.setImage(new Image(imagePath));

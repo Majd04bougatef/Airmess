@@ -172,4 +172,43 @@ public abstract class ReservationTransportService implements GlobalInterface<res
             System.err.println(e.getMessage());
         }
     }
+
+
+    public List<ReservationTransportDTO> getAllReservationAndNameUser(int id) {
+        String query = "SELECT users.id_U, users.name, users.prenom, station.idS, station.nom, station.typeVelo,reservation_transport.id, reservation_transport.reference, reservation_transport.dateRes, reservation_transport.dateFin, reservation_transport.nombreVelo, reservation_transport.statut, reservation_transport.prix FROM `reservation_transport` JOIN `users` ON reservation_transport.id_U = users.id_U JOIN `station` ON reservation_transport.idS = station.idS AND station.id_U=?";
+
+        List<ReservationTransportDTO> reservations = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                ReservationTransportDTO dto = new ReservationTransportDTO();
+
+                dto.setIdReservation(rs.getInt("id"));
+                dto.setReference(rs.getString("reference"));
+                dto.setDateRes(rs.getTimestamp("dateRes"));
+                dto.setDateFin(rs.getTimestamp("dateFin"));
+                dto.setNombreVelo(rs.getInt("nombreVelo"));
+                dto.setStatut(rs.getString("statut"));
+                dto.setPrix(rs.getDouble("prix"));
+
+                dto.setIdUser(rs.getInt("id_U"));
+                dto.setNomUser(rs.getString("name"));
+                dto.setPrenomUser(rs.getString("prenom"));
+
+                dto.setIdStation(rs.getInt("idS"));
+                dto.setNomStation(rs.getString("nom"));
+                dto.setTypeVelo(rs.getString("typeVelo"));
+
+                reservations.add(dto);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return reservations;
+    }
+
 }
