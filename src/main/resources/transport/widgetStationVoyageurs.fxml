@@ -17,7 +17,13 @@
             <Button mnemonicParsing="false" onAction="#MesReservation" text="Mes Réservations">
                <HBox.margin>
                   <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#discussion" text="discuter">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
       <Pane fx:id="panewidget" layoutY="74.0" prefHeight="567.0" prefWidth="1027.0" />

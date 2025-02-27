@@ -1,6 +1,5 @@
-package controllers;
+package controllers.transport;
 
-import controllers.transport.CardStation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
