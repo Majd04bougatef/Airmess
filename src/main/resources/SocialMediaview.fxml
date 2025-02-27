@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700" prefWidth="900" stylesheets="@css/SocialMediaview.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SocialMediaview">
+<AnchorPane prefHeight="640.0" prefWidth="1020.0" stylesheets="@css/SocialMediaview.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SocialMediaview">
     <children>
         <!-- Arrière-plan -->
         <ImageView fitHeight="700" fitWidth="900" pickOnBounds="true" preserveRatio="false" />
@@ -18,11 +18,11 @@
         <!-- Add username label here: -->
         <Label fx:id="username" layoutX="20.0" layoutY="20.0" styleClass="username-label" text="Username" />
 
-        <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="800" styleClass="scroll-pane">
+        <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="925.0" styleClass="scroll-pane">
             <content>
                 <VBox fx:id="postContainer" prefWidth="780" spacing="15">
                     <!-- Un exemple de post (sera généré dynamiquement) -->
-                    <VBox spacing="10" styleClass="post-box">
+                    <VBox prefHeight="801.0" prefWidth="852.0" spacing="10" styleClass="post-box">
                         <HBox spacing="10" styleClass="title-container">
                             <Label fx:id="postTitle" styleClass="title-label" text="Titre du post" />
                             <Region HBox.hgrow="ALWAYS" />
@@ -36,9 +36,9 @@
                         <Label fx:id="postDate" styleClass="date-label" text="📅 Date de publication: 01/01/2024" />
 
 
-                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-container">
-                            <Button text="Like" onAction="#handleLike" styleClass="like-button"/>
-                            <Button text="Comment" onAction="#handleComment" styleClass="comment-button"/>
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="button-container">
+                            <Button onAction="#handleLike" styleClass="like-button" text="Like" />
+                            <Button onAction="#handleComment" styleClass="comment-button" text="Comment" />
 
 
                         </HBox>
