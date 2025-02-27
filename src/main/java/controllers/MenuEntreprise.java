@@ -82,13 +82,21 @@ public class MenuEntreprise {
         }
     }
 
+    public void discussion(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/discussionEntreprise.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void BonPlan(ActionEvent actionEvent) {
     }
 
     public void Offre(ActionEvent actionEvent) {
-    }
-
-    public void Socail(ActionEvent actionEvent) {
     }
 
     public void logout(ActionEvent actionEvent) {

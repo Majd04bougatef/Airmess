@@ -85,6 +85,21 @@
                         <Font size="15.0" />
                      </font>
                   </Button>
+                    <Button mnemonicParsing="false" onAction="#discussion" style="-fx-background-color: #4292bf;" text="Discussion" textFill="WHITE">
+                        <graphic>
+                            <ImageView fitHeight="20" fitWidth="20">
+                                <image>
+                                    <Image url="@image/menu_voyageurs/discussion.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <font>
+                            <Font size="15.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                    </Button>
 
 
                     <Button mnemonicParsing="false" onAction="#BonPlan" style="-fx-background-color: #4292bf;" text="Bons Plans" textFill="WHITE">
@@ -107,21 +122,6 @@
                             <ImageView fitHeight="20" fitWidth="20">
                                 <image>
                                     <Image url="@image/menu_voyageurs/gestion offre.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <font>
-                            <Font size="15.0" />
-                        </font>
-                        <VBox.margin>
-                            <Insets top="10.0" />
-                        </VBox.margin>
-                    </Button>
-                    <Button mnemonicParsing="false" onAction="#Socail" style="-fx-background-color: #4292bf;" text="Réseau Sociaux" textFill="WHITE">
-                        <graphic>
-                            <ImageView fitHeight="20" fitWidth="20">
-                                <image>
-                                    <Image url="@image/menu_voyageurs/gestion socail media.png" />
                                 </image>
                             </ImageView>
                         </graphic>

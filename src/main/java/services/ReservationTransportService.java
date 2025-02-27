@@ -214,7 +214,7 @@ public abstract class ReservationTransportService implements GlobalInterface<res
     }
 
     public Map<Integer, String> getUniqueEnterpriseNames(int id) {
-        String query = "SELECT DISTINCT users.id_U, users.name FROM reservation_transport JOIN station ON reservation_transport.idS = station.idS JOIN users ON station.id_U = users.id_UWHERE reservation_transport.id_U = ?";
+        String query = "SELECT DISTINCT users.id_U, users.name FROM reservation_transport JOIN station ON reservation_transport.idS = station.idS JOIN users ON station.id_U = users.id_U WHERE reservation_transport.id_U = ?";
 
         Map<Integer, String> enterpriseMap = new HashMap<>();
 

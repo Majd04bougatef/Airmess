@@ -38,8 +38,11 @@ public class DiscussionVoyageurs {
 
     @FXML
     private void loadReservations() {
+
+        System.out.println(session.getId_U());
         Map<Integer, String> enterpriseMap = res.getUniqueEnterpriseNames(currentUserId);
 
+        System.out.println(enterpriseMap);
         if (!enterpriseMap.isEmpty()) {
             reservationList.getItems().clear();
             reservationList.getItems().addAll(enterpriseMap.values());
