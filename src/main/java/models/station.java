@@ -3,11 +3,11 @@ package models;
 public class station {
 
     private int idS,idU,capacite,nbVelo;
-    private String nom,typeVelo;
+    private String nom,typeVelo,pays;
     private double latitude,longitude,prixheure;
 
     public station() {}
-    public station(int id , int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV) {
+    public station(int id , int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,String pays) {
         this.idS = id;
         this.idU = idU;
         this.nom = nom;
@@ -17,9 +17,10 @@ public class station {
         this.capacite = capacite;
         this.nbVelo = nbV;
         this.typeVelo = typeV;
+        this.pays = pays;
     }
 
-    public station(int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV) {
+    public station(int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,String pays) {
         this.idU = idU;
         this.nom = nom;
         this.latitude = latitude;
@@ -28,6 +29,7 @@ public class station {
         this.capacite = capacite;
         this.nbVelo = nbV;
         this.typeVelo = typeV;
+        this.pays = pays;
     }
 
     public int getIdS() {
@@ -100,6 +102,14 @@ public class station {
 
     public void setPrixheure(double prixheure) {
         this.prixheure = prixheure;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String Pays) {
+        this.pays = pays;
     }
 
     @Override

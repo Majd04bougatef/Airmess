@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 
 import javafx.fxml.FXML;
@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.reservation_transport;
 import services.ReservationTransportService;
+import services.StationService;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -60,11 +62,16 @@ public class ModifierReservationVoyageurs {
     @FXML
     private void handleUpdate() {
         reservation_transport reservation = reservationService.getById(reservationId);
+        StationService res= new StationService(){};
         if (reservation != null) {
-            reservation.setDateFin(Timestamp.from(Instant.now()));
             reservation = reservationService.CalculPrix(reservation);
             reservationService.update(reservation);
 
+
+            System.out.println(reservation.getIdS()+"   "+reservation.getNombreVelo());
+            res.updateRetourVelo(reservation.getIdS(),reservation.getNombreVelo());
+
+            System.out.println("");
             Stage stage = (Stage) updateButton.getScene().getWindow();
             stage.close();
         }

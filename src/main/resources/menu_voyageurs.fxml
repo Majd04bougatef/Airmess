@@ -191,7 +191,7 @@
                   </Pane>
                </children>
             </HBox>
-            <AnchorPane fx:id="centralAnocherPane" layoutY="43.0" prefHeight="642.0" prefWidth="1023.0">
+            <AnchorPane fx:id="centralAnocherPane" layoutY="59.0" prefHeight="640.0" prefWidth="1020.0">
               </AnchorPane>
          </children>
       </AnchorPane>

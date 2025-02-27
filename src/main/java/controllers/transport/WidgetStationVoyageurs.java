@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,15 +14,30 @@ public class WidgetStationVoyageurs {
     private Pane panewidget;
 
     @FXML
+    public void initialize() {
+        loadPage("/transport/DisplayStationVoyageurs.fxml");
+    }
+
+    @FXML
     void reserver(ActionEvent event) {
-        laodPage("/DisplayStationVoyageurs.fxml");
+        loadPage("/transport/DisplayStationVoyageurs.fxml");
     }
 
+    @FXML
     public void MesReservation(ActionEvent actionEvent) {
-        laodPage("/MesReservationTransportVoyageurs.fxml");
+        loadPage("/transport/MesReservationTransportVoyageurs.fxml");
+    }
+    @FXML
+    public void discussion(ActionEvent actionEvent) {
+        loadPage("/transport/discussionVoyageurs.fxml");
     }
 
-    private void laodPage(String s) {
+    @FXML
+    public void carte(ActionEvent actionEvent) {
+        loadPage("/transport/AllStationVoyageurs.fxml");
+    }
+
+    private void loadPage(String s) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(s));
             Parent userPage = loader.load();
@@ -33,7 +48,6 @@ public class WidgetStationVoyageurs {
             System.out.println("Erreur de chargement du FXML : " + s);
         }
     }
-
 
 
 }

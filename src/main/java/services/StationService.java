@@ -21,7 +21,7 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public void add(station st) {
-        String sql = "INSERT INTO station ( id_U, nom, latitude, longitude, capacite, nombreVelo, typeVelo, prixHeure) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO station ( id_U, nom, latitude, longitude, capacite, nombreVelo, typeVelo, prixHeure,pays) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, st.getIdU());
@@ -32,6 +32,7 @@ public abstract class StationService implements GlobalInterface<station> {
             preparedStatement.setInt(6, st.getNbVelo());
             preparedStatement.setString(7, st.getTypeVelo());
             preparedStatement.setDouble(8, st.getPrixheure());
+            preparedStatement.setString(9, st.getPays());
 
             preparedStatement.executeUpdate();
             System.out.println("Station added successfully");
@@ -89,7 +90,7 @@ public abstract class StationService implements GlobalInterface<station> {
                 s.setNbVelo(rs.getInt("nombreVelo"));
                 s.setTypeVelo(rs.getString("typeVelo"));
                 s.setPrixheure(rs.getDouble("prixHeure"));
-
+                s.setPays(rs.getString("pays"));
                 st.add(s);
 
             }
@@ -125,6 +126,8 @@ public abstract class StationService implements GlobalInterface<station> {
                 st.setNbVelo(rs.getInt("nombreVelo"));
                 st.setTypeVelo(rs.getString("typeVelo"));
                 st.setPrixheure(rs.getDouble("prixHeure"));
+                st.setPays(rs.getString("pays"));
+
 
             }
         } catch (SQLException e) {
@@ -133,4 +136,44 @@ public abstract class StationService implements GlobalInterface<station> {
 
         return st;
     }
+
+    public void updateNombreVelo(int stationId, int nbVeloRes) {
+        String sql = "UPDATE station SET nombreVelo = nombreVelo - ? WHERE idS = ? AND nombreVelo >= ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, nbVeloRes);
+            preparedStatement.setInt(2, stationId);
+            preparedStatement.setInt(3, nbVeloRes);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Le nombre de vélos a été mis à jour avec succès.");
+            } else {
+                System.out.println("Erreur lors de la mise à jour du nombre de vélos disponibles.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL: " + e.getMessage());
+        }
+    }
+
+    public void updateRetourVelo(int stationId, int nbVeloRes) {
+        String sql = "UPDATE station SET nombreVelo = nombreVelo + ? WHERE idS = ? ";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, nbVeloRes);
+            preparedStatement.setInt(2, stationId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Le nombre de vélos a été mis à jour avec succès.");
+            } else {
+                System.out.println("Erreur lors de la mise à jour du nombre de vélos disponibles.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL: " + e.getMessage());
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.transport;
 
 
 import javafx.event.ActionEvent;
@@ -16,17 +16,22 @@ public class WidgetStationEntreprise {
 
     @FXML
     public void initialize() {
-        loadPage("/DisplayStationEntreprise.fxml");
+        loadPage("/transport/DisplayStationEntreprise.fxml");
     }
 
     @FXML
     void btnFormAdd() {
-        loadPage("/FormAddTransport.fxml");
+        loadPage("/transport/FormAddTransport.fxml");
     }
 
     @FXML
     void btnGettStation() {
-        loadPage("/DisplayStationEntreprise.fxml");
+        loadPage("/transport/DisplayStationEntreprise.fxml");
+    }
+
+    @FXML
+    public void btnStation(ActionEvent actionEvent) {
+        loadPage("/transport/AllStationEntreprise.fxml");
     }
 
     private void loadPage(String fxmlFile) {
@@ -40,5 +45,6 @@ public class WidgetStationEntreprise {
             System.out.println("Erreur de chargement du FXML : " + fxmlFile);
         }
     }
+
 
 }

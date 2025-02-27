@@ -42,26 +42,22 @@
                         <HBox alignment="CENTER_RIGHT" spacing="15">
                             <Button fx:id="btnlike" onAction="#handleLike" styleClass="like-button" text="👍 J'aime" />
                             <Button fx:id="btnComment" onAction="#handleComment" styleClass="comment-button" text="💬 Commenter" />
-
-
                         </HBox>
+
                         <VBox fx:id="commentSection" spacing="10" visible="true">
                             <TextArea fx:id="commentText" prefHeight="50" prefWidth="600" promptText="Écrire un commentaire..."
                                       wrapText="true"/>
                             <Button fx:id="btnAddComment" onAction="#handleAddComment" styleClass="submit-comment-button"
                                     text="📩 Publier" />
 
-                            <VBox fx:id="commentList" spacing="10">
-                                <HBox spacing="10" styleClass="comment-box">
-                                    <Label fx:id="commentContent" styleClass="comment-label" text="Un commentaire d'exemple."
-                                           wrapText="true"/>
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Button onAction="#handleUpdateComment" styleClass="update-comment-button" text="✏" />
-                                    <Button onAction="#handleDeleteComment" styleClass="delete-comment-button" text="🗑" />
-                                </HBox>
-                            </VBox>
-                        </VBox>
+                            <!-- Display only the latest comment -->
+                            <Label fx:id="latestCommentLabel" styleClass="comment-label" text="Latest comment here"
+                                   wrapText="true" />
 
+                            <!-- "See All Comments" Button -->
+                            <Button fx:id="seeAllCommentsButton" onAction="#handleSeeAllComments"
+                                    styleClass="see-all-comments-button" text="See All Comments" />
+                        </VBox>
                     </VBox>
                 </VBox>
             </content>

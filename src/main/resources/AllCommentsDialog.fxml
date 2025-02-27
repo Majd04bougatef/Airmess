@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="400.0"
+            prefHeight="300.0"
+            fx:controller="controllers.AllCommentsDialogController">
+    <content>
+        <ScrollPane fitToWidth="true">
+            <content>
+                <VBox fx:id="commentsContainer" spacing="10.0"
+                      style="-fx-padding: 10;">
+                    <!-- Comments will be added here dynamically -->
+                </VBox>
+            </content>
+        </ScrollPane>
+    </content>
+</DialogPane>

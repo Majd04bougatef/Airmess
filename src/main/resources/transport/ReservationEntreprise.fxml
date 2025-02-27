@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="620.0" prefWidth="1020.0" stylesheets="/css/DisplayStationEntreprise.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.ReservationEntreprise">
+    <children>
+        <TextField fx:id="searchField" layoutX="142.0" layoutY="40.0" prefWidth="250.0" promptText="Rechercher par référence..." />
+        <Text layoutX="70.0" layoutY="57.0" text="Référence :" />
+
+        <DatePicker fx:id="datePicker" layoutX="480.0" layoutY="40.0" prefWidth="200.0" promptText="Sélectionner une date" />
+        <Text layoutX="420.0" layoutY="57.0" text="Date :" />
+
+        <TableView fx:id="tableview" layoutX="28.0" layoutY="77.0" prefHeight="529.0" prefWidth="964.0">
+            <columns>
+                <TableColumn fx:id="Ref" prefWidth="234.0" text="Référence" />
+                <TableColumn fx:id="colNomUser" prefWidth="147.0" text="Nom client" />
+                <TableColumn fx:id="dateRes" prefWidth="168.0" text="Date Réservation" />
+                <TableColumn fx:id="dateFin" prefWidth="219.0" text="Date Fin de Réservation" />
+                <TableColumn fx:id="colNbVelo" minWidth="0.0" prefWidth="62.0" text="Nb Vélos" />
+                <TableColumn fx:id="colTypeVelo" minWidth="5.5999755859375" prefWidth="106.0" text="Type Vélo" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

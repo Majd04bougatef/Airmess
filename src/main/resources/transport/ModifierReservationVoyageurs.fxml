@@ -6,7 +6,7 @@
 <?import javafx.geometry.Pos?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.ModifierReservationVoyageurs"
+            fx:controller="controllers.transport.ModifierReservationVoyageurs"
             prefHeight="450.0" prefWidth="600.0">
 
     <VBox spacing="20" alignment="CENTER" prefWidth="580.0">
@@ -43,7 +43,7 @@
         </GridPane>
 
         <HBox spacing="20" alignment="CENTER">
-            <Button fx:id="updateButton" text="Fermer et Payer" onAction="#handleUpdate"
+            <Button fx:id="updateButton" text="Retour Vélo" onAction="#handleUpdate"
                     style="-fx-font-size: 16px; -fx-background-color: #27AE60; -fx-text-fill: white; -fx-font-weight: bold;" />
             <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel"
                     style="-fx-font-size: 16px; -fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold;" />

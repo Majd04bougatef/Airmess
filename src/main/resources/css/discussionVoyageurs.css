@@ -1,0 +1,34 @@
+/* Style de la liste des réservations */
+.list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+}
+
+.list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: #eeeeee;
+}
+
+.list-cell:hover {
+    -fx-background-color: #dff0d8;
+}
+
+/* Style de la boîte de discussion */
+#chatBox {
+    -fx-background-color: #ffffff;
+}
+
+/* Style des bulles de messages */
+.message-left {
+    -fx-padding: 8px;
+    -fx-background-color: #ecf0f1;
+    -fx-background-radius: 8px;
+    -fx-text-fill: black;
+}
+
+.message-right {
+    -fx-padding: 8px;
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 8px;
+    -fx-text-fill: white;
+}
