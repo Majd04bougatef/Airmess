@@ -18,6 +18,8 @@ import javafx.scene.shape.Rectangle;
 public class CardStation {
 
     public Button btnAvis;
+    public Text prixH;
+    public Text pays;
 
     private Session session = Session.getInstance();
 
@@ -79,6 +81,7 @@ public class CardStation {
             controller.setReservationData(
                     currentStation.getNbVelo(),
                     currentStation.getPrixheure(),
+                    currentStation.getPays(),
                     currentStation
             );
 
@@ -93,6 +96,8 @@ public class CardStation {
         this.currentStation = st;
         nom.setText(st.getNom());
         nbvelo.setText("Vélos disponibles: " + st.getNbVelo());
+        prixH.setText(String.valueOf(st.getPrixheure()));
+        pays.setText("Pays : " +st.getPays());
 
         idStation.setText(String.valueOf(st.getIdS()));
 

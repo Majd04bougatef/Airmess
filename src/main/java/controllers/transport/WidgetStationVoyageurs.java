@@ -32,6 +32,11 @@ public class WidgetStationVoyageurs {
         loadPage("/transport/discussionVoyageurs.fxml");
     }
 
+    @FXML
+    public void carte(ActionEvent actionEvent) {
+        loadPage("/transport/AllStationVoyageurs.fxml");
+    }
+
     private void loadPage(String s) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(s));
