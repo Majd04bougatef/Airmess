@@ -11,11 +11,12 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.DatePicker?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Offre.OffreAdminController">
-    <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
-        <VBox spacing="10" styleClass="vbox-container">
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="640.0" fx:id="rootAnchorPane" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Offre.OffreAdminController" style="-fx-background-color: #f1f1f1">
+    <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10" style="-fx-background-color: #f1f1f1">
+        <VBox spacing="10" styleClass="vbox-container" style="-fx-background-color: #f1f1f1">
             <ListView fx:id="offreListView" styleClass="list-view" />
-            <HBox spacing="10" styleClass="hbox-container">
+            <HBox fx:id="controlButtons" spacing="10" styleClass="hbox-container">
                 <Button onAction="#handleUpdateButtonAction" text="Mettre à jour">
                     <styleClass>
                         <String fx:value="button" />
@@ -63,20 +64,34 @@
 
             <!-- Champs cachés pour les champs de mise à jour -->
             <VBox fx:id="updateFieldsBox" visible="false" managed="false" spacing="10">
-                <Label text="Description" />
-                <TextField fx:id="updateDescriptionField" promptText="Description" />
-                <Label text="Lieu" />
-                <TextField fx:id="updateLocationField" promptText="Lieu" />
-                <Label text="Prix" />
-                <TextField fx:id="updatePriceField" promptText="Prix" />
-                <Label text="Remise" />
-                <TextField fx:id="updateDiscountField" promptText="Remise" />
-                <Label text="Date de début" />
-                <DatePicker fx:id="updateStartDateField" promptText="Date de début" />
-                <Label text="Date de fin" />
-                <DatePicker fx:id="updateEndDateField" promptText="Date de fin" />
-                <Label text="nombre de place disponible" />
-                <TextField fx:id="updateNumberField" promptText="nombre de place disponible" />
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <Text text="Prix Initial" />
+                    <TextField fx:id="updatePriceField" prefHeight="35.0" prefWidth="200.0" promptText="Entrez le prix initial" />
+                    <Text text="Nouveau Prix" />
+                    <TextField fx:id="updateDiscountField" prefHeight="35.0" prefWidth="200.0" promptText="Entrez le nouveau prix" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <Text text="Description" />
+                    <TextField fx:id="updateDescriptionField" prefHeight="35.0" prefWidth="450.0" promptText="Entrez une description" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <Text text="Date de début" />
+                    <DatePicker fx:id="updateStartDateField" prefHeight="35.0" prefWidth="200.0" />
+                    <Text text="Date de fin" />
+                    <DatePicker fx:id="updateEndDateField" prefHeight="35.0" prefWidth="200.0" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <Text text="Limite de nombre" />
+                    <TextField fx:id="updateNumberField" prefHeight="35.0" prefWidth="200.0" promptText="Entrez la limite" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <Text text="Lieu" />
+                    <TextField fx:id="updateLocationField" prefHeight="35.0" prefWidth="450.0" promptText="Entrez le lieu" />
+                </HBox>
                 <HBox spacing="10">
                     <Button onAction="#confirmUpdate" text="Confirmer">
                         <styleClass>

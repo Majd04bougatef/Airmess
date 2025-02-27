@@ -10,6 +10,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import models.Offre;
 import models.Reservation;
 import services.ReservationService;
 
@@ -19,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ReservationAdminController implements Initializable {
+public class ReservationAdminController{
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -29,10 +30,11 @@ public class ReservationAdminController implements Initializable {
     private ListView<Reservation> reservationsListView;
 
     private ReservationService reservationService;
+    private Offre offre;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(Offre offre) {
         reservationService = new ReservationService();
+        this.offre = offre;
         loadReservations();
 
         // Set a custom cell factory to control how reservations are displayed
@@ -67,7 +69,14 @@ public class ReservationAdminController implements Initializable {
     }
 
     private void loadReservations() {
-        List<Reservation> reservations = reservationService.getAll();
+        List<Reservation> reservations;
+        if (offre != null) {
+        reservations = reservationService.getAll().stream()
+                .filter(reservation -> reservation.getIdO().getIdO() == offre.getIdO())
+                .toList();
+        } else {
+            reservations = reservationService.getAll();
+        }
         ObservableList<Reservation> observableList = FXCollections.observableArrayList(reservations);
         reservationsListView.setItems(observableList);
     }
