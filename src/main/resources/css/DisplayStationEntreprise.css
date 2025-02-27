@@ -6,6 +6,13 @@
     -fx-padding: 5px;
 }
 
+/* Centrer le texte dans chaque cellule */
+.table-view .table-cell {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+
 /* Style des en-têtes de colonnes */
 .table-view .column-header-background {
     -fx-background-color: linear-gradient(to bottom, #4a90e2, #357abd);
@@ -116,4 +123,19 @@
 
 .combo-box .arrow {
     -fx-background-color: #ccc;
+}
+
+/* Masquer les barres de défilement horizontales et verticales */
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+/* Empêcher les barres de défilement d'apparaître lors du survol */
+.table-view .scroll-bar:vertical:hover,
+.table-view .scroll-bar:horizontal:hover {
+    -fx-opacity: 0;
 }

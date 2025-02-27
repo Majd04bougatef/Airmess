@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ScrollPane?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DisplayStationVoyageurs">
+<AnchorPane prefHeight="640.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.DisplayStationVoyageurs">
    <children>
       <ScrollPane style="-fx-padding: 20px;" fx:id="mainScrollPane" prefHeight="640.0" prefWidth="1030.0" fitToWidth="true" fitToHeight="true">
          <content>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="640.0" prefWidth="1020.0" style="-fx-background-color: #ecf0f1; -fx-padding: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.DiscussionEntreprise">
+
+<VBox layoutX="14.0" layoutY="10.0" prefHeight="635.0" prefWidth="991.0" spacing="10" style="-fx-background-color: white; -fx-padding: 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+
+    <HBox spacing="10" style="-fx-background-color: #3498db; -fx-padding: 15px; -fx-background-radius: 10px;">
+        <Label fx:id="chatTitle" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold;" text="💬 Discussion Voyageurs" />
+    </HBox>
+
+    <SplitPane dividerPositions="0.3" prefHeight="552.0" prefWidth="961.0">
+        <VBox spacing="10" style="-fx-background-color: #f4f4f4; -fx-padding: 10px; -fx-background-radius: 10px;">
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="📋 Mes Discussion" />
+            <ListView fx:id="voyageursList" onMouseClicked="#handleReservationClick" prefHeight="503.0" prefWidth="265.0" style="-fx-background-color: white; -fx-border-radius: 5px; -fx-background-radius: 5px;" />
+        </VBox>
+        <VBox spacing="10" style="-fx-padding: 10px;">
+
+            <ScrollPane fitToWidth="true" style="-fx-background-radius: 10px; -fx-hbar-policy: never; -fx-vbar-policy: never;">
+                <VBox fx:id="chatBox" spacing="8" style="-fx-padding: 10px; -fx-background-color: #FFFFFF" />
+            </ScrollPane>
+
+
+            <HBox spacing="5">
+                <TextField fx:id="messageInput" promptText="Écrire un message..." prefHeight="40" style="-fx-background-radius: 5px; -fx-border-color: #bdc3c7; -fx-border-radius: 5px; -fx-padding: 5px;" HBox.hgrow="ALWAYS" />
+                <Button fx:id="sendButton" onAction="#sendMessage" prefHeight="37" style="-fx-background-color: #db7093; -fx-text-fill: white; -fx-background-radius: 5px;" text="✉️ Envoyer" />
+            </HBox>
+
+        </VBox>
+    </SplitPane>
+
+</VBox>
+
+</AnchorPane>

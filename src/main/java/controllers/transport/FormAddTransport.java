@@ -41,7 +41,28 @@ public class FormAddTransport {
         }
 
         if (pays != null) {
-            pays.getItems().addAll("Algérie", "Allemagne", "Tunisie");
+            pays.getItems().addAll(
+                    "Albanie", "Algérie", "Allemagne", "Angola",
+                    "Arabie Saoudite", "Argentine", "Arménie", "Australie", "Autriche", "Azerbaïdjan", "Bahamas", "Bahreïn",
+                    "Belgique", "Belize", "Bénin", "Brésil", "Bulgarie",
+                    "Cameroun", "Canada", "Chili", "Chine", "Colombie",
+                    "Corée du Nord", "Corée du Sud", "Costa Rica", "Côte d'Ivoire", "Croatie",
+                    "Danemark",  "Dominique", "Égypte", "Émirats arabes unis", "Espagne",
+                    "États-Unis", "Éthiopie", "Finlande", "France",
+                    "Ghana", "Grèce",
+                    "Honduras", "Hongrie", "Inde", "Indonésie", "Irak", "Iran", "Irlande", "Islande","Italie",
+                    "Japon", "Jordanie", "Koweït",  "Lesotho", "Lettonie",
+                    "Liban", "Libéria", "Libye", "Lituanie", "Luxembourg", "Madagascar", "Malaisie", "Malawi",
+                    "Maldives", "Mali", "Malte", "Maroc", "Mauritanie", "Mexique", "Moldavie",
+                    "Monaco", "Mongolie", "Monténégro", "Mozambique", "Namibie", "Niger", "Nigéria",
+                    "Norvège", "Nouvelle-Zélande", "Oman",
+                    "Paraguay", "Pays-Bas", "Pérou", "Philippines", "Pologne", "Portugal", "Qatar", "République centrafricaine",
+                    "République dominicaine", "République tchèque", "Roumanie", "Royaume-Uni", "Russie", "Rwanda", "Salvador", "Samoa",
+                    "Sénégal", "Serbie", "Singapour", "Slovaquie", "Slovénie", "Soudan",
+                    "Soudan du Sud", "Suède", "Suisse", "Syrie", "Tanzanie", "Tchad",
+                    "Thaïlande", "Tunisie", "Turquie",
+                    "Ukraine", "Uruguay", "Venezuela", "Viêt Nam", "Yémen", "Zambie", "Zimbabwe"
+            );
         }
 
         WebEngine webEngine = mapView.getEngine();
@@ -130,12 +151,18 @@ public class FormAddTransport {
             isValid = false;
         }
 
+        String Pays = pays.getValue();
+        if (Pays == null || Pays.isEmpty()) {
+            lblTypeVeloError.setText("Veuillez sélectionner une pays");
+            lblTypeVeloError.setStyle("-fx-text-fill: red;");
+            isValid = false;
+        }
+
         if (!isValid) {
             return;
         }
 
-        // Créer la station avec les coordonnées récupérées
-        station newStation = new station(session.getId_U(), nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo);
+        station newStation = new station(session.getId_U(), nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo,Pays);
         StationService stService = new StationService() {};
         stService.add(newStation);
 
@@ -145,7 +172,6 @@ public class FormAddTransport {
         alert.setContentText("La station a été ajoutée avec succès !");
         alert.showAndWait();
 
-        // Réinitialiser les champs
         Nom.clear();
         Capacite.clear();
         NbVelo.clear();

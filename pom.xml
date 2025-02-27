@@ -90,7 +90,7 @@
             <artifactId>google-cloud-aiplatform</artifactId>
             <version>3.31.0</version>  <!-- Use the LATEST version -->
         </dependency>
-        
+
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
