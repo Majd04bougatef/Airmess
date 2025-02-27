@@ -106,22 +106,19 @@ public class FormUpdateSocialMedia implements Initializable {
 
             currentPost.setLieu(Lieu.getText());
 
-            // Image Handling:
             String newImageName = null;
             if (selectedImageFile != null) {
                 try {
-                    // Generate a unique name for the new image
                     newImageName = System.currentTimeMillis() + "_" + selectedImageFile.getName();
                     Path destinationPath = Paths.get("C:/xampp/htdocs/ImageSocialMedia/", newImageName);
 
-                    // Copy the selected image to the server
                     Files.copy(selectedImageFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-                    currentPost.setImagemedia(newImageName); // Update the database
+                    currentPost.setImagemedia(newImageName);
                 } catch (IOException e) {
                     showAlert("Error", "Failed to save new image: " + e.getMessage(), Alert.AlertType.ERROR);
                     e.printStackTrace();
-                    return; // Exit if saving fails
+                    return;
                 }
             }
 

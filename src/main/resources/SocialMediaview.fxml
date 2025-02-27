@@ -10,18 +10,15 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700" prefWidth="900" stylesheets="@css/SocialMediaview.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.SocialMediaview">
+<AnchorPane prefHeight="700" prefWidth="900" stylesheets="@css/SocialMediaview.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SocialMediaview">
     <children>
         <!-- Arrière-plan -->
-        <ImageView fitHeight="700" fitWidth="900" pickOnBounds="true" preserveRatio="false"/>
+        <ImageView fitHeight="700" fitWidth="900" pickOnBounds="true" preserveRatio="false" />
 
         <!-- Add username label here: -->
-        <Label fx:id="username" layoutX="20.0" layoutY="20.0" text="Username" styleClass="username-label"/>
+        <Label fx:id="username" layoutX="20.0" layoutY="20.0" styleClass="username-label" text="Username" />
 
-        <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="800"
-                    styleClass="scroll-pane">
+        <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="800" styleClass="scroll-pane">
             <content>
                 <VBox fx:id="postContainer" prefWidth="780" spacing="15">
                     <!-- Un exemple de post (sera généré dynamiquement) -->
@@ -29,44 +26,35 @@
                         <HBox spacing="10" styleClass="title-container">
                             <Label fx:id="postTitle" styleClass="title-label" text="Titre du post" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Button fx:id="btnUpdate" onAction="#handleUpdate" styleClass="update-button"
-                                    text="✏ Modifier" />
-                            <Button fx:id="btnDelete" onAction="#handleDelete" styleClass="delete-button"
-                                    text="🗑 Supprimer" />
+                            <Button fx:id="btnUpdate" onAction="#handleUpdate" styleClass="update-button" text="✏️" />
+                            <Button fx:id="btnDelete" onAction="#handleDelete" styleClass="delete-button" text="🗑️" />
                         </HBox>
 
-                        <Label fx:id="postContent" styleClass="content-label" text="Ceci est un exemple de contenu."
-                               wrapText="true" />
-                        <ImageView fx:id="postImage" fitHeight="250.0" fitWidth="600.0" preserveRatio="true"
-                                   styleClass="post-image"/>
+                        <Label fx:id="postContent" styleClass="content-label" text="Ceci est un exemple de contenu." wrapText="true" />
+                        <ImageView fx:id="postImage" fitHeight="250.0" fitWidth="600.0" preserveRatio="true" styleClass="post-image" />
                         <Label fx:id="postLocation" styleClass="location-label" text="📍 Lieu: Exemple" />
                         <Label fx:id="postDate" styleClass="date-label" text="📅 Date de publication: 01/01/2024" />
 
-                        <HBox alignment="CENTER_RIGHT" spacing="15">
-                            <Button fx:id="btnlike" onAction="#handleLike" styleClass="like-button" text="👍 J'aime" />
-                            <Button fx:id="btnComment" onAction="#handleComment" styleClass="comment-button" text="💬 Commenter" />
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-container">
+                            <Button text="Like" onAction="#handleLike" styleClass="like-button"/>
+                            <Button text="Comment" onAction="#handleComment" styleClass="comment-button"/>
                         </HBox>
 
                         <VBox fx:id="commentSection" spacing="10" visible="true">
-                            <TextArea fx:id="commentText" prefHeight="50" prefWidth="600" promptText="Écrire un commentaire..."
-                                      wrapText="true"/>
-                            <Button fx:id="btnAddComment" onAction="#handleAddComment" styleClass="submit-comment-button"
-                                    text="📩 Publier" />
+                            <TextArea fx:id="commentText" prefHeight="130.0" prefWidth="750.0" promptText="Écrire un commentaire..." wrapText="true" />
+                            <Button fx:id="btnAddComment" onAction="#handleAddComment" styleClass="submit-comment-button" text="📩 Publier" />
 
                             <!-- Display only the latest comment -->
-                            <Label fx:id="latestCommentLabel" styleClass="comment-label" text="Latest comment here"
-                                   wrapText="true" />
+                            <Label fx:id="latestCommentLabel" styleClass="comment-label" text="Latest comment here" wrapText="true" />
 
                             <!-- "See All Comments" Button -->
-                            <Button fx:id="seeAllCommentsButton" onAction="#handleSeeAllComments"
-                                    styleClass="see-all-comments-button" text="See All Comments" />
+                            <Button fx:id="seeAllCommentsButton" onAction="#handleSeeAllComments" styleClass="see-all-comments-button" text="See All Comments" />
                         </VBox>
                     </VBox>
                 </VBox>
             </content>
         </ScrollPane>
 
-        <Button fx:id="btnAjout" layoutX="650" layoutY="620" onAction="#Ajouterpost" prefHeight="45.0"
-                prefWidth="220.0" styleClass="add-button" text="➕ Ajouter une publication" />
+        <Button fx:id="btnAjout" layoutX="650" layoutY="620" onAction="#Ajouterpost" prefHeight="45.0" prefWidth="220.0" styleClass="add-button" text="➕ Ajouter une publication" />
     </children>
 </AnchorPane>

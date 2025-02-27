@@ -19,19 +19,12 @@
                    wrapText="true"
                    style="-fx-font-size: 13px; -fx-text-fill: #333333;" />
 
-            <Label text="Raison de la Modération:" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-            <Label fx:id="moderationExplanationLabel"
-                   text="Explanation will go here"
-                   wrapText="true"
-                   style="-fx-font-size: 13px; -fx-text-fill: #777777;" />
-
             <Label text="Commentaire Modéré:" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-            <TextArea fx:id="proposedCommentTextArea"
-                      editable="false"
-                      wrapText="true"
+            <TextArea fx:id="editableCommentTextArea"
                       prefHeight="100.0"
                       prefWidth="200.0"
-                      style="-fx-font-size: 13px; -fx-text-fill: #333333; -fx-border-color: #cccccc; -fx-padding: 5;"/>
+                      promptText="Edit the comment here"
+                      wrapText="true"/>
         </VBox>
         <HBox alignment="CENTER_RIGHT" spacing="15.0"
               AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">

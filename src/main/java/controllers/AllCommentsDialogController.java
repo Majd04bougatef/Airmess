@@ -13,7 +13,7 @@ public class AllCommentsDialogController {
     private VBox commentsContainer;
 
     public void setComments(List<Commentaire> comments) {
-        commentsContainer.getChildren().clear(); // Clear existing comments
+        commentsContainer.getChildren().clear();
 
         for (Commentaire comment : comments) {
             Label commentLabel = new Label(comment.getDescription());

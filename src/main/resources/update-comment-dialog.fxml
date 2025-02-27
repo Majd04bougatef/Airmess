@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="@css/SocialMediaview.css"
+      fx:controller="controllers.UpdateCommentDialogController"
+      spacing="10"
+      styleClass="update-comment-dialog">
+
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <Label text="Modifier le commentaire:" styleClass="dialog-title"/>
+    <TextArea fx:id="commentTextArea"
+              promptText="Entrez le nouveau texte ici"
+              wrapText="true"
+              styleClass="comment-text-area"/>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button text="Annuler" onAction="#handleCancel" styleClass="cancel-button"/>
+        <Button text="Mettre à jour" onAction="#handleUpdate" styleClass="update-button"/>
+    </HBox>
+</VBox>

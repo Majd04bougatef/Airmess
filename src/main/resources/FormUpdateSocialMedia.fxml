@@ -20,15 +20,15 @@
                 <Text fx:id="textTitre" layoutX="66.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titre" wrappingWidth="37.70703125" />
                 <TextField fx:id="Titre" layoutX="66.0" layoutY="124.0" prefHeight="35.0" prefWidth="194.0" promptText="Entrez un titre" />
 
-                <Text fx:id="textTitre2" layoutX="66.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contenu" wrappingWidth="87.70703125" />
-                <TextField fx:id="contenu" layoutX="66.0" layoutY="206.0" prefHeight="34.0" prefWidth="400.0" promptText="Entrez votre contenu" />
+                <Text fx:id="textTitre2" layoutX="59.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contenu" wrappingWidth="87.70703125" />
+                <TextField fx:id="contenu" layoutX="52.0" layoutY="199.0" prefHeight="136.0" prefWidth="387.0" promptText="Entrez votre contenu" />
 
-                <Text fx:id="textTitre1" layoutX="66.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lieu" wrappingWidth="96.70703125" />
-                <TextField fx:id="Lieu" layoutX="66.0" layoutY="291.0" prefHeight="35.0" prefWidth="384.0" promptText="Entrez le lieu" />
+                <Text fx:id="textTitre1" layoutX="55.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lieu" wrappingWidth="96.70703125" />
+                <TextField fx:id="Lieu" layoutX="52.0" layoutY="380.0" prefHeight="35.0" prefWidth="384.0" promptText="Entrez le lieu" />
 
                 <Button layoutX="66.0" layoutY="504.0" mnemonicParsing="false" onAction="#bttnUpdate" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Mettre à jour" />
-                <Button layoutX="212.0" layoutY="459.0" mnemonicParsing="false" onAction="#ajoutimage" prefHeight="25.0" prefWidth="134.0" text="Changer l'image" />
-                <ImageView fx:id="image" fitHeight="132.0" fitWidth="134.0" layoutX="66.0" layoutY="352.0" pickOnBounds="true" preserveRatio="true" />
+                <Button layoutX="698.0" layoutY="340.0" mnemonicParsing="false" onAction="#ajoutimage" prefHeight="25.0" prefWidth="134.0" text="Changer l'image" />
+                <ImageView fx:id="image" fitHeight="200.0" fitWidth="228.0" layoutX="591.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
             </children>
         </Pane>
     </children>
