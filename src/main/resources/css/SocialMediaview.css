@@ -1,8 +1,11 @@
-/* ======== Style général ======== */
+/* ==================== General Styles ==================== */
 AnchorPane {
-    -fx-background-color: #f5f5f5; /* Light gray background */
+
+    -fx-background-color: #E9F7EF; /* Soft mint background */
+
 }
 
+/* --- Scroll Pane --- */
 .scroll-pane {
     -fx-background-color: transparent;
 }
@@ -11,160 +14,191 @@ AnchorPane {
     -fx-background-color: transparent;
 }
 
+/* ==================== Post Styles ==================== */
 .post-box {
-    -fx-background-color: #ffffff; /* White card background */
-    -fx-padding: 15px;
-    -fx-background-radius: 15px; /* More rounded corners */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5); /* Softer shadow */
-    -fx-border-radius: 15px; /* Match background radius */
+    -fx-background-color: #FFFFFF; /* White card background */
+    -fx-padding: 20px; /* Increased padding for a more spacious feel */
+    -fx-background-radius: 22px; /* Slightly more rounded corners */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 14, 0, 0, 7); /* Subtler shadow */
+    -fx-border-radius: 22px; /* Match background radius */
+    -fx-border-width: 1px; /* Add a subtle border */
+    -fx-border-color: #D4E6F1; /* Light blue border color */
+
 }
 
+/* --- Title Container --- */
 .title-container {
     -fx-alignment: center-left;
-    -fx-padding: 0 0 10px 0; /* Space below title */
-    -fx-border-width: 0 0 1px 0; /* Bottom border */
-    -fx-border-color: #eee; /* Light border color */
+    -fx-padding: 0 0 14px 0; /* Increased space below title */
+    -fx-border-width: 0 0 2px 0; /* Use integer value */
+    -fx-border-color: #D0ECE7; /* Soft teal border color */
 }
 
 .title-label {
-    -fx-font-size: 20px; /* Slightly larger title */
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333; /* Darker title text */
+    -fx-font-size: 24px; /* More prominent title */
+    -fx-font-weight: 700; /* Bold font weight */
+    -fx-text-fill: #2E4053; /* Deep navy title text */
 }
 
+/* --- Content --- */
 .content-label {
-    -fx-font-size: 16px; /* Slightly larger content */
-    -fx-text-fill: #666666; /* Darker content text */
-    -fx-line-spacing: 4px; /* Improved readability */
+
+    -fx-font-size: 18px; /* Slightly larger content font */
+    -fx-text-fill: #34495E; /* Dark charcoal content text color */
+    -fx-line-spacing: 6px; /* Further improved readability */
+
 }
 
+/* --- Location and Date --- */
 .location-label,
 .date-label {
-    -fx-font-size: 13px;
-    -fx-text-fill: #888888;
-    -fx-padding: 3px 0; /* Add some padding */
+
+    -fx-font-size: 15px; /* Slightly larger */
+    -fx-text-fill: #5D6D7E; /* More sophisticated text color */
+    -fx-padding: 5px 0; /* Add some padding */
+
 }
 
-/* ======== Boutons ======== */
+/* ==================== Buttons ==================== */
+/* --- General Button Styling --- */
+.button { /* Apply to all buttons to provide a consistent base */
+    -fx-font-size: 16px; /* Standardized font size */
+    -fx-font-weight: 500; /* Medium font weight */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 3); /* Subtle shadow */
+    -fx-cursor: hand; /* Change cursor to hand */
+}
+
+/* --- Add Button --- */
 .add-button {
-    -fx-background-color: #546e7a; /* Darker blue-gray */
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-background-radius: 25px; /* More rounded */
-    -fx-padding: 8px 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+
+    -fx-background-color: #A3D9FF; /* Light sky blue */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-background-radius: 30px; /* More rounded */
+    -fx-padding: 12px 28px; /* Adjusted padding */
 }
 
 .add-button:hover {
-    -fx-background-color: #455a64; /* Darken on hover */
+    -fx-background-color: #7FB3D5; /* Medium sky blue on hover */
+    -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
+
 }
 
+/* --- Like Button --- */
 .like-button {
-    -fx-background-color: #e91e63; /* Pink color */
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-background-radius: 25px; /* More rounded */
-    -fx-padding: 5px 15px;
+
+    -fx-background-color: #FFBABA; /* Light coral */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-background-radius: 30px; /* More rounded */
+    -fx-padding: 8px 20px; /* Adjusted padding */
 }
 
 .like-button:hover {
-    -fx-background-color: #c2185b; /* Darken on hover */
+    -fx-background-color: #F1948A; /* Medium coral on hover */
+    -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
 }
 
+/* --- Update and Delete Buttons --- */
 .update-button,
 .delete-button {
-    -fx-background-color: #607d8b; /* Blue-gray */
-    -fx-text-fill: white;
-    -fx-background-radius: 8px; /* Slightly rounded */
-    -fx-padding: 5px 12px;
+    -fx-background-color: #AED6F1; /* Light periwinkle */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-background-radius: 12px; /* More rounded */
+    -fx-padding: 8px 16px; /* Adjusted padding */
 }
 
 .update-button:hover {
-    -fx-background-color: #455a64; /* Darken on hover */
+    -fx-background-color: #85C1E9; /* Medium periwinkle on hover */
+    -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
 }
 
 .delete-button:hover {
-    -fx-background-color: #b71c1c; /* Darken on hover */
+    -fx-background-color: #E6B0AA; /* Light rose on hover */
+    -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
+
 }
 
+/* ==================== Images ==================== */
 .post-image {
-    -fx-border-radius: 15px; /* Match post-box radius */
-    -fx-fit-height: 250px;
+    -fx-border-radius: 22px; /* Match post-box radius */
+    -fx-fit-height: 300px; /* Increased image height */
     -fx-fit-width: 100%;
     -fx-preserve-ratio: true;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2); /* Softer shadow */
 }
 
+/* ==================== Comment Styles ==================== */
 .update-comment-button,
 .delete-comment-button {
-    -fx-background-color: #78909c; /* Light blue-gray */
-    -fx-text-fill: white;
-    -fx-background-radius: 8px; /* Slightly rounded */
-    -fx-padding: 5px 10px;
-    -fx-font-size: 13px;
+    -fx-background-color: #CCD1D1; /* Light gray */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-background-radius: 12px; /* More rounded */
+    -fx-padding: 7px 14px; /* Adjusted padding */
+    -fx-font-size: 15px; /* Slightly larger font */
 }
 
 .update-comment-button:hover,
 .delete-comment-button:hover {
-    -fx-background-color: #455a64; /* Darken on hover */
+    -fx-background-color: #B2BABB; /* Medium gray on hover */
+    -fx-text-fill: #1B2631; /* Even darker charcoal on hover */
 }
 
 .comment-label {
-    -fx-font-size: 15px;
-    -fx-text-fill: #444;
-    -fx-padding: 8px; /* Add some padding */
+    -fx-font-size: 17px; /* Slightly larger */
+    -fx-text-fill: #34495E; /* Refined color */
+    -fx-padding: 12px; /* Add more padding */
 }
 
 .comment-box {
-    -fx-border-color: #cfd8dc; /* Light border color */
-    -fx-border-width: 1px;
-    -fx-padding: 12px;
-    -fx-background-radius: 8px; /* Slightly rounded */
-    -fx-background-color: #f0f4f7; /* Very light gray */
+    -fx-border-color: #D6EAF8; /* Lighter border color */
+    -fx-border-width: 1px; /* Use integer value */
+    -fx-padding: 16px; /* Increased padding */
+    -fx-background-radius: 12px; /* More rounded */
+    -fx-background-color: #EBF5FB; /* Very light blue */
 }
 
 #commentList {
-    -fx-border-color: #b0bec5; /* Slightly darker border */
-    -fx-padding: 12px;
+    -fx-border-color: #BDC3C7; /* Slightly darker border */
+    -fx-padding: 16px; /* Increased padding */
 }
 
+/* --- Username --- */
 .username-label {
-    -fx-font-weight: bold;
-    -fx-text-fill: #546e7a; /* Darker blue-gray */
+    -fx-font-size: 18px; /* Slightly larger */
+    -fx-font-weight: 700; /* Bold */
+    -fx-text-fill: #34495E; /* Darker blue-gray */
 }
 
+/* --- Comment Button --- */
 .comment-button{
-    -fx-background-color: #546e7a; /* Darker blue-gray */
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-background-radius: 25px; /* More rounded */
-    -fx-padding: 8px 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-color: #A3D9FF; /* Light sky blue */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-font-size: 17px;
+    -fx-background-radius: 30px; /* More rounded */
+    -fx-padding: 12px 28px; /* Adjusted padding */
 }
 
+/* --- See All Comments Button --- */
 .see-all-comments-button{
-    -fx-background-color: #546e7a; /* Darker blue-gray */
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-background-radius: 25px; /* More rounded */
-    -fx-padding: 8px 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-color: #A3D9FF; /* Light sky blue */
+    -fx-text-fill: #212F3D; /* Dark charcoal text */
+    -fx-font-size: 17px;
+    -fx-background-radius: 30px; /* More rounded */
+    -fx-padding: 12px 28px; /* Adjusted padding */
 }
 
-
-
+/* ==================== All Comments Dialog ==================== */
 .all-comments-dialog .dialog-pane {
-    -fx-background-color: #f5f5f5;
+    -fx-background-color: #E9F7EF; /* Lighter background */
 }
 
 .all-comments-dialog .header-panel {
-    -fx-background-color: #3f51b5;
-    -fx-padding: 10;
+    -fx-background-color: #283747; /* Darker header */
+    -fx-padding: 14px; /* Slightly more padding */
 }
 
 .all-comments-dialog .header-panel .label {
     -fx-text-fill: white;
-    -fx-font-size: 18;
+    -fx-font-size: 22; /* Larger header font */
 }
 
 .all-comments-dialog .content .scroll-pane {
@@ -176,12 +210,78 @@ AnchorPane {
 }
 
 .all-comments-dialog .content .scroll-pane .content .vbox {
-    -fx-padding: 10;
-    -fx-spacing: 10;
+    -fx-padding: 14px; /* Slightly more padding */
+    -fx-spacing: 14px; /* Slightly more spacing */
 }
 
 .all-comments-dialog .content .scroll-pane .content .vbox .label {
-    -fx-font-size: 14;
-    -fx-text-fill: #333;
+    -fx-font-size: 16px; /* Refined font size */
+    -fx-text-fill: #34495E; /* Refined text color */
     -fx-wrap-text: true;
+}
+
+/* ==================== Update Comment Dialog ==================== */
+.update-comment-dialog {
+    -fx-background-color: #E9F7EF; /* Lighter */
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* A more modern font */
+}
+
+.dialog-title {
+    -fx-font-size: 22px; /* Larger */
+    -fx-font-weight: 700; /* Bold */
+    -fx-text-fill: #283747; /* Darker */
+}
+
+.comment-text-area {
+    -fx-font-size: 16px; /* Larger */
+    -fx-text-fill: #34495E; /* Refined color */
+    -fx-border-color: #D0D3D4; /* Lighter border */
+    -fx-border-radius: 10px; /* More rounded */
+    -fx-padding: 12px; /* More padding */
+    -fx-background-color: white;
+}
+
+.update-button {
+    -fx-background-color: #58D68D; /* Muted green */
+    -fx-text-fill: #212F3D; /* Dark charcoal */
+    -fx-font-size: 16px; /* Consistent */
+    -fx-padding: 12px 24px; /* More padding */
+    -fx-background-radius: 10px; /* Rounded */
+}
+
+.update-button:hover {
+    -fx-background-color: #4CAF50; /* Darken */
+}
+
+.cancel-button {
+    -fx-background-color: #EC7063; /* Muted red */
+    -fx-text-fill: #212F3D; /* Dark charcoal */
+    -fx-font-size: 16px; /* Consistent */
+    -fx-padding: 12px 24px; /* More padding */
+    -fx-background-radius: 10px; /* Rounded */
+}
+
+.cancel-button:hover {
+    -fx-background-color: #E74C3C; /* Darken */
+}
+
+.button-bar {
+    -fx-padding: 5px;
+    -fx-spacing: 10px;
+}
+
+.post-image {
+    -fx-border-radius: 15px; /* Match post-box radius */
+    -fx-fit-width: 200px;
+    -fx-fit-height: 200px;
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.default-post-image {
+    -fx-border-radius: 15px; /* Match post-box radius */
+    -fx-fit-width: 200px;
+    -fx-fit-height: 200px;
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }

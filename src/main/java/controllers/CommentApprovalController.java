@@ -4,8 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import models.Commentaire;
 
 public class CommentApprovalController {
 
@@ -13,13 +13,13 @@ public class CommentApprovalController {
     private Label originalCommentLabel;
 
     @FXML
-    private Label proposedCommentLabel;
+    private TextArea editableCommentTextArea;
 
     private boolean approved = false;
 
     public void setCommentData(String original, String proposed) {
         originalCommentLabel.setText(original);
-        proposedCommentLabel.setText(proposed);
+        editableCommentTextArea.setText(proposed);
     }
 
     @FXML
@@ -38,6 +38,10 @@ public class CommentApprovalController {
         Node source = (Node) event.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+    public String getFinalComment() {
+        return editableCommentTextArea.getText();
     }
 
     public boolean isApproved() {

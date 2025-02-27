@@ -34,7 +34,6 @@ public class AiServices {
     }
 
     private String callGeminiApi(String content) throws IOException {
-
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -47,40 +46,33 @@ public class AiServices {
         contentObj.put("role", "user");
         JSONArray parts = new JSONArray();
         JSONObject part = new JSONObject();
-        part.put("text", "Please rewrite the following text to remove any offensive, hateful, or inappropriate content. Keep the overall meaning as similar as possible to the original: " + content);
+
+        part.put("text", "Rewrite the following text to be perfectly grammatical and appropriate.  If the text is already perfect, rewrite it to be slightly more elegant or professional.  Return only the rewritten text: " + content);
+
         parts.put(part);
         contentObj.put("parts", parts);
         contents.put(contentObj);
 
         json.put("contents", contents);
 
-        JSONObject generationConfig = new JSONObject();
-        generationConfig.put("temperature", 0.7);
-        generationConfig.put("topP", 1.0);
-        generationConfig.put("topK", 50);
-        generationConfig.put("candidateCount", 1);
-        generationConfig.put("maxOutputTokens", 800);
-        generationConfig.put("presencePenalty", 0.0);
-        generationConfig.put("frequencyPenalty", 0.0);
-        generationConfig.put("stopSequences", new JSONArray());
-
-        json.put("generationConfig", generationConfig);
-
         RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json"));
 
         Request request = new Request.Builder()
-                .url(API_URL) // Use the new API_URL with the key
+                .url(API_URL)
                 .header("Content-Type", "application/json")
                 .post(body)
                 .build();
 
-
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("Erreur API Gemini : " + response.code() + " " + response.body().string()); //Included response code
+                throw new IOException("Erreur API Gemini : " + response.code() + " " + response.body().string());
             }
 
-            JSONObject responseBody = new JSONObject(response.body().string());
+            String responseString = response.body().string(); // Capture the raw response
+            System.out.println("Raw API Response: " + responseString); // Print the raw response
+            JSONObject responseBody = new JSONObject(responseString);
+
+         //   JSONObject responseBody = new JSONObject(response.body().string());
             JSONArray candidates = responseBody.getJSONArray("candidates");
 
             if (candidates != null && candidates.length() > 0) {
