@@ -17,6 +17,9 @@
         <!-- Arrière-plan -->
         <ImageView fitHeight="700" fitWidth="900" pickOnBounds="true" preserveRatio="false"/>
 
+        <!-- Add username label here: -->
+        <Label fx:id="username" layoutX="20.0" layoutY="20.0" text="Username" styleClass="username-label"/>
+
         <ScrollPane layoutX="50" layoutY="50" prefHeight="550" prefWidth="800"
                     styleClass="scroll-pane">
             <content>

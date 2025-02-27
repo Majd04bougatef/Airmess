@@ -53,9 +53,11 @@ public class FormAddSocialMedia {
 
 
     private int id_u;
+    private int userId;
 
     private final SocialMediaServices socialMediaServices = new SocialMediaServices() {};
     private final AiServices aiServices = new AiServices();
+
 
     @FXML
     public void initialize() {
@@ -63,7 +65,9 @@ public class FormAddSocialMedia {
     }
 
 
-
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     @FXML
     void ajoutimage(ActionEvent event) {
@@ -126,8 +130,8 @@ public class FormAddSocialMedia {
         socialMedia.setContenu(contenu.getText());
         socialMedia.setLieu(Lieu.getText());
         socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
-
-        socialMedia.setId_U(2);
+        socialMedia.setId_U(userId);
+      //  socialMedia.setId_U(2);
 
 
         if (imageName != null) {

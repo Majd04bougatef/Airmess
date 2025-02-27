@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import models.Commentaire;
 
@@ -13,13 +14,18 @@ public class CommentApprovalController {
     private Label originalCommentLabel;
 
     @FXML
-    private Label proposedCommentLabel;
+    private TextArea proposedCommentTextArea;
+
+    @FXML
+    private Label moderationExplanationLabel; // New Label
 
     private boolean approved = false;
 
-    public void setCommentData(String original, String proposed) {
-        originalCommentLabel.setText(original);
-        proposedCommentLabel.setText(proposed);
+    public void setCommentData(String original, String proposed, String explanation) {
+        originalCommentLabel.setText("Original Comment: " + original);
+        proposedCommentTextArea.setText(proposed);
+        moderationExplanationLabel.setText("Moderation Reason: " + explanation); // Set Explanation
+        proposedCommentTextArea.setEditable(false); // Prevent editing
     }
 
     @FXML

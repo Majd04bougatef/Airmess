@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-
 <AnchorPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="250.0"
+            prefHeight="350.0"
             prefWidth="500.0"
             style="-fx-background-color: #f5f5f5;"
             fx:controller="controllers.CommentApprovalController">
@@ -24,11 +19,19 @@
                    wrapText="true"
                    style="-fx-font-size: 13px; -fx-text-fill: #333333;" />
 
-            <Label text="Commentaire Modéré:" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-            <Label fx:id="proposedCommentLabel"
-                   text="Proposed comment here"
+            <Label text="Raison de la Modération:" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+            <Label fx:id="moderationExplanationLabel"
+                   text="Explanation will go here"
                    wrapText="true"
-                   style="-fx-font-size: 13px; -fx-text-fill: #333333;" />
+                   style="-fx-font-size: 13px; -fx-text-fill: #777777;" />
+
+            <Label text="Commentaire Modéré:" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+            <TextArea fx:id="proposedCommentTextArea"
+                      editable="false"
+                      wrapText="true"
+                      prefHeight="100.0"
+                      prefWidth="200.0"
+                      style="-fx-font-size: 13px; -fx-text-fill: #333333; -fx-border-color: #cccccc; -fx-padding: 5;"/>
         </VBox>
         <HBox alignment="CENTER_RIGHT" spacing="15.0"
               AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">

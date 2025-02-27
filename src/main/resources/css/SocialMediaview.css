@@ -185,3 +185,9 @@ AnchorPane {
     -fx-text-fill: #333;
     -fx-wrap-text: true;
 }
+
+.username-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}

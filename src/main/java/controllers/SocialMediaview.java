@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import javafx.scene.Node;
 import javafx.stage.Modality;
+import test.Session;
 
 public class SocialMediaview {
 
@@ -63,12 +65,31 @@ public class SocialMediaview {
     };
     private final UsersService usersService = new UsersService() {
     };
+
     private final CommentaireServices CommentaireServices = new CommentaireServices() {};
+    private Session session = Session.getInstance();
+
+
     private final AiServices aiServices = new AiServices();
 
     @FXML
     public void initialize() {
-        loadPosts();
+        Platform.runLater(() -> {
+            loadPosts();
+            loadUserData();
+        });
+    }
+
+    public void loadUserData() {
+        int userId = session.getId_U();
+        Users user = usersService.getById(userId);
+
+        if (user != null) {
+            username.setText(user.getName());
+        } else {
+            username.setText("Unknown User");
+            showAlert("Error", "Could not load User Data", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -96,13 +117,44 @@ public class SocialMediaview {
 
 
             Users user = usersService.getById(post.getId_U());
+
+            ImageView userImageView = new ImageView();
+            userImageView.setFitWidth(30);
+            userImageView.setFitHeight(30);
+            userImageView.setPreserveRatio(true);
+
+            String defaultImagePath = "src/main/resources/image/imagepardefaut.jpg";
+
+            if (user != null && user.getImagesU() != null && !user.getImagesU().isEmpty()) {
+                try {
+                    Image profileImage = new Image("file:/C:/xampp/htdocs/imguser/" + user.getImagesU());
+                    userImageView.setImage(profileImage);
+                } catch (Exception e) {
+                    System.err.println("Error loading profile image: " + e.getMessage());
+                    if (getClass().getResourceAsStream(defaultImagePath) != null) {
+                        Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
+                        userImageView.setImage(defaultImage);
+                    } else {
+                        System.err.println("Default profile image not found in resources!");
+                    }
+                }
+            } else {
+                if (getClass().getResourceAsStream(defaultImagePath) != null) {
+                    Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
+                    userImageView.setImage(defaultImage);
+                } else {
+                    System.err.println("Default profile image not found in resources!");
+                }
+            }
+
             Label usernameLabel = new Label(user != null ? "Posté par: " + user.getName() : "Posté par: Utilisateur inconnu");
             usernameLabel.getStyleClass().add("username-label");
 
-            postBox.getChildren().addAll(titleLabel, usernameLabel, contentLabel,dateLabel,locationLabel);
+            HBox userHeader = new HBox(10);
+            userHeader.setAlignment(Pos.CENTER_LEFT);
+            userHeader.getChildren().addAll(userImageView, usernameLabel);
 
-
-
+            postBox.getChildren().addAll(titleLabel, userHeader, contentLabel, dateLabel, locationLabel);
 
             if (post.getImagemedia() != null && !post.getImagemedia().isEmpty()) {
                 Image postImage = new Image("file:/C:/xampp/htdocs/ImageSocialMedia/" + post.getImagemedia());
@@ -120,17 +172,21 @@ public class SocialMediaview {
             likeButton.setUserData(post);
             likeButton.setOnAction(event -> handleLike(event));
 
-            Button updateButton = new Button("Update");
-            updateButton.getStyleClass().add("update-button");
-            updateButton.setUserData(post);
-            updateButton.setOnAction(this::handleUpdate);
+            if (post.getId_U() == session.getId_U()) {
+                Button updateButton = new Button("Update");
+                updateButton.getStyleClass().add("update-button");
+                updateButton.setUserData(post);
+                updateButton.setOnAction(this::handleUpdate);
 
-            Button deleteButton = new Button("Delete");
-            deleteButton.getStyleClass().add("delete-button");
-            deleteButton.setUserData(post);
-            deleteButton.setOnAction(this::handleDelete);
+                Button deleteButton = new Button("Delete");
+                deleteButton.getStyleClass().add("delete-button");
+                deleteButton.setUserData(post);
+                deleteButton.setOnAction(this::handleDelete);
 
-            buttonBox.getChildren().addAll(likeButton, updateButton, deleteButton);
+                buttonBox.getChildren().addAll(likeButton, updateButton, deleteButton);
+            } else {
+                buttonBox.getChildren().addAll(likeButton);
+            }
             postBox.getChildren().add(buttonBox);
 
             Button commentButton = new Button("💬 Commenter");
@@ -172,6 +228,7 @@ public class SocialMediaview {
 
             FormAddSocialMedia formAddController = loader.getController();
             formAddController.setSocialMediaViewController(this);
+            formAddController.setUserId(session.getId_U());
 
             Scene scene = new Scene(formAddPane);
             Stage stage = new Stage();
@@ -216,11 +273,17 @@ public class SocialMediaview {
     }
 
     @FXML
+
     void handleDelete(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         SocialMedia postToDelete = (SocialMedia) sourceButton.getUserData();
 
         if (postToDelete != null) {
+            if (postToDelete.getId_U() != session.getId_U()) {
+                showAlert("Permission Denied", "You do not have permission to delete this post.", Alert.AlertType.ERROR);
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Suppression de Publication");
             alert.setHeaderText("Êtes-vous sûr de vouloir supprimer cette publication ?");
@@ -248,7 +311,6 @@ public class SocialMediaview {
 
                         refreshPosts();
 
-
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Succès");
                         successAlert.setHeaderText("La publication a été supprimée avec succès.");
@@ -267,27 +329,35 @@ public class SocialMediaview {
             });
         }
     }
-
-
     @FXML
     void handleUpdate(ActionEvent event) {
-        try {
-            Button sourceButton = (Button) event.getSource();
-            SocialMedia postToUpdate = (SocialMedia) sourceButton.getUserData();
+        Button sourceButton = (Button) event.getSource();
+        SocialMedia postToUpdate = (SocialMedia) sourceButton.getUserData();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormUpdateSocialMedia.fxml"));
-            AnchorPane updatePane = loader.load();
+        if (postToUpdate != null) {
+            if (postToUpdate.getId_U() != session.getId_U()) {
+                showAlert("Permission Denied", "You do not have permission to update this post.", Alert.AlertType.ERROR);
+                return;
+            }
 
-            FormUpdateSocialMedia controller = loader.getController();
-            controller.setPostData(postToUpdate);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormUpdateSocialMedia.fxml"));
+                AnchorPane updatePane = loader.load();
 
-            Scene scene = new Scene(updatePane);
-            Stage stage = new Stage();
-            stage.setTitle("Modifier la publication");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+                FormUpdateSocialMedia controller = loader.getController();
+                controller.setPostData(postToUpdate);
+                //Ensure that you call this!
+                controller.setUserId(session.getId_U());
+
+                Scene scene = new Scene(updatePane);
+                Stage stage = new Stage();
+                stage.setTitle("Modifier la publication");
+                stage.setScene(scene);
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to load update form.", Alert.AlertType.ERROR);
+            }
         }
     }
 
@@ -382,7 +452,7 @@ public class SocialMediaview {
 
         Commentaire commentaire = new Commentaire();
         commentaire.setIdEB(post.getIdEB());
-        commentaire.setId_U(1);
+        commentaire.setId_U(session.getId_U());
         commentaire.setDescription(originalCommentText);
         commentaire.setProposedDescription(originalCommentText);
         commentaire.setNumberLike(0);
@@ -396,11 +466,11 @@ public class SocialMediaview {
 
     private boolean showApprovalDialog(String original, String proposed) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentApproval.fxml"));
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentApproval.fxml"));
             Parent root = loader.load();
-
             CommentApprovalController controller = loader.getController();
-            controller.setCommentData(original, proposed);
+            String explanation = "This comment was flagged for potentially containing offensive language.  The AI suggests the above change.";
+            controller.setCommentData(original, proposed, explanation);
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -409,12 +479,13 @@ public class SocialMediaview {
             stage.showAndWait();
 
             return controller.isApproved();
-        } catch (IOException e) {
-            System.err.println("Error loading CommentApproval.fxml: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+        }  catch (IOException e) {
+        System.err.println("Error loading CommentApproval.fxml: " + e.getMessage());
+        e.printStackTrace();
+        showAlert("Error", "Failed to display comment approval dialog.", Alert.AlertType.ERROR);
+        return false;
     }
+}
 
     public void refreshCommentList(VBox commentList, int postId) {
         commentList.getChildren().clear();
@@ -422,38 +493,62 @@ public class SocialMediaview {
         List<Commentaire> commentaires = CommentaireServices.getAllWithPostDetails(postId);
 
         for (Commentaire commentaire : commentaires) {
-            if (commentaire.getIdEB() == postId && commentaire.isApproved())  {
+            Users user = usersService.getById(commentaire.getId_U());
+            if (commentaire.getIdEB() == postId && commentaire.isApproved()) {
                 HBox commentBox = new HBox(10);
                 commentBox.setAlignment(Pos.CENTER_LEFT);
                 commentBox.setUserData(commentaire);
 
+                ImageView userImageView = new ImageView();
+                userImageView.setFitWidth(20);
+                userImageView.setFitHeight(20);
+                userImageView.setPreserveRatio(true);
+
+                if (user != null && user.getImagesU() != null && !user.getImagesU().isEmpty()) {
+                    Image profileImage = new Image("file:/C:/xampp/htdocs/ImageSocialMedia/" + user.getImagesU());
+                    userImageView.setImage(profileImage);
+                } else {
+                    Image defaultImage = new Image("/path/to/default/profile/image.png");
+                    userImageView.setImage(defaultImage);
+                }
+
+                VBox commentContent = new VBox();
+                Label usernameLabel = new Label(user != null ? user.getName() + ":" : "Unknown User:");
+                usernameLabel.setStyle("-fx-font-weight: bold;");
                 Label commentLabel = new Label(commentaire.getDescription());
-                commentLabel.getStyleClass().add("comment-label");
 
-                Button updateButton = new Button("Modifier");
-                updateButton.getStyleClass().add("update-comment-button");
-                updateButton.setOnAction(this::handleUpdateComment);
+                commentContent.getChildren().addAll(usernameLabel, commentLabel);
 
-                Button deleteButton = new Button("Supprimer");
-                deleteButton.getStyleClass().add("delete-comment-button");
-                deleteButton.setOnAction(this::handleDeleteComment);
-
-                updateButton.setPrefSize(60, 25);
-                deleteButton.setPrefSize(60, 25);
-
-                Region spacer = new Region();
-                HBox.setHgrow(spacer, Priority.ALWAYS);
+                HBox commentHeader = new HBox(5);
+                commentHeader.getChildren().addAll(userImageView, commentContent);
 
 
-                commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
+
+                if (commentaire.getId_U() == session.getId_U()) {
+                    Button updateButton = new Button("Modifier");
+                    updateButton.getStyleClass().add("update-comment-button");
+                    updateButton.setOnAction(this::handleUpdateComment);
+
+                    Button deleteButton = new Button("Supprimer");
+                    deleteButton.getStyleClass().add("delete-comment-button");
+                    deleteButton.setOnAction(this::handleDeleteComment);
+
+                    updateButton.setPrefSize(60, 25);
+                    deleteButton.setPrefSize(60, 25);
+
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                    commentBox.getChildren().addAll(commentHeader, updateButton, deleteButton);
+
+                } else {
+                    commentBox.getChildren().addAll(commentHeader);
+                }
 
                 commentList.getChildren().add(commentBox);
             }
         }
     }
-
-
-
     @FXML
     private void handleUpdateComment(ActionEvent event) {
         HBox commentBox = (HBox) ((Button) event.getSource()).getParent();
