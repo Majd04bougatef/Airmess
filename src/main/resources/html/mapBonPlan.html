@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte OpenStreetMap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map { height: 100%; width: 100%; }
+        body, html { margin: 0; padding: 0; height: 100%; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    // Initialisation de la carte
+    var map = L.map('map').setView([36.8065, 10.1815], 13); // Par défaut: Tunis
+
+    // Ajout du fond de carte OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var marker;
+
+    // Récupération des coordonnées lorsqu'on clique sur la carte
+    map.on('click', function (e) {
+        var lat = e.latlng.lat.toFixed(6);
+        var lng = e.latlng.lng.toFixed(6);
+
+        // Suppression du marqueur précédent s'il existe
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        // Ajout d'un nouveau marqueur
+        marker = L.marker([lat, lng]).addTo(map);
+
+        // Envoi des coordonnées à JavaFX via WebView
+        if (window.javafx) {
+            window.javafx.sendCoordinates(lat, lng);
+        }
+    });
+</script>
+
+</body>
+</html>

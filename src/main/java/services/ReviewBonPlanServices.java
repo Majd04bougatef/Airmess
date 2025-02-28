@@ -171,6 +171,16 @@ public abstract class ReviewBonPlanServices implements GlobalInterface<ReviewBon
         }
         return comments;
     }
+    public int getAverageRating(int bonPlanId) {
+        List<ReviewBonplan> reviews = getCommentsByBonPlan(bonPlanId);
+        if (reviews.isEmpty()) return 0;
 
+        int totalRating = 0;
+        for (ReviewBonplan review : reviews) {
+            totalRating += review.getRating();
+        }
+
+        return Math.round((float) totalRating / reviews.size());
+    }
 
 }

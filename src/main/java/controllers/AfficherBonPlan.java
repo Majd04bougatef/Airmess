@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,32 +9,44 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.bonplan;
-import services.BonPlanServices;
 import models.ReviewBonplan;
+import services.BonPlanServices;
 import services.ReviewBonPlanServices;
 import javafx.geometry.Pos;
-import java.io.IOException;
-import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.scene.shape.Rectangle;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class AfficherBonPlan {
 
     @FXML
     private FlowPane flowPaneBonPlans;
+    @FXML
+    private AnchorPane centralAnchorPane; // Assurez-vous que cette variable est bien déclarée
+
+
+    public void setCentralAnchorPane(AnchorPane anchorPane) {
+        this.centralAnchorPane = anchorPane;
+    }
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
+    private final ReviewBonPlanServices reviewService = new ReviewBonPlanServices(){};
+
 
     @FXML
     public void initialize() {
         loadBonPlans();
     }
+
 
     private void loadBonPlans() {
         List<bonplan> bonPlansList = bonPlanServices.getAll();
@@ -46,10 +59,12 @@ public class AfficherBonPlan {
 
         flowPaneBonPlans.setPrefWrapLength(900);
     }
-
     private VBox createBonPlanCard(bonplan bp) {
-        VBox card = new VBox();
+        VBox card = new VBox(10);
         card.getStyleClass().add("bonplan-card");
+        card.setPadding(new Insets(15));
+        card.setAlignment(Pos.CENTER);
+        card.setPrefWidth(250);
 
         // Image du Bon Plan
         ImageView imageView = new ImageView();
@@ -61,65 +76,148 @@ public class AfficherBonPlan {
                 imageView.setImage(new Image(file.toURI().toString()));
             }
         }
+        makeImageRounded(imageView);
 
+        // Labels
         Label nomLabel = new Label("Nom: " + bp.getNomplace());
         Label descLabel = new Label("Description: " + bp.getDescription());
         Label locLabel = new Label("Localisation: " + bp.getLocalisation());
         Label typeLabel = new Label("Type: " + bp.getTypePlace());
 
-
-        Button updateButton = new Button("Modifier");
-        updateButton.getStyleClass().add("update-button");
-        updateButton.setOnAction(event -> openUpdateForm(bp));
-
-        Button deleteButton = new Button("Supprimer");
-        deleteButton.getStyleClass().add("delete-button");
-        deleteButton.setOnAction(event -> deleteBonPlan(bp, card));
-
-        HBox buttonBox = new HBox(10, updateButton, deleteButton);
-        buttonBox.getStyleClass().add("hbox-buttons");
-
         Separator separator = new Separator();
-        separator.setPrefHeight(1);
-        separator.setStyle("-fx-background-color: #dddddd; -fx-padding: 5px;");
 
-        //  Commentaires
-        VBox commentsSection = new VBox();
-        commentsSection.getStyleClass().add("comments-section");
-        loadComments(bp.getIdP(), commentsSection);
+        // Menu Bouton pour Modifier/Supprimer
+        MenuButton menuButton = new MenuButton("⋮");
+        menuButton.getStyleClass().add("menu-button");
+        MenuItem editItem = new MenuItem("Modifier");
+        MenuItem deleteItem = new MenuItem("Supprimer");
 
+        editItem.setOnAction(event -> openUpdateForm(bp));
+        deleteItem.setOnAction(event -> deleteBonPlan(bp));
+
+        menuButton.getItems().addAll(editItem, deleteItem);
+
+        HBox menuBox = new HBox(menuButton);
+        menuBox.setAlignment(Pos.TOP_RIGHT);
+
+        // 🔹 Vérifier si l'utilisateur a déjà noté
+        int userId = 1; // Remplace avec l'ID de l'utilisateur connecté
+        boolean alreadyRated = hasUserAlreadyRated(userId, bp.getIdP());
+
+        // 🔹 Champ de commentaire
         TextArea commentField = new TextArea();
         commentField.setPromptText("Ajouter un commentaire...");
         commentField.setPrefRowCount(2);
         commentField.getStyleClass().add("comment-field");
 
+        // 🔹 Système de notation dynamique avec étoiles
         ChoiceBox<Integer> ratingBox = new ChoiceBox<>();
-        ratingBox.getItems().addAll(1, 2, 3, 4, 5);
-        ratingBox.setValue(5);
+        HBox interactiveStars = createInteractiveStars(ratingBox);
+        ratingBox.setDisable(alreadyRated); // Désactiver les étoiles après un premier vote
 
+        // 🔹 Section des commentaires (DÉCLARATION AVANT UTILISATION)
+        VBox commentsSection = new VBox(5);
+        commentsSection.getStyleClass().add("comments-section");
+        loadComments(bp.getIdP(), commentsSection); // Charger les commentaires ici
+
+        // 🔹 Bouton d'ajout de commentaire (toujours actif)
         Button addCommentButton = new Button("Envoyer");
         addCommentButton.getStyleClass().add("add-comment-button");
+
         addCommentButton.setOnAction(event -> {
             String commentText = commentField.getText().trim();
-            Integer rating = ratingBox.getValue();
+            Integer rating = ratingBox.getValue();  // Récupérer la valeur du rating sélectionné
 
-            if (!commentText.isEmpty() && rating != null) {
-                ReviewBonplan newReview = new ReviewBonplan(1, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
-                ReviewBonPlanServices reviewService = new ReviewBonPlanServices(){};
-                reviewService.add(newReview);
+            if (!commentText.isEmpty()) {
+                // Si un rating est sélectionné
+                if (rating != null && rating > 0) {
+                    // Ajouter un commentaire avec la note
+                    ReviewBonplan newReview = new ReviewBonplan(userId, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
+                    reviewService.add(newReview);
+                } else {
+                    // Ajouter un commentaire sans rating (rating = 0)
+                    ReviewBonplan newComment = new ReviewBonplan(userId, bp.getIdP(), 0, commentText, java.time.LocalDateTime.now());
+                    reviewService.add(newComment);
+                }
+
+                // Recharger les commentaires après l'ajout
                 loadComments(bp.getIdP(), commentsSection);
                 commentField.clear();
+                ratingBox.setValue(null);  // Réinitialiser le rating après l'envoi
+            } else {
+                showAlert("Erreur", "Veuillez entrer un commentaire.");
             }
         });
+        // 🔹 Afficher la moyenne des ratings avec des étoiles
+        int averageRating = reviewService.getAverageRating(bp.getIdP());
+        HBox starRating = createStarRating(averageRating);
 
-        HBox commentBox = new HBox(10);
-        commentBox.getChildren().addAll(commentField, ratingBox, addCommentButton);
+        // 🔹 Organisation des éléments dans la carte
+        HBox commentBox = new HBox(10, commentField, addCommentButton);
         commentBox.setAlignment(Pos.CENTER_LEFT);
 
-        card.getChildren().addAll(imageView, nomLabel, descLabel, locLabel, typeLabel, buttonBox, separator, commentsSection, commentBox);
+        card.getChildren().addAll(
+                menuBox, imageView, nomLabel, descLabel, locLabel, typeLabel,
+                interactiveStars, separator, commentsSection, commentBox
+        );
+
         return card;
     }
 
+
+
+
+    // 🔹 Fonction mise à jour pour charger les commentaires
+    private void loadComments(int bonPlanId, VBox commentsSection) {
+        commentsSection.getChildren().clear();
+        List<ReviewBonplan> comments = reviewService.getCommentsByBonPlan(bonPlanId);
+
+        for (ReviewBonplan review : comments) {
+            HBox commentContainer = new HBox(10);
+            commentContainer.setAlignment(Pos.CENTER_LEFT);
+
+            Label commentLabel = new Label("⭐ " + review.getRating() + " - " + review.getCommente());
+            commentLabel.setWrapText(true);
+            commentLabel.getStyleClass().add("comment-text");
+
+            MenuButton menuButton = new MenuButton("⋮");
+            menuButton.getStyleClass().add("menu-button");
+            MenuItem editItem = new MenuItem("Modifier");
+            MenuItem deleteItem = new MenuItem("Supprimer");
+
+            editItem.setOnAction(event -> openEditCommentDialog(review, commentsSection));
+            deleteItem.setOnAction(event -> deleteComment(review, commentsSection));
+
+            menuButton.getItems().addAll(editItem, deleteItem);
+
+            commentContainer.getChildren().addAll(commentLabel, menuButton);
+            commentsSection.getChildren().add(commentContainer);
+        }
+    }
+
+    private void deleteComment(ReviewBonplan review, VBox commentsSection) {
+        reviewService.delete(review);
+        loadComments(review.getIdP(), commentsSection);
+    }
+
+    private void openEditCommentDialog(ReviewBonplan review, VBox commentsSection) {
+        TextField editField = new TextField(review.getCommente());
+        Button saveButton = new Button("Enregistrer");
+
+        saveButton.setOnAction(e -> {
+            review.setCommente(editField.getText());
+            reviewService.update(review);
+            loadComments(review.getIdP(), commentsSection);
+        });
+
+        VBox editBox = new VBox(5, editField, saveButton);
+        commentsSection.getChildren().add(editBox);
+    }
+
+    private void deleteBonPlan(bonplan bp) {
+        bonPlanServices.delete(bp);
+        refreshBonPlanList();
+    }
 
     private void openUpdateForm(bonplan bp) {
         try {
@@ -132,36 +230,13 @@ public class AfficherBonPlan {
             Stage stage = new Stage();
             stage.setTitle("Modifier Bon Plan");
             stage.setScene(new Scene(root));
-
             stage.setOnHidden(event -> refreshBonPlanList());
-
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    private void deleteBonPlan(bonplan bp, VBox card) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Voulez-vous vraiment supprimer ce bon plan ?");
-        alert.setContentText("Cette action est irréversible.");
-
-        alert.showAndWait().ifPresent(response -> {
-
-            bonPlanServices.delete(bp);
-
-            flowPaneBonPlans.getChildren().remove(card);
-
-
-            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-            successAlert.setTitle("Suppression réussie");
-            successAlert.setHeaderText(null);
-            successAlert.setContentText("Le bon plan a été supprimé avec succès !");
-            successAlert.show();
-        });
-    }
     public void refreshBonPlanList() {
         flowPaneBonPlans.getChildren().clear();
         List<bonplan> bonPlansList = bonPlanServices.getAll();
@@ -169,57 +244,94 @@ public class AfficherBonPlan {
             flowPaneBonPlans.getChildren().add(createBonPlanCard(bp));
         }
     }
-    private void loadComments(int idP, VBox commentsSection) {
-        commentsSection.getChildren().clear();
 
-        ReviewBonPlanServices reviewService = new ReviewBonPlanServices() {};
-        List<ReviewBonplan> comments = reviewService.getCommentsByBonPlan(idP);
+    private void makeImageRounded(ImageView imageView) {
+        Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+        clip.setArcWidth(40);
+        clip.setArcHeight(40);
+        imageView.setClip(clip);
+    }
 
-        for (ReviewBonplan review : comments) {
-            HBox commentBox = new HBox(10);
-            commentBox.setAlignment(Pos.CENTER_LEFT);
-
-            Label commentLabel = new Label("⭐ " + review.getRating() + " - " + review.getCommente());
-            commentLabel.setWrapText(true);
-
-            Button editButton = new Button("Modifier");
-            Button deleteButton = new Button("Supprimer");
-
-
-            deleteButton.setOnAction(event -> {
-                reviewService.delete(review);
-                commentsSection.getChildren().remove(commentBox);
-            });
-
-
-            editButton.setOnAction(event -> {
-                TextField editField = new TextField(review.getCommente());
-                Button saveButton = new Button("Enregistrer");
-
-                saveButton.setOnAction(e -> {
-                    review.setCommente(editField.getText());
-                    reviewService.update(review);
-                    commentLabel.setText("⭐ " + review.getRating() + " - " + review.getCommente());
-
-                    commentBox.getChildren().setAll(commentLabel, editButton, deleteButton);
-                });
-
-                commentBox.getChildren().setAll(editField, saveButton);
-            });
-
-            commentBox.getChildren().addAll(commentLabel, editButton, deleteButton);
-            commentsSection.getChildren().add(commentBox);
-        }
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
     @FXML
-    void showAddBonPlan(ActionEvent event) {
+    private void showAddBonPlan() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddBonPlan.fxml"));
-            Parent addBonPlanPage = loader.load();
+            Parent addBonPlan = loader.load();
 
-            ((Node) event.getSource()).getScene().setRoot(addBonPlanPage);
+            // Effacer le contenu actuel et afficher le formulaire dans centralAnchorPane
+            centralAnchorPane.getChildren().clear();
+            centralAnchorPane.getChildren().add(addBonPlan);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    private HBox createStarRating(int rating) {
+        HBox starBox = new HBox(2); // Espacement entre les étoiles
+        starBox.setAlignment(Pos.CENTER_LEFT);
+
+        for (int i = 1; i <= 5; i++) {
+            Label star = new Label(i <= rating ? "★" : "☆"); // Remplit selon le rating
+            star.setStyle("-fx-font-size: 18px; -fx-text-fill: gold;");
+            starBox.getChildren().add(star);
+        }
+
+        return starBox;
+    }
+    private HBox createInteractiveStars(ChoiceBox<Integer> ratingBox) {
+        HBox starBox = new HBox(5); // Espacement entre les étoiles
+        starBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label[] stars = new Label[5]; // 5 étoiles interactives
+
+        // On charge le rating actuel s'il y en a un
+        Integer currentRating = ratingBox.getValue();
+
+        for (int i = 0; i < 5; i++) {
+            final int ratingValue = i + 1; // Valeur de rating associée à chaque étoile
+            stars[i] = new Label("☆"); // Par défaut, étoile vide
+            stars[i].setStyle("-fx-font-size: 22px; -fx-text-fill: gray; -fx-cursor: hand;");
+
+            // Vérifiez si l'étoile est sélectionnée (remplie de jaune)
+            if (currentRating != null && currentRating >= ratingValue) {
+                stars[i].setStyle("-fx-font-size: 22px; -fx-text-fill: gold; -fx-cursor: hand;"); // Remplir les étoiles sélectionnées
+            }
+
+            // Ajouter un événement de clic sur l'étoile
+            stars[i].setOnMouseClicked(event -> {
+                // Mettre à jour l'affichage des étoiles
+                for (int j = 0; j < 5; j++) {
+                    if (j < ratingValue) {
+                        stars[j].setStyle("-fx-font-size: 22px; -fx-text-fill: gold; -fx-cursor: hand;"); // Remplir les étoiles sélectionnées
+                    } else {
+                        stars[j].setStyle("-fx-font-size: 22px; -fx-text-fill: gray; -fx-cursor: hand;"); // Vider les autres étoiles
+                    }
+                }
+
+                // Mettre la valeur sélectionnée dans le ChoiceBox
+                ratingBox.setValue(ratingValue);
+            });
+
+            starBox.getChildren().add(stars[i]);
+        }
+
+        return starBox;
+    }
+
+    private boolean hasUserAlreadyRated(int userId, int bonPlanId) {
+        List<ReviewBonplan> reviews = reviewService.getCommentsByBonPlan(bonPlanId);
+        for (ReviewBonplan review : reviews) {
+            if (review.getIdU() == userId) {
+                return true; // L'utilisateur a déjà noté ce bon plan
+            }
+        }
+        return false;
+    }
+
 }

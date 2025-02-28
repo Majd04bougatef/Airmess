@@ -6,13 +6,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="640.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FormAddBonPlan">
     <children>
-        <Pane fx:id="form" layoutX="48.0" layoutY="42.0" prefHeight="556.0" prefWidth="935.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;">
+        <Pane fx:id="form" layoutX="14.0" layoutY="42.0" prefHeight="556.0" prefWidth="935.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;">
             <children>
                 <Text fx:id="text1" layoutX="262.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter un nouvel emplacement" wrappingWidth="410.13671875">
                     <font>
@@ -25,6 +28,21 @@
                 <TextField fx:id="DescriptionBP" layoutX="66.0" layoutY="205.0" prefHeight="32.0" prefWidth="364.0" promptText="Entrez une description" />
                 <Text fx:id="textTitre1" layoutX="66.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Localisation" wrappingWidth="96.70703125" />
                 <TextField fx:id="LocalistionBP" layoutX="66.0" layoutY="291.0" prefHeight="32.0" prefWidth="364.0" promptText="Entrez une localisation" />
+
+                <!-- Conteneur de l'image et de la carte -->
+                <HBox alignment="CENTER" layoutX="480.0" layoutY="124.0" spacing="20">
+                    <!-- Conteneur de l'image -->
+                    <VBox alignment="CENTER">
+                        <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="addImageButton" onAction="#addImageBP" prefHeight="32.0" prefWidth="139.0" text="Ajouter Image" />
+                    </VBox>
+
+                    <!-- Conteneur de la carte -->
+                    <VBox alignment="CENTER">
+                        <WebView fx:id="mapView" prefHeight="306.0" prefWidth="263.0" />
+                    </VBox>
+                </HBox>
+
                 <Text fx:id="textTitre11" layoutX="66.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de lieu" wrappingWidth="96.70703125" />
                 <SplitMenuButton fx:id="type" layoutX="66.0" layoutY="380.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="364.0" styleClass="listCategorie" text="Choisir un type">
                     <items>
@@ -36,10 +54,7 @@
                 </SplitMenuButton>
 
                 <Button fx:id="bttnBP" layoutX="66.0" layoutY="450.0" mnemonicParsing="false" onAction="#ajouterBP" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Ajouter" />
-                <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" layoutX="587.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" />
-                <Button fx:id="addImageButton" layoutX="640.0" layoutY="364.0" mnemonicParsing="false" onAction="#addImageBP" prefHeight="32.0" prefWidth="139.0" text="Ajouter Image" />
                 <Button fx:id="afficherBP" layoutX="66.0" layoutY="510.0" mnemonicParsing="false" onAction="#afficherBonPlan" prefHeight="37.0" prefWidth="780.0" styleClass="submit-button" text="Afficher les Bon Plans" />
-
             </children>
         </Pane>
     </children>
