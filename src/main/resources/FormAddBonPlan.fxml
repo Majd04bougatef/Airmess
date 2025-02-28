@@ -6,8 +6,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -15,7 +15,7 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FormAddBonPlan">
     <children>
-        <Pane fx:id="form" layoutX="48.0" layoutY="42.0" prefHeight="556.0" prefWidth="935.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;">
+        <Pane fx:id="form" layoutX="14.0" layoutY="42.0" prefHeight="556.0" prefWidth="935.0" style="-fx-background-color: #f3f3f3; -fx-background-radius: 30px;">
             <children>
                 <Text fx:id="text1" layoutX="262.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="form-title" text="Ajouter un nouvel emplacement" wrappingWidth="410.13671875">
                     <font>
@@ -30,16 +30,16 @@
                 <TextField fx:id="LocalistionBP" layoutX="66.0" layoutY="291.0" prefHeight="32.0" prefWidth="364.0" promptText="Entrez une localisation" />
 
                 <!-- Conteneur de l'image et de la carte -->
-                <HBox layoutX="480.0" layoutY="124.0" spacing="20" alignment="CENTER">
+                <HBox alignment="CENTER" layoutX="480.0" layoutY="124.0" spacing="20">
                     <!-- Conteneur de l'image -->
                     <VBox alignment="CENTER">
                         <ImageView fx:id="imgPB" fitHeight="215.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="addImageButton" text="Ajouter Image" onAction="#addImageBP" prefHeight="32.0" prefWidth="139.0"/>
+                        <Button fx:id="addImageButton" onAction="#addImageBP" prefHeight="32.0" prefWidth="139.0" text="Ajouter Image" />
                     </VBox>
 
                     <!-- Conteneur de la carte -->
                     <VBox alignment="CENTER">
-                        <WebView fx:id="mapView" prefWidth="400" prefHeight="260"/>
+                        <WebView fx:id="mapView" prefHeight="306.0" prefWidth="263.0" />
                     </VBox>
                 </HBox>
 

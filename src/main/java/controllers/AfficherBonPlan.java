@@ -126,27 +126,28 @@ public class AfficherBonPlan {
 
         addCommentButton.setOnAction(event -> {
             String commentText = commentField.getText().trim();
-            Integer rating = ratingBox.getValue();
+            Integer rating = ratingBox.getValue();  // Récupérer la valeur du rating sélectionné
 
             if (!commentText.isEmpty()) {
-                if (!alreadyRated && rating != null) {
-                    // Premier rating + commentaire
+                // Si un rating est sélectionné
+                if (rating != null && rating > 0) {
+                    // Ajouter un commentaire avec la note
                     ReviewBonplan newReview = new ReviewBonplan(userId, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
                     reviewService.add(newReview);
-                    ratingBox.setDisable(true); // Désactiver les étoiles après le premier rating
                 } else {
-                    // Ajouter un commentaire sans rating
+                    // Ajouter un commentaire sans rating (rating = 0)
                     ReviewBonplan newComment = new ReviewBonplan(userId, bp.getIdP(), 0, commentText, java.time.LocalDateTime.now());
                     reviewService.add(newComment);
                 }
 
+                // Recharger les commentaires après l'ajout
                 loadComments(bp.getIdP(), commentsSection);
                 commentField.clear();
+                ratingBox.setValue(null);  // Réinitialiser le rating après l'envoi
             } else {
                 showAlert("Erreur", "Veuillez entrer un commentaire.");
             }
         });
-
         // 🔹 Afficher la moyenne des ratings avec des étoiles
         int averageRating = reviewService.getAverageRating(bp.getIdP());
         HBox starRating = createStarRating(averageRating);
@@ -284,25 +285,37 @@ public class AfficherBonPlan {
         return starBox;
     }
     private HBox createInteractiveStars(ChoiceBox<Integer> ratingBox) {
-        HBox starBox = new HBox(5); // Espacement entre étoiles
+        HBox starBox = new HBox(5); // Espacement entre les étoiles
         starBox.setAlignment(Pos.CENTER_LEFT);
 
-        Label[] stars = new Label[5];
+        Label[] stars = new Label[5]; // 5 étoiles interactives
+
+        // On charge le rating actuel s'il y en a un
+        Integer currentRating = ratingBox.getValue();
 
         for (int i = 0; i < 5; i++) {
-            final int starValue = i + 1; // Note associée à l'étoile
-
-            stars[i] = new Label("☆"); // Étoile vide au départ
+            final int ratingValue = i + 1; // Valeur de rating associée à chaque étoile
+            stars[i] = new Label("☆"); // Par défaut, étoile vide
             stars[i].setStyle("-fx-font-size: 22px; -fx-text-fill: gray; -fx-cursor: hand;");
+
+            // Vérifiez si l'étoile est sélectionnée (remplie de jaune)
+            if (currentRating != null && currentRating >= ratingValue) {
+                stars[i].setStyle("-fx-font-size: 22px; -fx-text-fill: gold; -fx-cursor: hand;"); // Remplir les étoiles sélectionnées
+            }
 
             // Ajouter un événement de clic sur l'étoile
             stars[i].setOnMouseClicked(event -> {
                 // Mettre à jour l'affichage des étoiles
                 for (int j = 0; j < 5; j++) {
-                    stars[j].setText(j < starValue ? "★" : "☆");
-                    stars[j].setStyle(j < starValue ? "-fx-font-size: 22px; -fx-text-fill: gold;" : "-fx-font-size: 22px; -fx-text-fill: gray;");
+                    if (j < ratingValue) {
+                        stars[j].setStyle("-fx-font-size: 22px; -fx-text-fill: gold; -fx-cursor: hand;"); // Remplir les étoiles sélectionnées
+                    } else {
+                        stars[j].setStyle("-fx-font-size: 22px; -fx-text-fill: gray; -fx-cursor: hand;"); // Vider les autres étoiles
+                    }
                 }
-                ratingBox.setValue(starValue); // Mettre à jour la valeur sélectionnée
+
+                // Mettre la valeur sélectionnée dans le ChoiceBox
+                ratingBox.setValue(ratingValue);
             });
 
             starBox.getChildren().add(stars[i]);
@@ -310,6 +323,7 @@ public class AfficherBonPlan {
 
         return starBox;
     }
+
     private boolean hasUserAlreadyRated(int userId, int bonPlanId) {
         List<ReviewBonplan> reviews = reviewService.getCommentsByBonPlan(bonPlanId);
         for (ReviewBonplan review : reviews) {
