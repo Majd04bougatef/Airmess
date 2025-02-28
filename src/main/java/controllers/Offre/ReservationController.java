@@ -53,37 +53,52 @@ public class ReservationController implements Initializable {
     private VBox createOffreCard(Offre offre) {
         // Create a card layout
         VBox card = new VBox(10);
-        card.setStyle("-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        card.setStyle("-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-background-radius: 15; -fx-pref-width: 300; -fx-pref-height: 200;");
 
         // Add offer details
         Label descriptionLabel = new Label("Description: " + offre.getDescription());
         descriptionLabel.setFont(new Font(14));
+        descriptionLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
 
-        Label priceLabel = new Label(String.format("Price: %.2f -> %.2f", offre.getPriceInit(), offre.getPriceAfter()));
+        Label priceLabel = new Label(String.format("Price: %.2f", offre.getPriceInit()));
         priceLabel.setFont(new Font(14));
+        priceLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
+
+        Label discountLabel = new Label(String.format("Discounted Price: %.2f", offre.getPriceAfter()));
+        discountLabel.setFont(new Font(14));
+        discountLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-strikethrough: true;");
 
         Label datesLabel = new Label("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER) + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
         datesLabel.setFont(new Font(14));
+        datesLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
 
         Label placeLabel = new Label("Place: " + offre.getPlace());
         placeLabel.setFont(new Font(14));
+        placeLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
 
         Label limitLabel = new Label("Limit: " + offre.getNumberLimit());
         limitLabel.setFont(new Font(14));
+        limitLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
 
         // Add "Reserve Now" button
         Button reserveButton = new Button("Reserve Now");
-        reserveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 5;");
+        reserveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 15;");
         reserveButton.setOnAction(event -> handleReserveButtonAction(offre));
 
         // Add all elements to the card
-        card.getChildren().addAll(descriptionLabel, priceLabel, datesLabel, placeLabel, limitLabel, reserveButton);
+        card.getChildren().addAll(descriptionLabel, priceLabel, discountLabel, datesLabel, placeLabel, limitLabel, reserveButton);
+        card.setStyle("-fx-alignment: center; -fx-background-color: #f0f0f0; -fx-pref-width: 300; -fx-pref-height: 200;");
+
         if (offre.getNumberLimit() == 0) {
             reserveButton.setDisable(true);
         }
+        if (LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now())) {
+            reserveButton.setDisable(true);
+            card.setStyle("-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-border-color: #ff0000; -fx-border-radius: 15; -fx-background-radius: 15; -fx-pref-width: 300; -fx-pref-height: 200;");
+            card.setEffect(new javafx.scene.effect.GaussianBlur(6));
+        }
         return card;
     }
-
     private void handleReserveButtonAction(Offre offre) {
         try {
             // Load the FXML file for the reservation dialog

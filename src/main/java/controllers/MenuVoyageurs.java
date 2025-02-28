@@ -118,7 +118,7 @@ public class MenuVoyageurs {
 
     @FXML
     void Offre(ActionEvent event) {
-        try {
+            try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservation.fxml"));
             Parent userPage = loader.load();
 

@@ -138,6 +138,14 @@ public class MenuEntreprise {
     }
 
     public void Offre(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/offreAdmin.fxml"));
+            Parent userPage = loader.load();
+
+            centralAnocherPane.getChildren().setAll(userPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void logout(ActionEvent actionEvent) {

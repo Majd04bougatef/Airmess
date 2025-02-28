@@ -6,9 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -36,6 +39,8 @@ public class OffreAdminController implements Initializable {
     public TextField updateDescriptionField;
     public VBox updateFieldsBox;
     public TextField updateNumberField;
+    public HBox controlButtons;
+    public AnchorPane rootAnchorPane;
     @FXML
     private ListView<Offre> offreListView;
 
@@ -66,6 +71,8 @@ public class OffreAdminController implements Initializable {
                 };
             }
         });
+
+        updateFieldsBox.setAlignment(Pos.TOP_CENTER);
     }
 
     private String formatOffreDisplay(Offre offre) {
@@ -94,6 +101,8 @@ public class OffreAdminController implements Initializable {
         if (selectedOffre != null) {
             // Show the update fields box
             updateFieldsBox.setVisible(true);
+            offreListView.setVisible(false);
+            controlButtons.setVisible(false);
             updateFieldsBox.setManaged(true);
 
             // Fill the fields with the selected offer's data
@@ -120,6 +129,7 @@ public class OffreAdminController implements Initializable {
             System.out.println("No offer selected.");
         }
     }
+
     @FXML
     private void confirmDelete() {
         // Hide the delete confirmation box
@@ -133,6 +143,7 @@ public class OffreAdminController implements Initializable {
             System.out.println("No offer selected.");
         }
     }
+
     @FXML
     private void cancelDelete() {
         // Hide the delete confirmation box
@@ -147,23 +158,10 @@ public class OffreAdminController implements Initializable {
             // Load the FXML file for the "Add Offer" dialog
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutOffre.fxml"));
             Parent root = loader.load();
+            // Clear the current content and set the new content
+            rootAnchorPane.getChildren().clear();
+            rootAnchorPane.getChildren().add(root);
 
-            // Get the controller for the "Add Offer" dialog
-            AddOffreController addOfferController = loader.getController();
-
-            // Create a new stage (dialog) for the "Add Offer" window
-            Stage stage = new Stage();
-            stage.setTitle("Add New Offer");
-            stage.setScene(new Scene(root));
-
-            // Set the current stage as the owner of the new stage (optional, for modality)
-            stage.initOwner(offreListView.getScene().getWindow());
-
-            // Show the dialog and wait for it to close
-            stage.showAndWait();
-
-            // Refresh the list of offers after the dialog is closed
-            loadOffres();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -228,7 +226,6 @@ public class OffreAdminController implements Initializable {
             selectedOffre.setNumberLimit(Integer.parseInt(updateNumberField.getText()));
 
 
-
             // Save the updated offer to the database
             if (updateEndDateField.getValue().isBefore(updateStartDateField.getValue())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -242,6 +239,8 @@ public class OffreAdminController implements Initializable {
 
             // Hide the update fields box
             updateFieldsBox.setVisible(false);
+            offreListView.setVisible(true);
+            controlButtons.setVisible(true);
             updateFieldsBox.setManaged(false);
 
             // Refresh the list of offers
@@ -254,6 +253,8 @@ public class OffreAdminController implements Initializable {
     public void cancelUpdate(ActionEvent actionEvent) {
         // Hide the update fields box
         updateFieldsBox.setVisible(false);
+        offreListView.setVisible(true);
+        controlButtons.setVisible(true);
         updateFieldsBox.setManaged(false);
     }
 
@@ -265,6 +266,7 @@ public class OffreAdminController implements Initializable {
 
             // Get the controller for the "Reservations" dialog
             ReservationAdminController reservationsController = loader.getController();
+            reservationsController.initialize(offreListView.getSelectionModel().getSelectedItem());
 
             // Create a new stage (dialog) for the "Reservations" window
             Stage stage = new Stage();
