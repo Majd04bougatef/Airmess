@@ -90,13 +90,19 @@ public class MenuVoyageurs {
     void BonPlan(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherBonPlan.fxml"));
-            Parent userPage = loader.load();
+            Parent afficherBonPlan = loader.load();
 
-            centralAnocherPane.getChildren().setAll(userPage);
+            AfficherBonPlan controller = loader.getController();
+            controller.setCentralAnchorPane(centralAnocherPane); // ✅ Transmettre l'AnchorPane
+
+            centralAnocherPane.getChildren().clear();
+            centralAnocherPane.getChildren().add(afficherBonPlan);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     void Home(ActionEvent event) {

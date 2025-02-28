@@ -35,7 +35,13 @@
                             <Button fx:id="btnModifier" text="Modifier" styleClass="update-button"/>
                             <Button fx:id="btnSupprimer" text="Supprimer" styleClass="delete-button"/>
                         </HBox>
-
+                        <HBox spacing="2" alignment="CENTER">
+                            <Label fx:id="star1" text="★" styleClass="star"/>
+                            <Label fx:id="star2" text="★" styleClass="star"/>
+                            <Label fx:id="star3" text="★" styleClass="star"/>
+                            <Label fx:id="star4" text="★" styleClass="star"/>
+                            <Label fx:id="star5" text="★" styleClass="star"/>
+                        </HBox>
                         <!-- Commentaires -->
                         <VBox fx:id="commentsSection" spacing="5" style="-fx-padding: 10;">
                             <Label text="Commentaires :" styleClass="comment-title"/>

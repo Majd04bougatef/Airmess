@@ -187,7 +187,8 @@ image-view {
     -fx-text-fill: black;
     -fx-padding: 5;
 }
-.star-label {
+.star {
     -fx-font-size: 18px;
     -fx-text-fill: gold;
 }
+

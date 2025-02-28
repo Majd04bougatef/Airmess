@@ -1,12 +1,15 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,14 +30,23 @@ public class AfficherBonPlan {
 
     @FXML
     private FlowPane flowPaneBonPlans;
+    @FXML
+    private AnchorPane centralAnchorPane; // Assurez-vous que cette variable est bien déclarée
+
+
+    public void setCentralAnchorPane(AnchorPane anchorPane) {
+        this.centralAnchorPane = anchorPane;
+    }
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
     private final ReviewBonPlanServices reviewService = new ReviewBonPlanServices(){};
+
 
     @FXML
     public void initialize() {
         loadBonPlans();
     }
+
 
     private void loadBonPlans() {
         List<bonplan> bonPlansList = bonPlanServices.getAll();
@@ -47,7 +59,6 @@ public class AfficherBonPlan {
 
         flowPaneBonPlans.setPrefWrapLength(900);
     }
-
     private VBox createBonPlanCard(bonplan bp) {
         VBox card = new VBox(10);
         card.getStyleClass().add("bonplan-card");
@@ -89,42 +100,71 @@ public class AfficherBonPlan {
         HBox menuBox = new HBox(menuButton);
         menuBox.setAlignment(Pos.TOP_RIGHT);
 
-        // Commentaires
-        VBox commentsSection = new VBox(5);
-        commentsSection.getStyleClass().add("comments-section");
-        loadComments(bp.getIdP(), commentsSection);
+        // 🔹 Vérifier si l'utilisateur a déjà noté
+        int userId = 1; // Remplace avec l'ID de l'utilisateur connecté
+        boolean alreadyRated = hasUserAlreadyRated(userId, bp.getIdP());
 
+        // 🔹 Champ de commentaire
         TextArea commentField = new TextArea();
         commentField.setPromptText("Ajouter un commentaire...");
         commentField.setPrefRowCount(2);
         commentField.getStyleClass().add("comment-field");
 
+        // 🔹 Système de notation dynamique avec étoiles
         ChoiceBox<Integer> ratingBox = new ChoiceBox<>();
-        ratingBox.getItems().addAll(1, 2, 3, 4, 5);
-        ratingBox.setValue(5);
+        HBox interactiveStars = createInteractiveStars(ratingBox);
+        ratingBox.setDisable(alreadyRated); // Désactiver les étoiles après un premier vote
 
+        // 🔹 Section des commentaires (DÉCLARATION AVANT UTILISATION)
+        VBox commentsSection = new VBox(5);
+        commentsSection.getStyleClass().add("comments-section");
+        loadComments(bp.getIdP(), commentsSection); // Charger les commentaires ici
+
+        // 🔹 Bouton d'ajout de commentaire (toujours actif)
         Button addCommentButton = new Button("Envoyer");
         addCommentButton.getStyleClass().add("add-comment-button");
+
         addCommentButton.setOnAction(event -> {
             String commentText = commentField.getText().trim();
             Integer rating = ratingBox.getValue();
 
-            if (!commentText.isEmpty() && rating != null) {
-                ReviewBonplan newReview = new ReviewBonplan(1, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
-                reviewService.add(newReview);
+            if (!commentText.isEmpty()) {
+                if (!alreadyRated && rating != null) {
+                    // Premier rating + commentaire
+                    ReviewBonplan newReview = new ReviewBonplan(userId, bp.getIdP(), rating, commentText, java.time.LocalDateTime.now());
+                    reviewService.add(newReview);
+                    ratingBox.setDisable(true); // Désactiver les étoiles après le premier rating
+                } else {
+                    // Ajouter un commentaire sans rating
+                    ReviewBonplan newComment = new ReviewBonplan(userId, bp.getIdP(), 0, commentText, java.time.LocalDateTime.now());
+                    reviewService.add(newComment);
+                }
+
                 loadComments(bp.getIdP(), commentsSection);
                 commentField.clear();
             } else {
-                showAlert("Erreur", "Veuillez entrer un commentaire avant d’envoyer.");
+                showAlert("Erreur", "Veuillez entrer un commentaire.");
             }
         });
 
-        HBox commentBox = new HBox(10, commentField, ratingBox, addCommentButton);
+        // 🔹 Afficher la moyenne des ratings avec des étoiles
+        int averageRating = reviewService.getAverageRating(bp.getIdP());
+        HBox starRating = createStarRating(averageRating);
+
+        // 🔹 Organisation des éléments dans la carte
+        HBox commentBox = new HBox(10, commentField, addCommentButton);
         commentBox.setAlignment(Pos.CENTER_LEFT);
 
-        card.getChildren().addAll(menuBox, imageView, nomLabel, descLabel, locLabel, typeLabel, separator, commentsSection, commentBox);
+        card.getChildren().addAll(
+                menuBox, imageView, nomLabel, descLabel, locLabel, typeLabel,
+                interactiveStars, separator, commentsSection, commentBox
+        );
+
         return card;
     }
+
+
+
 
     // 🔹 Fonction mise à jour pour charger les commentaires
     private void loadComments(int bonPlanId, VBox commentsSection) {
@@ -222,14 +262,62 @@ public class AfficherBonPlan {
     private void showAddBonPlan() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormAddBonPlan.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter un Bon Plan");
-            stage.setScene(new Scene(root));
-            stage.show();
+            Parent addBonPlan = loader.load();
+
+            // Effacer le contenu actuel et afficher le formulaire dans centralAnchorPane
+            centralAnchorPane.getChildren().clear();
+            centralAnchorPane.getChildren().add(addBonPlan);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private HBox createStarRating(int rating) {
+        HBox starBox = new HBox(2); // Espacement entre les étoiles
+        starBox.setAlignment(Pos.CENTER_LEFT);
+
+        for (int i = 1; i <= 5; i++) {
+            Label star = new Label(i <= rating ? "★" : "☆"); // Remplit selon le rating
+            star.setStyle("-fx-font-size: 18px; -fx-text-fill: gold;");
+            starBox.getChildren().add(star);
+        }
+
+        return starBox;
+    }
+    private HBox createInteractiveStars(ChoiceBox<Integer> ratingBox) {
+        HBox starBox = new HBox(5); // Espacement entre étoiles
+        starBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label[] stars = new Label[5];
+
+        for (int i = 0; i < 5; i++) {
+            final int starValue = i + 1; // Note associée à l'étoile
+
+            stars[i] = new Label("☆"); // Étoile vide au départ
+            stars[i].setStyle("-fx-font-size: 22px; -fx-text-fill: gray; -fx-cursor: hand;");
+
+            // Ajouter un événement de clic sur l'étoile
+            stars[i].setOnMouseClicked(event -> {
+                // Mettre à jour l'affichage des étoiles
+                for (int j = 0; j < 5; j++) {
+                    stars[j].setText(j < starValue ? "★" : "☆");
+                    stars[j].setStyle(j < starValue ? "-fx-font-size: 22px; -fx-text-fill: gold;" : "-fx-font-size: 22px; -fx-text-fill: gray;");
+                }
+                ratingBox.setValue(starValue); // Mettre à jour la valeur sélectionnée
+            });
+
+            starBox.getChildren().add(stars[i]);
+        }
+
+        return starBox;
+    }
+    private boolean hasUserAlreadyRated(int userId, int bonPlanId) {
+        List<ReviewBonplan> reviews = reviewService.getCommentsByBonPlan(bonPlanId);
+        for (ReviewBonplan review : reviews) {
+            if (review.getIdU() == userId) {
+                return true; // L'utilisateur a déjà noté ce bon plan
+            }
+        }
+        return false;
     }
 
 }
