@@ -11,8 +11,9 @@ public class Offre {
     private int numberLimit;
     private String description;
     private String place;
+    private String image;
 
-    public Offre(int idO, int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place) {
+    public Offre(int idO, int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place, String image) {
         this.idO = idO;
         this.id_U = id_U;
         this.priceInit = priceInit;
@@ -24,7 +25,7 @@ public class Offre {
         this.place = place;
     }
 
-    public Offre(int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place) {
+    public Offre(int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place, String image) {
         this.id_U = id_U;
         this.priceInit = priceInit;
         this.priceAfter = priceAfter;
@@ -35,7 +36,8 @@ public class Offre {
         this.place = place;
     }
 
-    public Offre() {}
+    public Offre() {
+    }
 
     public int getIdO() {
         return idO;
@@ -107,6 +109,12 @@ public class Offre {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getImage() { return image; }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
