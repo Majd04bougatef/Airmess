@@ -122,10 +122,8 @@ public class ReservationController implements Initializable {
         card.getChildren().addAll(imageView, descriptionLabel, priceLabel, discountLabel, datesLabel, placeLabel, limitLabel, reserveButton);
         card.setStyle("-fx-alignment: center; -fx-background-color: #f0f0f0; -fx-pref-width: 300; -fx-pref-height: 200;");
 
-        if (offre.getNumberLimit() == 0) {
-            reserveButton.setDisable(true);
-        }
-        if (LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now())) {
+
+        if (LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now()) || offre.getNumberLimit() == 0) {
             reserveButton.setDisable(true);
             card.setStyle("-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-border-color: #ff0000; -fx-border-radius: 15; -fx-background-radius: 15; -fx-pref-width: 300; -fx-pref-height: 200;");
             card.setEffect(new javafx.scene.effect.GaussianBlur(6));
@@ -133,57 +131,74 @@ public class ReservationController implements Initializable {
         return card;
     }
 
+//    private void handleReserveButtonAction(Offre offre) {
+//
+//        try {
+//            // Load the FXML file for the reservation dialog
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservation_dialog.fxml"));
+//            Parent root = loader.load();
+//
+//            // Get the controller for the reservation dialog
+//            ReservationDialogController controller = loader.getController();
+//            LocalDate date = LocalDate.parse(offre.getEndDate(), DATE_FORMATTER);
+//
+//            controller.setDate(date);
+//            // Create a new stage (dialog) for the reservation window
+//            Stage stage = new Stage();
+//            stage.setTitle("Reserve Offer");
+//            stage.setScene(new Scene(root));
+//
+//            // Set the current stage as the owner of the new stage (optional, for modality)
+//            stage.initOwner(cardsContainer.getScene().getWindow());
+//
+//            // Pass the dialog stage to the controller
+//            controller.setDialogStage(stage);
+//
+//            // Show the dialog and wait for it to close
+//            stage.showAndWait();
+//
+//            // Handle the result after the dialog is closed
+//            if (controller.isConfirmed()) {
+//                String selectedDate = controller.getSelectedDate();
+//                String paymentMethod = controller.getPaimentMethod();
+//                ReservationService reservationService = new ReservationService();
+//                System.out.println(paymentMethod);
+//                switch (paymentMethod) {
+//                    case "Reserve with Card":
+//                        paymentMethod = "carte";
+//                        break;
+//                    default:
+//                        paymentMethod = "espece";
+//                        break;
+//                }
+//                Reservation reservation = new Reservation(offre, selectedDate, paymentMethod, 1);
+//                ReservationService reservationService1 = new ReservationService();
+//                reservationService1.add(reservation);
+//                OffreService offreService = new OffreService();
+//                offre.setNumberLimit(offre.getNumberLimit() - 1);
+//                offreService.update(offre);
+//                loadOffreCards();
+//            }
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//            System.out.println("Failed to load the reservation dialog.");
+//            e.printStackTrace();
+//        }
+//    }
     private void handleReserveButtonAction(Offre offre) {
         try {
-            // Load the FXML file for the reservation dialog
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservation_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/paymentWindow.fxml"));
             Parent root = loader.load();
-
-            // Get the controller for the reservation dialog
-            ReservationDialogController controller = loader.getController();
-            LocalDate date = LocalDate.parse(offre.getEndDate(), DATE_FORMATTER);
-
-            controller.setDate(date);
-            // Create a new stage (dialog) for the reservation window
+            PaymentController controller = loader.getController();
+            controller.setTotalAmount(2);
             Stage stage = new Stage();
-            stage.setTitle("Reserve Offer");
+            stage.setTitle("Payment");
             stage.setScene(new Scene(root));
-
-            // Set the current stage as the owner of the new stage (optional, for modality)
             stage.initOwner(cardsContainer.getScene().getWindow());
-
-            // Pass the dialog stage to the controller
-            controller.setDialogStage(stage);
-
-            // Show the dialog and wait for it to close
             stage.showAndWait();
 
-            // Handle the result after the dialog is closed
-            if (controller.isConfirmed()) {
-                String selectedDate = controller.getSelectedDate();
-                String paymentMethod = controller.getPaimentMethod();
-                ReservationService reservationService = new ReservationService();
-                System.out.println(paymentMethod);
-                switch (paymentMethod) {
-                    case "Reserve with Card":
-                        paymentMethod = "carte";
-                        break;
-                    default:
-                        paymentMethod = "espece";
-                        break;
-                }
-                Reservation reservation = new Reservation(offre, selectedDate, paymentMethod, 1);
-                ReservationService reservationService1 = new ReservationService();
-                reservationService1.add(reservation);
-                OffreService offreService = new OffreService();
-                offre.setNumberLimit(offre.getNumberLimit() - 1);
-                offreService.update(offre);
-                loadOffreCards();
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to load the reservation dialog.");
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
