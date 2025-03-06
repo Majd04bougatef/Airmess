@@ -57,4 +57,17 @@ public class MessageService {
 
         return messages;
     }
+
+    public void delete(int idE,int idU) {
+        String sql = "DELETE * FROM MESSAGES WHERE (sender_id = ? AND receiver_id = ?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idE);
+            ps.setInt(2, idU);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'envoi du message : " + e.getMessage());
+        }
+    }
 }
