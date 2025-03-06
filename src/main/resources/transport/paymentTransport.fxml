@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+
+    <VBox alignment="CENTER"
+          style="-fx-background-color: #FFFFFF; -fx-pref-width: 900; -fx-pref-height: 600; -fx-padding: 20; -fx-spacing: 10;"
+          xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="controllers.transport.PaymentTransport"
+          prefHeight="400.0" prefWidth="600.0">
+
+        <!-- Centered Title with Business Casual Font -->
+        <Label alignment="CENTER"
+               style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-family: 'Roboto', sans-serif;"
+               text="Payment" />
+
+        <!-- Centered ComboBox, styled to match your application theme -->
+        <ComboBox fx:id="currencyComboBox"
+                  prefWidth="150.0"
+                  style="-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-size: 12; -fx-border-color: #BA9467; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 4;" />
+
+        <!-- WebView for the Payment Form -->
+        <WebView fx:id="paymentWebView"
+                 prefHeight="500.0"
+                 prefWidth="860.0"
+                 style="-fx-background-color: #ECBB70;" />
+
+    </VBox>
+
