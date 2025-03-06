@@ -137,7 +137,8 @@ public class PaymentTransport {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/html/paymentTransport.html");
             if (inputStream == null) {
-                System.err.println("Payment form not found! Check the file path.");
+                logger.severe("Payment form not found! Check the file path.");
+                showAlert("Error", "Payment form template not found", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -155,14 +156,15 @@ public class PaymentTransport {
 
             webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
                 if (newState == Worker.State.SUCCEEDED) {
-                    System.out.println("Payment form loaded successfully in WebView");
+                    logger.info("Payment form loaded successfully in WebView");
                 } else if (newState == Worker.State.FAILED) {
-                    System.err.println("Failed to load payment form in WebView");
+                    logger.severe("Failed to load payment form in WebView");
                 }
             });
 
         } catch (Exception e) {
-            System.err.println("Failed to load payment form: " + e.getMessage());
+            logger.severe("Failed to load payment form: " + e.getMessage());
+            showAlert("Error", "Failed to load payment form: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
     @FXML
