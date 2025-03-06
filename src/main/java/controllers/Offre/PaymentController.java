@@ -41,11 +41,20 @@ public class PaymentController {
     private static final String STRIPE_SECRET_KEY = "sk_test_51QyNnpEi7sEs3DVkSqFNnFbi7GWSJKmgwrT0Ci9bDsAoRXqGWk6b6aCCTYJqGtPuBHH5p6PfmkxPelep7EqkkDPL00x26BnXJt";
     private JavaBridge javaBridge;
 
+    private static final Logger logger = Logger.getLogger(PaymentController.class.getName());
+
     @FXML
     private void initialize() {
-        Logger.getLogger(PaymentController.class.getName()).info("PaymentController initialized");
+        logger.info("PaymentController initialized");
 
+        if (STRIPE_SECRET_KEY == null || STRIPE_SECRET_KEY.isEmpty()) {
+            logger.severe("Stripe API key is missing");
+            throw new IllegalStateException("Stripe API key is missing");
+        }
+
+        logger.info("Stripe API key: " + STRIPE_SECRET_KEY);
         Stripe.apiKey = STRIPE_SECRET_KEY;
+        logger.info("Stripe API key set successfully");
 
         if (paymentWebView != null) {
             paymentWebView.setContextMenuEnabled(false);
@@ -62,7 +71,6 @@ public class PaymentController {
             }
         });
     }
-
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
     }
@@ -88,12 +96,16 @@ public class PaymentController {
 
     private void initializePayment() {
         try {
+            // Set API key explicitly before each Stripe operation
+            Stripe.apiKey = STRIPE_SECRET_KEY;
+
             String selectedCurrency = currencyComboBox.getValue();
             double amount = totalAmount;
             if (!selectedCurrency.equals("USD")) {
                 CurrencyConverter converter = new CurrencyConverter();
                 amount = converter.convert(totalAmount, "USD", selectedCurrency);
             }
+
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                     .setAmount((long) (amount * 100))
                     .setCurrency(selectedCurrency.equals("USD") ? "usd" : selectedCurrency.toLowerCase())
@@ -103,19 +115,27 @@ public class PaymentController {
                                     .build()
                     )
                     .build();
+
+            // Log before creating payment intent
+            logger.info("Creating payment intent with amount: " + amount + " " + selectedCurrency);
+
             PaymentIntent paymentIntent = PaymentIntent.create(createParams);
             this.clientSecret = paymentIntent.getClientSecret();
+
+            // Log success and call loadPaymentForm if successful
+            logger.info("Payment intent created successfully");
+            loadPaymentForm(amount, selectedCurrency);
         } catch (StripeException e) {
-            System.err.println("Failed to initialize payment: " + e.getMessage());
+            logger.severe("Failed to initialize payment: " + e.getMessage());
+            showAlert("Payment Error", "Failed to initialize payment: " + e.getMessage(), Alert.AlertType.ERROR);
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            logger.severe("Error: " + e.getMessage());
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
     }
-
     private void loadPaymentForm(double convertedAmount, String currency) {
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/payment_form.html");
+            InputStream inputStream = getClass().getResourceAsStream("/paymentform.html");
             if (inputStream == null) {
                 throw new FileNotFoundException("Payment form not found");
             }
