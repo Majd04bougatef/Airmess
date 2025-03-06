@@ -212,7 +212,6 @@ public class FormAddBonPlan {
     public static class GeocodingService {
         public static String getLocationName(double latitude, double longitude) {
             try {
-                // URL de l'API de géocodification inverse (Nominatim), ajout du paramètre lang=fr pour la réponse en français
                 String url = "https://nominatim.openstreetmap.org/reverse?lat=" + latitude + "&lon=" + longitude + "&format=json&lang=fr";
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("GET");
@@ -225,7 +224,6 @@ public class FormAddBonPlan {
                 }
                 in.close();
 
-                // Parser la réponse JSON pour récupérer le nom de la localisation
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 return jsonResponse.getString("display_name");  // Retourne le nom complet de la localisation
             } catch (Exception e) {
