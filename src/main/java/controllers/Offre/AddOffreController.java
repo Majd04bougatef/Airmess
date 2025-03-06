@@ -2,17 +2,24 @@ package controllers.Offre;
 
 import controllers.transport.FormAddTransport;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import models.Offre;
 import netscape.javascript.JSObject;
 import services.OffreService;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 
@@ -20,6 +27,7 @@ public class AddOffreController {
 
     public Label warningLabel;
     public WebView mapView;
+    public AnchorPane rootAnchorPane;
     private JavaConnector javaConnector;
 
     @FXML
@@ -45,9 +53,23 @@ public class AddOffreController {
 
     @FXML
     private DatePicker startDate;
+    private String imagePath;
 
     private double lat = 51.1;
     private double lng = -0.3;
+
+    public void handleUploadButtonAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        File file = fileChooser.showOpenDialog(form.getScene().getWindow());
+        if (file != null) {
+            imagePath = file.getAbsolutePath();
+            System.out.println(file.getAbsolutePath());
+        }
+    }
 
     public class JavaConnector {
         public void receiveCoordinates(double latitude, double longitude) {
@@ -98,9 +120,20 @@ public class AddOffreController {
         offre.setNumberLimit(Integer.parseInt(numberLimit.getText()));
         offre.setDescription(description.getText());
         offre.setPlace(place.getText());
+        offre.setImage(imagePath);
         offreService.add(offre);
         //close the form
-        form.getScene().getWindow().hide();
+        try {
+            // Load the FXML file for the "Add Offer" dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/offreAdmin.fxml"));
+            Parent root = loader.load();
+            // Clear the current content and set the new content
+            rootAnchorPane.getChildren().clear();
+            rootAnchorPane.getChildren().add(root);
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private boolean validateForm() {
@@ -110,7 +143,8 @@ public class AddOffreController {
                 || endDate.getValue() == null
                 || numberLimit.getText().isEmpty()
                 || description.getText().isEmpty()
-                || place.getText().isEmpty()){
+                || place.getText().isEmpty()
+                || imagePath == null) {
             warningLabel.setVisible(true);
             warningLabel.setText("Veuillez remplir tous les champs.");
             return false;

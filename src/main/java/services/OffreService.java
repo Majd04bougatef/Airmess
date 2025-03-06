@@ -19,7 +19,7 @@ public class OffreService implements GlobalInterface<Offre> {
 
     @Override
     public void add(Offre offre) {
-        String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, offre.getId_U());
@@ -30,6 +30,7 @@ public class OffreService implements GlobalInterface<Offre> {
             preparedStatement.setInt(6, offre.getNumberLimit());
             preparedStatement.setString(7, offre.getDescription());
             preparedStatement.setString(8, offre.getPlace());
+            preparedStatement.setString(9, offre.getImage());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -39,7 +40,7 @@ public class OffreService implements GlobalInterface<Offre> {
     @Override
     public void update(Offre offre) {
         // TODO Auto-generated method stub
-        String query = "UPDATE offre SET id_U = ?, priceInit = ?, priceAfter = ?, startDate = ?, endDate = ?, numberLimit = ?, description = ?, place = ? WHERE idO = ?";
+        String query = "UPDATE offre SET id_U = ?, priceInit = ?, priceAfter = ?, startDate = ?, endDate = ?, numberLimit = ?, description = ?, place = ?, image_path = ? WHERE idO = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, offre.getId_U());
@@ -50,7 +51,8 @@ public class OffreService implements GlobalInterface<Offre> {
             preparedStatement.setInt(6, offre.getNumberLimit());
             preparedStatement.setString(7, offre.getDescription());
             preparedStatement.setString(8, offre.getPlace());
-            preparedStatement.setInt(9, offre.getIdO());
+            preparedStatement.setString(9, offre.getImage());
+            preparedStatement.setInt(10, offre.getIdO());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -88,6 +90,7 @@ public class OffreService implements GlobalInterface<Offre> {
                 offre.setNumberLimit(resultSet.getInt("numberLimit"));
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
+                offre.setImage(resultSet.getString("image_path"));
                 offres.add(offre);
             }
         } catch (Exception e) {
@@ -114,6 +117,7 @@ public class OffreService implements GlobalInterface<Offre> {
                 offre.setNumberLimit(resultSet.getInt("numberLimit"));
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
+                offre.setImage(resultSet.getString("image_path"));
 
             }
         } catch (Exception e) {
