@@ -15,9 +15,6 @@
         <DatePicker fx:id="datePicker" />
 
         <!-- Payment Method -->
-        <Label text="Select Payment Method:" />
-        <RadioButton text="Reserve with Cash" fx:id="cashRadioButton" />
-        <RadioButton text="Reserve with Card" fx:id="cardRadioButton" />
 
         <!-- Buttons -->
         <HBox spacing="10">

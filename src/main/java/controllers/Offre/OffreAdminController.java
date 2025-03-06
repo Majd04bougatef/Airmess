@@ -10,6 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,7 @@ import javafx.util.Callback;
 import models.Offre;
 import services.OffreService;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -63,32 +66,60 @@ public class OffreAdminController implements Initializable {
                         super.updateItem(offre, empty);
                         if (empty || offre == null) {
                             setText(null);
+                            setGraphic(null);
                         } else {
                             // Customize the display text
-                            setText(formatOffreDisplay(offre));
+                            setGraphic(formatOffreDisplay(offre));
+                            setStyle("-fx-text-fill: black;");
                         }
                     }
                 };
             }
         });
 
+
         updateFieldsBox.setAlignment(Pos.TOP_CENTER);
     }
 
-    private String formatOffreDisplay(Offre offre) {
+    private VBox formatOffreDisplay(Offre offre) {
+        VBox vbox = new VBox(10);
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        vbox.setStyle("-fx-padding: 10; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: #f9f9f9; -fx-background-radius: 5;");
 
-        return String.format(
-                "Description: %s\nPrix: %.2f -> %.2f\nDate :du %s au %s\nLieu: %s\nnombre de place disponible: %d",
-                offre.getDescription(),
-                offre.getPriceInit(),
-                offre.getPriceAfter(),
-                LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER),
-                LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER),
-                offre.getPlace(),
-                offre.getNumberLimit()
-        );
+        // Create ImageView for the offer image
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        imageView.setPreserveRatio(true);
+        imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 0); -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5;");
+        if (offre.getImage() != null && !offre.getImage().isEmpty()) {
+            File imageFile = new File(offre.getImage());
+            if (imageFile.exists()) {
+                imageView.setImage(new Image(imageFile.toURI().toString()));
+            }
+        }
+
+        // Create labels for offer details
+        Label descriptionLabel = new Label("Description: " + offre.getDescription());
+        descriptionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Label priceLabel = new Label(String.format("Price: %.2f -> %.2f", offre.getPriceInit(), offre.getPriceAfter()));
+        priceLabel.setStyle("-fx-font-size: 12px;");
+
+        Label datesLabel = new Label("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER) + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
+        datesLabel.setStyle("-fx-font-size: 12px;");
+
+        Label placeLabel = new Label("Place: " + offre.getPlace());
+        placeLabel.setStyle("-fx-font-size: 12px;");
+
+        Label limitLabel = new Label("Number of places: " + offre.getNumberLimit());
+        limitLabel.setStyle("-fx-font-size: 12px;");
+
+        // Add all elements to the VBox
+        vbox.getChildren().addAll(imageView, descriptionLabel, priceLabel, datesLabel, placeLabel, limitLabel);
+
+        return vbox;
     }
-
     private void loadOffres() {
         List<Offre> offres = offreService.getAll();
         ObservableList<Offre> observableList = FXCollections.observableArrayList(offres);
