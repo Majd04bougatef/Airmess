@@ -186,8 +186,8 @@
                                     <Image url="@image/menu_voyageurs/recherche.png" />
                                 </image>
                             </ImageView>
-                        <Button layoutX="915.0" layoutY="2.0" mnemonicParsing="false" onAction="#compt" prefHeight="56.0" prefWidth="108.0" style="-fx-background-color: whi;" />
-                        <ImageView fx:id="fotouser" fitHeight="50.0" fitWidth="107.0" layoutX="915.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="fotouser" fitHeight="59.0" fitWidth="166.0" layoutX="850.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button layoutX="908.0" layoutY="2.0" mnemonicParsing="false" onAction="#compt" prefHeight="56.0" prefWidth="108.0" style="-fx-background-color: whi;" />
                         </children>
                     </Pane>
                 </children>
