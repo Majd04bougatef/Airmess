@@ -305,7 +305,7 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #4a90e2;
+    -fx-background-color: rgba(199, 196, 196, 0.39);
     -fx-text-fill: white;
 }
 .expired-card {
