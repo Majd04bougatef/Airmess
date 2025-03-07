@@ -37,7 +37,7 @@
 
             <!-- Nombre de vélos -->
             <Label text="Nombre de Vélos" />
-            <TextField fx:id="nombreVelo" onKeyReleased="#updatePrixTotal" prefHeight="35.0" prefWidth="326.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
+            <TextField fx:id="nombreVelo" onKeyReleased="#updatePrixTotal" prefHeight="35.0" prefWidth="326.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
 
             <!-- Date de réservation -->
             <Label text="Date de Réservation" />
@@ -47,7 +47,7 @@
             <Label text="Date et Heure de Fin" />
             <HBox spacing="10">
                <DatePicker fx:id="dateFin" onAction="#updatePrixTotal" prefWidth="160.0" />
-               <TextField fx:id="heureFin" promptText="HH:MM" onKeyReleased="#updatePrixTotal" prefWidth="80.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
+               <TextField fx:id="heureFin" onKeyReleased="#updatePrixTotal" prefWidth="80.0" promptText="HH:MM" style="-fx-background-color: #e0e0e0; -fx-background-radius: 50;" />
             </HBox>
 
 

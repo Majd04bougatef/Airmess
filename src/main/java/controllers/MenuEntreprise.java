@@ -134,8 +134,6 @@ public class MenuEntreprise {
         }
     }
 
-    public void BonPlan(ActionEvent actionEvent) {
-    }
 
     public void Offre(ActionEvent actionEvent) {
         try {

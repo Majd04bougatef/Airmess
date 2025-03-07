@@ -16,7 +16,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane prefHeight="640.0" prefWidth="1020.0" style="-fx-background-color: #ecf0f1; -fx-padding: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.DiscussionVoyageurs">
+<AnchorPane prefHeight="540.0" prefWidth="1020.0" style="-fx-background-color: #ecf0f1; -fx-padding: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.DiscussionVoyageurs">
 
     <VBox layoutX="14.0" layoutY="10.0" prefHeight="635.0" prefWidth="991.0" spacing="10" style="-fx-background-color: white; -fx-padding: 15px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
 

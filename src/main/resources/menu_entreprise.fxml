@@ -46,21 +46,7 @@
                             <Insets top="10.0" />
                         </VBox.margin>
                     </Button>
-                    <Button mnemonicParsing="false" onAction="#User" style="-fx-background-color: #4292bf;" text="Compte" textFill="WHITE">
-                        <graphic>
-                            <ImageView fitHeight="20" fitWidth="20">
-                                <image>
-                                    <Image url="@image/menu_voyageurs/gestion user.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <font>
-                            <Font size="15.0" />
-                        </font>
-                        <VBox.margin>
-                            <Insets top="10.0" />
-                        </VBox.margin>
-                    </Button>
+
                   <Button mnemonicParsing="false" onAction="#Velo" style="-fx-background-color: #4292bf;" text="Station" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="20" fitWidth="20">
@@ -101,22 +87,6 @@
                         </VBox.margin>
                     </Button>
 
-
-                    <Button mnemonicParsing="false" onAction="#BonPlan" style="-fx-background-color: #4292bf;" text="Bons Plans" textFill="WHITE">
-                        <graphic>
-                            <ImageView fitHeight="20" fitWidth="20">
-                                <image>
-                                    <Image url="@image/menu_voyageurs/gestion bonplan.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <font>
-                            <Font size="15.0" />
-                        </font>
-                        <VBox.margin>
-                            <Insets top="10.0" />
-                        </VBox.margin>
-                    </Button>
                     <Button mnemonicParsing="false" onAction="#Offre" style="-fx-background-color: #4292bf;" text="Offres" textFill="WHITE">
                         <graphic>
                             <ImageView fitHeight="20" fitWidth="20">
