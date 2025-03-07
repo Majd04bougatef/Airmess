@@ -14,7 +14,7 @@
 
 <AnchorPane stylesheets="/css/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="controllers.AfficherBonPlan">
     <children>
-
+        <Button text="Ajouter un Bon Plan" layoutX="20" layoutY="10" onAction="#showAddBonPlan" styleClass="add-button"/>
         <ScrollPane layoutX="10.0" layoutY="50.0" prefHeight="700.0" prefWidth="1000.0">
             <content>
                 <FlowPane fx:id="flowPaneBonPlans" hgap="30" prefWrapLength="900" style="-fx-padding: 10;" vgap="30">
