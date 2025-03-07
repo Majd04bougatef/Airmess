@@ -54,12 +54,12 @@
 
 /* Update button style */
 .update-button {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 
 .update-button:hover {
-    -fx-background-color: #45a049;
+    -fx-background-color: #4292bf;
 }
 
 /* Delete button style */
@@ -73,7 +73,7 @@
 }
 
 .add-button {
-    -fx-background-color: #2196F3;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 .add-button:hover {
@@ -94,7 +94,7 @@
 }
 
 .show-button {
-    -fx-background-color: #2196F3;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 

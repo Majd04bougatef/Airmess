@@ -27,7 +27,7 @@
 
         <TableView fx:id="reservationsTable" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="offerDescriptionColumn" prefWidth="250.0" text="Offer Description" />
+                <TableColumn fx:id="offerDescriptionColumn" prefWidth="250.0" text="Title" />
                 <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Reservation Date" />
                 <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
                 <TableColumn fx:id="actionsColumn" prefWidth="200.0" text="Actions" />

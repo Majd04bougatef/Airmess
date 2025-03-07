@@ -13,7 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import models.Offre;
 import models.Reservation;
 import services.OffreService;
 import services.ReservationService;
@@ -55,6 +57,8 @@ public class UserReservationsController implements Initializable {
         reservationService = new ReservationService();
         setupTableColumns();
         loadUserReservations();
+        reservationsTable.setTableMenuButtonVisible(false);
+        reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
     // In UpdateReservationController.java
 // Find where you're parsing the date string and modify it:
@@ -125,13 +129,21 @@ public class UserReservationsController implements Initializable {
                     @Override
                     public TableCell<Reservation, Void> call(final TableColumn<Reservation, Void> param) {
                         return new TableCell<>() {
-                            private final Button updateBtn = new Button("Update");
-                            private final Button cancelBtn = new Button("Cancel");
+
+                            private final Button updateBtn = new Button();
+                            private final Button cancelBtn = new Button("Annuler");
                             private final HBox pane = new HBox(5);
 
                             {
+                                updateBtn.setText("");
                                 updateBtn.getStyleClass().add("update-button");
+
+                                // Create a simple pencil icon using JavaFX shapes
+                                javafx.scene.layout.StackPane pencilIcon = createPencilIcon();
+                                updateBtn.setGraphic(pencilIcon);
+
                                 cancelBtn.getStyleClass().add("delete-button");
+
 
                                 pane.setAlignment(Pos.CENTER);
                                 pane.getChildren().addAll(updateBtn, cancelBtn);
@@ -197,6 +209,10 @@ public class UserReservationsController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 reservationService.delete(reservation);
+                OffreService offreService = new OffreService();
+                Offre offre = offreService.getById(reservation.getIdO().getIdO());
+                offre.setNumberLimit(offre.getNumberLimit() + 1);
+                offreService.update(offre);
                 loadUserReservations(); // Refresh the table
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation Cancelled",
                         "Your reservation has been successfully cancelled.");
@@ -229,5 +245,22 @@ public class UserReservationsController implements Initializable {
     // Method to be called from the UpdateReservationController after an update
     public void refreshData() {
         loadUserReservations();
+    }
+    private javafx.scene.layout.StackPane createPencilIcon() {
+        javafx.scene.layout.StackPane iconContainer = new javafx.scene.layout.StackPane();
+        iconContainer.setPrefSize(16, 16);
+
+        javafx.scene.shape.Polygon pencil = new javafx.scene.shape.Polygon(
+                2, 14,   // bottom-left
+                2, 12,   // mid-left
+                12, 2,   // top-right
+                14, 4,   // mid-right
+                4, 14    // bottom-right
+        );
+
+        pencil.setFill(Color.WHITE);
+        iconContainer.getChildren().add(pencil);
+
+        return iconContainer;
     }
 }

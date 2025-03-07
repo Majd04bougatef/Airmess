@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,7 +16,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Offre;
@@ -44,6 +50,7 @@ public class OffreAdminController implements Initializable {
     public TextField updateNumberField;
     public HBox controlButtons;
     public AnchorPane rootAnchorPane;
+    public TableColumn actionsColumn;
 
     @FXML
     private TableView<Offre> offreTableView;
@@ -124,9 +131,97 @@ public class OffreAdminController implements Initializable {
             }
         });
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+        // Add this in the initialize method, after your other column initializations
+        actionsColumn.setCellFactory(param -> new TableCell<Offre, String>() {
+            private final Button editButton = new Button();
+            private final Button deleteButton = new Button();
+            private final HBox buttonContainer = new HBox(10);
+
+            {
+                // Configure edit button
+                editButton.getStyleClass().add("edit-button-cell");
+                editButton.setPrefHeight(30);
+                editButton.setPrefWidth(30);
+                editButton.setGraphic(createEditIcon());
+
+                // Configure delete button
+                deleteButton.getStyleClass().add("delete-button-cell");
+                deleteButton.setPrefHeight(30);
+                deleteButton.setPrefWidth(30);
+                deleteButton.setGraphic(createDeleteIcon());
+
+                // Set up container
+                buttonContainer.setAlignment(javafx.geometry.Pos.CENTER);
+                buttonContainer.getChildren().addAll(editButton, deleteButton);
+
+                // Set action handlers
+                editButton.setOnAction(event -> {
+                    Offre offre = getTableView().getItems().get(getIndex());
+                    getTableView().getSelectionModel().select(offre);
+                    handleUpdateButtonAction();
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Offre offre = getTableView().getItems().get(getIndex());
+                    getTableView().getSelectionModel().select(offre);
+                    handleDeleteButtonAction();
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(buttonContainer);
+                }
+            }
+        });
+
 
         loadOffres();
         updateFieldsBox.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        offreTableView.setTableMenuButtonVisible(false);
+        offreTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    private Node createEditIcon() {
+        StackPane iconContainer = new StackPane();
+        iconContainer.setPrefSize(16, 16);
+
+        Polygon pencil = new Polygon(
+                2, 14,   // bottom-left
+                2, 12,   // mid-left
+                12, 2,   // top-right
+                14, 4,   // mid-right
+                4, 14    // bottom-right
+        );
+        pencil.setFill(javafx.scene.paint.Color.WHITE);
+        iconContainer.getChildren().add(pencil);
+
+        return iconContainer;
+    }
+
+    private Node createDeleteIcon() {
+        StackPane iconContainer = new StackPane();
+        iconContainer.setPrefSize(16, 16);
+
+        Rectangle bin = new Rectangle(4, 3, 8, 11);
+        bin.setFill(javafx.scene.paint.Color.WHITE);
+
+        Line topLine = new Line(2, 3, 14, 3);
+        topLine.setStroke(javafx.scene.paint.Color.WHITE);
+        topLine.setStrokeWidth(2);
+
+        Line handle = new Line(7, 1, 9, 1);
+        handle.setStroke(javafx.scene.paint.Color.WHITE);
+        handle.setStrokeWidth(2);
+
+        Group deleteIcon = new Group(bin, topLine, handle);
+        iconContainer.getChildren().add(deleteIcon);
+
+        return iconContainer;
     }
 
     private void loadOffres() {
