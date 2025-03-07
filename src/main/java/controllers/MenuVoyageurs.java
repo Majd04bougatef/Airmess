@@ -87,6 +87,25 @@ public class MenuVoyageurs {
     }
 
     @FXML
+    void compt(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/detailuser.fxml"));
+            Parent userPage = loader.load();
+
+            // Get the controller and pass the centralAnocherPane reference
+            Detailuser detailUserController = loader.getController();
+            detailUserController.setCentralAnocherPane(centralAnocherPane);
+
+            centralAnocherPane.getChildren().clear(); // Clear previous content
+            centralAnocherPane.getChildren().add(userPage);
+
+            System.out.println("Detailuser.fxml loaded inside centralAnocherPane.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void BonPlan(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherBonPlan.fxml"));
@@ -197,24 +216,6 @@ public class MenuVoyageurs {
     }
 
 
-    @FXML
-    void compt(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/detailuser.fxml"));
-            Parent userPage = loader.load();
-
-            // Get the controller and pass the centralAnocherPane reference
-            Detailuser detailUserController = loader.getController();
-            detailUserController.setCentralAnocherPane(centralAnocherPane);
-
-            centralAnocherPane.getChildren().clear(); // Clear previous content
-            centralAnocherPane.getChildren().add(userPage);
-
-            System.out.println("Detailuser.fxml loaded inside centralAnocherPane.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @FXML

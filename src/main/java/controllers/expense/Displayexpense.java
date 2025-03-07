@@ -1,31 +1,33 @@
-package controllers.expense;
+
+        package controllers.expense;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.image.ImageView;
-import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+import javafx.geometry.Insets;
+import javafx.fxml.Initializable;
 import models.Expense;
 import util.MyDatabase;
 import test.Session;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -114,8 +116,13 @@ public class Displayexpense implements Initializable {
         // Image
         ImageView imageView = new ImageView();
         try {
-            Image image = new Image(expense.getImagedepense());
-            imageView.setImage(image);
+            File imageFile = new File(expense.getImagedepense());
+            if (imageFile.exists()) {
+                Image image = new Image(imageFile.toURI().toString());
+                imageView.setImage(image);
+            } else {
+                throw new IOException("Image file not found");
+            }
             imageView.setFitWidth(150);
             imageView.setFitHeight(150);
             imageView.setPreserveRatio(true);
