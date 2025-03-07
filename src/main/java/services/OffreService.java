@@ -20,7 +20,7 @@ public class OffreService implements GlobalInterface<Offre> {
 
     @Override
     public void add(Offre offre) {
-        String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place, image_path, aidesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, Session.getInstance().getId_U());
@@ -32,6 +32,7 @@ public class OffreService implements GlobalInterface<Offre> {
             preparedStatement.setString(7, offre.getDescription());
             preparedStatement.setString(8, offre.getPlace());
             preparedStatement.setString(9, offre.getImage());
+            preparedStatement.setString(10, offre.getAiDescription());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -92,6 +93,7 @@ public class OffreService implements GlobalInterface<Offre> {
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
                 offre.setImage(resultSet.getString("image_path"));
+                offre.setAiDescription(resultSet.getString("aidesc"));
                 offres.add(offre);
             }
         } catch (Exception e) {
@@ -119,6 +121,7 @@ public class OffreService implements GlobalInterface<Offre> {
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
                 offre.setImage(resultSet.getString("image_path"));
+                offre.setAiDescription(resultSet.getString("aidesc"));
 
             }
         } catch (Exception e) {
