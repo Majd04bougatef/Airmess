@@ -12,6 +12,42 @@ public class Offre {
     private String description;
     private String place;
     private String image;
+    private String aiDescription;
+
+    public String getAiDescription() {
+        return aiDescription;
+    }
+
+    public void setAiDescription(String aiDescription) {
+        this.aiDescription = aiDescription;
+    }
+
+    public Offre(int idO, int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place, String image, String aiDescription) {
+        this.idO = idO;
+        this.id_U = id_U;
+        this.priceInit = priceInit;
+        this.priceAfter = priceAfter;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.numberLimit = numberLimit;
+        this.description = description;
+        this.place = place;
+        this.image = image;
+        this.aiDescription = aiDescription;
+    }
+    public Offre( int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place, String image, String aiDescription) {
+        this.id_U = id_U;
+        this.priceInit = priceInit;
+        this.priceAfter = priceAfter;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.numberLimit = numberLimit;
+        this.description = description;
+        this.place = place;
+        this.image = image;
+        this.aiDescription = aiDescription;
+    }
+
 
     public Offre(int idO, int id_U, double priceInit, double priceAfter, String startDate, String endDate, int numberLimit, String description, String place, String image) {
         this.idO = idO;

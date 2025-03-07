@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -16,6 +17,8 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import models.Offre;
 import netscape.javascript.JSObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import services.OffreService;
 
 import java.io.File;
@@ -28,6 +31,7 @@ public class AddOffreController {
     public Label warningLabel;
     public WebView mapView;
     public AnchorPane rootAnchorPane;
+    public TextArea descriptionn;
     private JavaConnector javaConnector;
 
     @FXML
@@ -121,6 +125,7 @@ public class AddOffreController {
         offre.setDescription(description.getText());
         offre.setPlace(place.getText());
         offre.setImage(imagePath);
+        offre.setAiDescription(descriptionn.getText());
         offreService.add(offre);
         //close the form
         try {
@@ -185,5 +190,88 @@ public class AddOffreController {
         }
         return true;
 
+    }
+    @FXML
+    public void generateAiContent(ActionEvent actionEvent) {
+        try {
+            String apiKey = "AIzaSyBLxnvxGsT3kt-2q6KYS7TDrZhECI5UNBI";
+            String endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
+
+            // Create content object
+            JSONObject content = new JSONObject();
+            JSONArray parts = new JSONArray();
+            JSONObject part = new JSONObject();
+
+            // Construct the prompt with offer details
+            String messageContent = "Generate a detailed and appealing description for this offer: " +
+                    description.getText() + " located in " + place.getText() +
+                    ". Price reduced from " + prixInitial.getText() + " to " + nouveauPrix.getText() +
+                    ". Only " + numberLimit.getText() + " places available from " +
+                    (startDate.getValue() != null ? startDate.getValue() : "") +
+                    " to " + (endDate.getValue() != null ? endDate.getValue() : "");
+
+            part.put("text", messageContent);
+            parts.put(part);
+            content.put("parts", parts);
+
+            JSONArray contents = new JSONArray();
+            contents.put(content);
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("contents", contents);
+            requestBody.put("generationConfig", new JSONObject()
+                    .put("temperature", 0.7)
+                    .put("maxOutputTokens", 800));
+
+            // Create HTTP connection
+            java.net.URL url = new java.net.URL(endpoint);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Send request
+            try (java.io.OutputStream os = connection.getOutputStream()) {
+                byte[] input = requestBody.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            // Read response
+            StringBuilder response = new StringBuilder();
+            try (java.io.BufferedReader br = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+            }
+
+            // Parse response JSON
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            String generatedText = "";
+
+            if (jsonResponse.has("candidates") && jsonResponse.getJSONArray("candidates").length() > 0) {
+                JSONObject candidate = jsonResponse.getJSONArray("candidates").getJSONObject(0);
+                if (candidate.has("content")) {
+                    JSONObject candidateContent = candidate.getJSONObject("content");
+                    if (candidateContent.has("parts") && candidateContent.getJSONArray("parts").length() > 0) {
+                        generatedText = candidateContent.getJSONArray("parts").getJSONObject(0).getString("text");
+                    }
+                }
+            }
+
+            // Update the description field
+            if (!generatedText.isEmpty()) {
+                descriptionn.setText(generatedText);
+            } else {
+                warningLabel.setText("Failed to generate AI content");
+                warningLabel.setVisible(true);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            warningLabel.setText("Error generating AI content: " + e.getMessage());
+            warningLabel.setVisible(true);
+        }
     }
 }

@@ -54,12 +54,12 @@
 
 /* Update button style */
 .update-button {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 
 .update-button:hover {
-    -fx-background-color: #45a049;
+    -fx-background-color: #4292bf;
 }
 
 /* Delete button style */
@@ -73,7 +73,7 @@
 }
 
 .add-button {
-    -fx-background-color: #2196F3;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 .add-button:hover {
@@ -94,7 +94,7 @@
 }
 
 .show-button {
-    -fx-background-color: #2196F3;
+    -fx-background-color: #4292bf;
     -fx-text-fill: white;
 }
 
@@ -166,4 +166,217 @@
 
 .split-menu-button .menu-item:focused .label {
     -fx-text-fill: white;
+}
+/*Offre.css */
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-border-color: transparent;
+
+}
+
+.card {
+    -fx-pref-width: 220px; /* Largeur fixe */
+    -fx-pref-height: 300px; /* Hauteur fixe */
+    -fx-margin: 10px; /* Marge entre les cartes */
+}
+
+
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0, 0, 8);
+    -fx-translate-y: -2px;
+}
+
+.card-image {
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 0);
+}
+
+.card-image {
+    -fx-pref-width: 280px;  /* Increased width */
+    -fx-pref-height: 130px; /* Same height */
+    -fx-background-radius: 25px; /* More rounded corners */
+    -fx-border-radius: 50px; /* More rounded corners */
+    -fx-clip: rect(0px, 280px, 130px, 0px); /* Updated clip to match new width */
+}
+
+
+.card-content {
+    -fx-padding: 10px;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: #333333;
+}
+
+.card-subtitle {
+    -fx-font-size: 13px;
+    -fx-fill: #6c757d;
+}
+
+.card-rating {
+    -fx-padding: 5px 0;
+    -fx-alignment: center-left;
+    -fx-spacing: 3px;
+}
+
+.star {
+    -fx-font-size: 16px;
+    -fx-fill: #F6C026;
+}
+
+.card-buttons {
+    -fx-padding: 10px 0 0 0;
+    -fx-alignment: center;
+}
+
+.btn-primary {
+    -fx-background-color: #4292bf;
+    -fx-text-fill: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #357599;
+}
+
+.btn-secondary {
+    -fx-background-color: #CBD5E0;
+    -fx-text-fill: #333333;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #A0AEC0;
+}
+/* Style général du TableView */
+.table-view {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #d3d3d3;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+}
+
+/* Centrer le texte dans chaque cellule */
+.table-view .table-cell {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+
+/* Style des en-têtes de colonnes */
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #4a90e2, #357abd);
+    -fx-padding: 10px;
+    -fx-border-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Style des lignes */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 5px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(199, 196, 196, 0.39);
+    -fx-text-fill: white;
+}
+.expired-card {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5),
+                innershadow(gaussian, rgba(200, 200, 200, 0.8), 10, 0, 0, 0);
+}
+
+.expired-card::after {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 20px;
+}
+
+.expired-card .card-content {
+    -fx-effect: blur(2px);
+}
+
+.expired-card .btn-primary, .expired-card .btn-secondary {
+    -fx-opacity: 0.6;
+}
+
+.expired-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
+    -fx-translate-y: 0px;
+}
+
+/* Black and white buttons for expired cards */
+.expired-card .btn-primary {
+    -fx-background-color: #888888;
+    -fx-text-fill: white;
+}
+
+.expired-card .btn-secondary {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #333333;
+}
+
+/* Disable hover effects for expired card buttons */
+.expired-card .btn-primary:hover,
+.expired-card .btn-secondary:hover {
+    -fx-background-color: #888888;
+    -fx-effect: none;
+}
+
+/* Remove any colored borders if present */
+.expired-card .btn-primary,
+.expired-card .btn-secondary {
+    -fx-border-color: #aaaaaa;
+}
+/* Make all text monochrome in expired cards */
+.expired-card Text {
+    -fx-fill: #555555 !important;
+}
+
+/* Override specific colored text elements */
+.expired-card .card-title {
+    -fx-fill: #333333 !important;
+}
+
+.expired-card .card-subtitle {
+    -fx-fill: #777777 !important;
+}
+
+/* Override the colored price text */
+.expired-card Text {
+    -fx-strikethrough: false;
+    -fx-fill: #555555 !important;
+}
+
+/* Ensure inline styles are overridden with !important */
+.expired-card HBox Text {
+    -fx-fill: #555555 !important;
+    -fx-strikethrough: false !important;
 }
