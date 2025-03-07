@@ -20,6 +20,7 @@ public class CardStation {
     public Button btnAvis;
     public Text prixH;
     public Text pays;
+    public ImageView imgoffre;
 
     private Session session = Session.getInstance();
 
@@ -97,7 +98,7 @@ public class CardStation {
         nom.setText(st.getNom());
         nbvelo.setText("Vélos disponibles: " + st.getNbVelo());
         prixH.setText(String.valueOf(st.getPrixheure()));
-        pays.setText("Pays : " +st.getPays());
+        pays.setText("Pays : " + st.getPays());
 
         idStation.setText(String.valueOf(st.getIdS()));
 
@@ -109,7 +110,13 @@ public class CardStation {
         };
 
         image.setImage(new Image(imagePath));
-        //image.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+
+        if (st.getNbVelo() > 50) {
+            imgoffre.setImage(new Image(getClass().getResourceAsStream("/image/offrecard3.jpeg")));
+            imgoffre.setVisible(true);
+        } else {
+            imgoffre.setVisible(false);
+        }
     }
 
 

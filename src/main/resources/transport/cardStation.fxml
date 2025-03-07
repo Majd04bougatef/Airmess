@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="320.0" prefWidth="200.0" stylesheets="/css/cardStation.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transport.CardStation">
     <children>
         <VBox fx:id="vboxx" layoutX="0" layoutY="0" prefHeight="320.0" prefWidth="200.0" styleClass="card">
             <children>
-                <ImageView fx:id="image" fitWidth="200.0" fitHeight="130.0" preserveRatio="false" smooth="true" styleClass="card-image"/>
+                <ImageView fx:id="image" fitHeight="122.0" fitWidth="200.0" preserveRatio="false" smooth="true" styleClass="card-image" />
                 <Text fx:id="idStation" opacity="0" text="ID de la station" visible="false" />
 
-                <VBox spacing="5" styleClass="card-content">
-                    <Text fx:id="nom" text="Nom de la station" styleClass="card-title" />
-                    <Text fx:id="nbvelo" text="Nombre de vélos" styleClass="card-subtitle" />
-                    <Text fx:id="prixH" text="Prix par Heure" styleClass="card-subtitle" />
-                    <Text fx:id="pays" text="Pays : " styleClass="card-subtitle" />
+                <VBox prefHeight="291.0" prefWidth="200.0" spacing="5" styleClass="card-content">
+               <ImageView fx:id="imgoffre" fitHeight="56.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true" />
+                    <Text fx:id="nom" styleClass="card-title" text="Nom de la station" />
+                    <Text fx:id="nbvelo" styleClass="card-subtitle" text="Nombre de vélos" />
+                    <Text fx:id="prixH" styleClass="card-subtitle" text="Prix par Heure" />
+                    <Text fx:id="pays" styleClass="card-subtitle" text="Pays : " />
                 </VBox>
 
-                <HBox fx:id="ratingContainer" spacing="3.0" alignment="CENTER_LEFT">
-                    <Text text="★" styleClass="star"/>
-                    <Text text="★" styleClass="star"/>
-                    <Text text="★" styleClass="star"/>
-                    <Text text="★" styleClass="star"/>
-                    <Text text="☆" styleClass="star"/>
+                <HBox fx:id="ratingContainer" alignment="CENTER_LEFT" spacing="3.0">
+                    <Text styleClass="star" text="★" />
+                    <Text styleClass="star" text="★" />
+                    <Text styleClass="star" text="★" />
+                    <Text styleClass="star" text="★" />
+                    <Text styleClass="star" text="☆" />
                 </HBox>
 
 
-                <HBox spacing="10" alignment="CENTER" styleClass="card-buttons">
-                    <Button mnemonicParsing="false" onAction="#reserver" text="Réserver" styleClass="btn-primary" />
-                    <Button fx:id="btnAvis" mnemonicParsing="false" onAction="#review" text="Avis" styleClass="btn-secondary" />
+                <HBox alignment="CENTER" prefHeight="17.0" prefWidth="200.0" spacing="10" styleClass="card-buttons">
+                    <Button mnemonicParsing="false" onAction="#reserver" styleClass="btn-primary" text="Réserver" />
+                    <Button fx:id="btnAvis" mnemonicParsing="false" onAction="#review" styleClass="btn-secondary" text="Avis" />
                 </HBox>
             </children>
         </VBox>

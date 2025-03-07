@@ -20,7 +20,8 @@ import services.ReservationTransportService;
 import services.StationService;
 import test.Session;
 
-
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
 
 import java.awt.*;
 import java.io.*;
@@ -100,7 +101,7 @@ public class ReservationTransport {
             }
 
             long heures = ChronoUnit.HOURS.between(LocalDateTime.now(), dateFinValue.atStartOfDay());
-            prixTotalValue = calculateTotalPrice(heures, nbVelo);
+            prixTotalValue = calculateTotalPrice(heures, nbVelo)[0];
             prixTotal.setText(String.format(PRIX_FORMAT, prixTotalValue));
         } catch (NumberFormatException e) {
             prixTotal.setText(ERREUR_MESSAGE);
@@ -111,9 +112,24 @@ public class ReservationTransport {
         return nbVelo <= 0 || nbVelo > nbVeloDispo || dateFinValue == null || !dateFinValue.isAfter(LocalDate.now());
     }
 
-    private double calculateTotalPrice(long heures, int nbVelo) {
+    private double[] calculateTotalPrice(long heures, int nbVelo) {
         if (heures <= 0) heures = 1;
-        return heures * prixParHeure * nbVelo;
+        double totalWithoutDiscount = heures * prixParHeure * nbVelo;
+        double totalWithDiscount = totalWithoutDiscount;
+        if (nbVeloDispo > 50) {
+            totalWithDiscount *= 0.9; // Apply 10% discount
+        }
+        return new double[]{totalWithoutDiscount, totalWithDiscount};
+    }
+
+    private void updateRecap(int nbVelo, LocalDate dateFinValue) {
+        double[] prices = calculateTotalPrice(ChronoUnit.HOURS.between(LocalDateTime.now(), dateFinValue.atStartOfDay()), nbVelo);
+        double totalWithoutDiscount = prices[0];
+        double totalWithDiscount = prices[1];
+        String discountInfo = (nbVeloDispo > 50) ? "Remise : 10%" : "Remise : 0%";
+        recapitulatifDetails.setText(String.format("Référence : %s\nStation : %s\nNombre de vélos : %d\nDate de fin : %s\n%s\nMontant sans remise : %.2f €\nMontant avec remise : %.2f €\nStatut : En attente",
+                reference, currentStation.getNom(), nbVelo, dateFinValue, discountInfo, totalWithoutDiscount, totalWithDiscount));
+        recapPrixTotal.setText(String.format(PRIX_FORMAT, totalWithDiscount));
     }
 
     @FXML
@@ -132,13 +148,6 @@ public class ReservationTransport {
             showAlert("Erreur", "Veuillez entrer un nombre valide pour les vélos.");
         }
     }
-
-    private void updateRecap(int nbVelo, LocalDate dateFinValue) {
-        recapitulatifDetails.setText(String.format("Référence : %s\nStation : %s\nNombre de vélos : %d\nDate de fin : %s\nStatut : En attente",
-                reference, currentStation.getNom(), nbVelo, dateFinValue));
-        recapPrixTotal.setText(String.format(PRIX_FORMAT, prixTotalValue));
-    }
-
 
     @FXML
     public void payerReservation(ActionEvent actionEvent) {
@@ -237,64 +246,63 @@ public class ReservationTransport {
     }
 
 
-    @FXML
     public void genererPDF() {
         try {
-            // Définir un format horizontal (200x500) pour le billet
-            Document document = new Document(new Rectangle(500, 200));  // Format horizontal (taille adaptée pour un billet)
+            // Define a horizontal format (200x500) for the ticket
+            Document document = new Document(new Rectangle(500, 200));  // Horizontal format (size suitable for a ticket)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
 
-            // Créer un rectangle divisé en deux parties : gauche (70%) et droite (30%)
-            Rectangle fullRectangle = new Rectangle(0, 0, 500, 200);  // Rectangle principal
+            // Create a main rectangle divided into two parts: left (70%) and right (30%)
+            Rectangle fullRectangle = new Rectangle(0, 0, 500, 200);  // Main rectangle
             fullRectangle.setBorder(Rectangle.BOX);
             fullRectangle.setBorderWidth(2);
             document.add(fullRectangle);
 
-            // Partie gauche : Fond bleu et informations
-            Rectangle leftRectangle = new Rectangle(0, 0, 350, 200);  // 70% de la largeur
-            leftRectangle.setBackgroundColor(new Color(255,255,255));  // Fond bleu pour la partie gauche
+            // Left part: White background and information
+            Rectangle leftRectangle = new Rectangle(0, 0, 350, 200);  // 70% of the width
+            leftRectangle.setBackgroundColor(new Color(255, 255, 255));  // White background for the left part
             document.add(leftRectangle);
 
-            // Logo (positionné en haut à gauche dans la partie gauche)
+            // Logo (positioned at the top left in the left part)
             Image logo = Image.getInstance(getClass().getResource("/image/AirMess copie.png"));
-            logo.setAbsolutePosition(20, 130);  // Position du logo (ajustée en fonction de la taille du logo)
+            logo.setAbsolutePosition(20, 130);  // Logo position (adjusted based on logo size)
             logo.scaleToFit(50, 50);
             document.add(logo);
 
-            // Informations de réservation dans la partie gauche
+            // Reservation information in the left part
             Font textFont = new Font(Font.HELVETICA, 12);
             Paragraph infoParagraph = new Paragraph();
-            infoParagraph.add(new Chunk("\n\n\n\n\n\nNom de la station : " + currentStation.getNom() + "\n", textFont));
+            infoParagraph.add(new Chunk("\n\n\n\nNom de la station : " + currentStation.getNom() + "\n", textFont));
             infoParagraph.add(new Chunk("Date de réservation : " + dateRes.getText() + "\n", textFont));
             infoParagraph.add(new Chunk("Date de fin : " + dateFin.getValue() + "\n", textFont));
             infoParagraph.add(new Chunk("Nombre de vélos : " + nombreVelo.getText() + "\n", textFont));
             infoParagraph.add(new Chunk("Prix total : " + String.format("%.2f €", prixTotalValue) + "\n", textFont));
-            infoParagraph.setLeading(10);  // Espacement entre les lignes
+            infoParagraph.setLeading(10);  // Line spacing
             document.add(infoParagraph);
 
-            // Partie droite : QR code et informations supplémentaires
-            float qrCodeX = 370;  // Position en X pour le QR code
-            float qrCodeY = 100;  // Position Y pour le QR code
+            // Right part: QR code and additional information
+            float qrCodeX = 370;  // X position for the QR code
+            float qrCodeY = 100;  // Y position for the QR code
             String qrCodeText = "Référence: " + reference;
             Image qrCodeImage = createQRCodeImage(qrCodeText);
             qrCodeImage.setAbsolutePosition(qrCodeX, qrCodeY);
-            qrCodeImage.scaleToFit(80, 80);  // Ajuster la taille du QR code
+            qrCodeImage.scaleToFit(80, 80);  // Adjust QR code size
             document.add(qrCodeImage);
 
-            // Référence et prix total dans la partie droite
+            // Reference and total price in the right part
             Paragraph rightInfoParagraph = new Paragraph();
-            rightInfoParagraph.add(new Chunk( reference + "\n", textFont));
+            rightInfoParagraph.add(new Chunk(reference + "\n", textFont));
             rightInfoParagraph.add(new Chunk("Prix total : " + String.format("%.2f €", prixTotalValue) + "\n", textFont));
-            rightInfoParagraph.setLeading(10);  // Espacement entre les lignes
-            rightInfoParagraph.setAlignment(Element.ALIGN_RIGHT);  // Aligner à droite
+            rightInfoParagraph.setLeading(10);  // Line spacing
+            rightInfoParagraph.setAlignment(Element.ALIGN_RIGHT);  // Align to the right
             document.add(rightInfoParagraph);
 
             document.close();
 
-            // Afficher le PDF généré
+            // Display the generated PDF
             afficherPDF(byteArrayOutputStream.toByteArray());
 
         } catch (Exception e) {

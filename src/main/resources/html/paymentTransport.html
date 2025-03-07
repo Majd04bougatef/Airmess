@@ -193,7 +193,7 @@
       errorDiv.textContent = confirmError.message;
       submitButton.disabled = false;
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      successDiv.textContent = 'Payment Successful: ' + paymentIntent.id;
+      successDiv.textContent = 'Payment Successful: ';
       if (window.javaBridge) {
         window.javaBridge.paymentSuccess(paymentIntent.id);
       }
