@@ -31,8 +31,8 @@ public class AfficherBonPlan {
     private AnchorPane centralAnchorPane; // Assurez-vous que cette variable est bien déclarée
 
 
-    public void setCentralAnchorPane(AnchorPane anchorPane) {
-        this.centralAnchorPane = anchorPane;
+    public void setCentralAnchorPane(AnchorPane centralAnocherPane) {
+        this.centralAnchorPane = centralAnocherPane;
     }
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
@@ -279,6 +279,29 @@ public class AfficherBonPlan {
             e.printStackTrace();
         }
     }
+    private bonplan selectedBonPlan;
+    @FXML
+    private void showUpdateBonPlan() {
+        if (selectedBonPlan != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormUpdateBonPlan.fxml"));
+                Parent updateBonPlan = loader.load();
+
+                // Récupérer le contrôleur du formulaire et lui envoyer les données du bon plan
+                FormUpdateBonPlan controller = loader.getController();
+                controller.initData(selectedBonPlan);
+
+                // Effacer le contenu actuel et afficher le formulaire dans centralAnchorPane
+                centralAnchorPane.getChildren().clear();
+                centralAnchorPane.getChildren().add(updateBonPlan);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showAlert("Erreur", "Veuillez sélectionner un bon plan à modifier !");
+        }
+    }
+
     private HBox createStarRating(int rating) {
         HBox starBox = new HBox(5); // Espacement entre étoile et texte
         starBox.setAlignment(Pos.CENTER_LEFT);
@@ -326,6 +349,17 @@ public class AfficherBonPlan {
 
                 // Mettre la valeur sélectionnée dans le ChoiceBox
                 ratingBox.setValue(ratingValue);
+                if (ratingValue == 1) {
+                    String[] messages = {
+                            "Vraiment ? Une seule étoile ? On peut s'améliorer, promis !",
+                            "Ouch ! 😨 Dites-nous ce qui ne va pas !",
+                            "On peut discuter ? 😅 Votre retour est précieux !",
+                            "Une étoile... est-ce que c'était si terrible ? 😭",
+                            "On veut s'améliorer, que s'est-il passé ? 🤔"
+                    };
+                    int randomIndex = (int) (Math.random() * messages.length);
+                    showAlert("Oh non ! 😢", messages[randomIndex]);
+                }
             });
 
             starBox.getChildren().add(stars[i]);

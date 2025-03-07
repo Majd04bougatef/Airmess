@@ -103,7 +103,6 @@ public class MenuVoyageurs {
         }
     }
 
-
     @FXML
     void Home(ActionEvent event) {
         try {
