@@ -2,10 +2,16 @@ package controllers.expense;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import models.Expense;
 import services.ExpenseService;
 import test.Session;
@@ -15,6 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Addexpense {
 
@@ -53,6 +61,7 @@ public class Addexpense {
 
     @FXML
     private TextField name;
+
 
     private Session session = Session.getInstance();
     private ExpenseService expenseService = new ExpenseService();
@@ -304,8 +313,10 @@ public class Addexpense {
         controllerimage.setText("");
     }
 
+
     @FXML
-    void depaff(ActionEvent event) {
-        // Implementation for displaying expenses if needed
+    private void depaff(ActionEvent event) {
+
     }
+
 }

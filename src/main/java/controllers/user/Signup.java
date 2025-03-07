@@ -1,9 +1,5 @@
 package controllers.user;
 
-
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,64 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
 import java.time.LocalDate;
-
 import java.util.regex.Pattern;
-
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import test.Session;
-import models.EmailService;
-
-
-
-
-
-
-
-
-
-
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import models.Users;
-import models.EmailService;
-import services.UsersService;
-
-import javax.mail.MessagingException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.util.Random;
-import java.util.regex.Pattern;
-
-
 
 public class Signup {
 
-    // Champs FXML
     @FXML
     private TextField Email_user;
     @FXML
@@ -95,8 +38,9 @@ public class Signup {
     private ComboBox<String> type_user;
     @FXML
     private ImageView user_photo;
+    @FXML
+    private TextField tax_id; // New field for tax ID
 
-    // Labels de validation
     @FXML
     private Label validationemail;
     @FXML
@@ -115,218 +59,67 @@ public class Signup {
     private UsersService userService = new UsersService();
     private String imagePath;
 
-
-
-
-
-
-
-
-
-    private String verificationCode;
-    private Timeline codeExpirationTimer;
-    private Stage verificationStage;
-    private Users pendingUser;
-
-
-
-
-
-
-
-
-
-
-
-
     @FXML
     public void initialize() {
         type_user.getItems().addAll("Voyageurs", "Entreprise", "Créateur de contenu");
+        type_user.setOnAction(event -> handleUserTypeChange());
     }
 
+    private void handleUserTypeChange() {
+        if ("Entreprise".equals(type_user.getValue())) {
+            dateN_user.setPromptText("Foundation Date");
+            tax_id.setVisible(true);
+        } else {
+            dateN_user.setPromptText("Date de Naissance");
+            tax_id.setVisible(false);
+        }
+    }
 
     @FXML
     void Ajouterunephotodep(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-
-        // Configuration du filtre d'extensions
         FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
                 "Fichiers image (*.png, *.jpg, *.jpeg)",
-                "*.png",
-                "*.jpg",
-                "*.jpeg"
+                "*.png", "*.jpg", "*.jpeg"
         );
-
         fileChooser.getExtensionFilters().add(imageFilter);
         fileChooser.setTitle("Sélectionner une photo de profil");
-
-        // Démarre dans le dossier Images par défaut
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Pictures"));
 
         File file = fileChooser.showOpenDialog(user_photo.getScene().getWindow());
-
         if (file == null) {
             showAlert("Aucun fichier sélectionné", "Veuillez sélectionner une image.");
             return;
         }
 
-        // Configuration du dossier de destination
         String destinationDirectory = "C:/xampp/htdocs/imguser/";
         File destDir = new File(destinationDirectory);
-
         try {
-            // Crée le dossier s'il n'existe pas
             if (!destDir.exists()) Files.createDirectories(destDir.toPath());
-
-            // Copie le fichier
             File destinationFile = new File(destinationDirectory + file.getName());
-            Files.copy(
-                    file.toPath(),
-                    destinationFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING
-            );
-
-            // Met à jour l'interface
+            Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             imagePath = destinationFile.getAbsolutePath();
-            Image image = new Image(destinationFile.toURI().toString());
-            user_photo.setImage(image);
-
-            System.out.println("Image enregistrée avec succès : " + imagePath);
-
+            user_photo.setImage(new Image(destinationFile.toURI().toString()));
         } catch (IOException e) {
             showAlert("Erreur de traitement", "Erreur lors de la copie du fichier : " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-
-
-
-
-
-
-
-    private String generateVerificationCode() {
-        return String.format("%06d", new Random().nextInt(999999));
-    }
-
-    private void sendVerificationEmail(String email, String code) throws MessagingException {
-        String subject = "Code de vérification";
-        String messageBody = "Votre code de vérification est : " + code + "\n\n" +
-                "Ce code expirera dans 2 minutes.\n\n" +
-                "Si vous n'avez pas demandé ce code, veuillez ignorer cet email.";
-        EmailService.sendConfirmationEmail(email, subject, messageBody);
-    }
-
-    private void showVerificationWindow(ActionEvent originalEvent) {
-        try {
-            verificationStage = new Stage();
-            verificationStage.initModality(Modality.APPLICATION_MODAL);
-
-            VBox layout = new VBox(10);
-            layout.setPadding(new Insets(20));
-            layout.setAlignment(Pos.CENTER);
-
-            Label timerLabel = new Label("Temps restant: 2:00");
-            TextField codeField = new TextField();
-            codeField.setPromptText("Entrez le code de vérification");
-
-            Button verifyButton = new Button("Vérifier");
-            Label messageLabel = new Label("");
-            messageLabel.setTextFill(Color.RED);
-
-            layout.getChildren().addAll(
-                    timerLabel,
-                    new Label("Un code a été envoyé à votre email."),
-                    codeField,
-                    verifyButton,
-                    messageLabel
-            );
-
-            startVerificationTimer(timerLabel, messageLabel, verificationStage);
-
-            verifyButton.setOnAction(e -> {
-                if (codeField.getText().equals(verificationCode)) {
-                    try {
-                        if (codeExpirationTimer != null) {
-                            codeExpirationTimer.stop();
-                        }
-
-                        // Add user using existing service method (no database changes)
-                        userService.add(pendingUser);
-
-                        verificationStage.close();
-                        showAlert("Succès", "Inscription réussie !");
-                        navigateToLogin(originalEvent);
-                    } catch (Exception ex) {
-                        showAlert("Erreur", "Échec de l'inscription : " + ex.getMessage());
-                        ex.printStackTrace();
-                    }
-                } else {
-                    messageLabel.setText("Code incorrect. Veuillez réessayer.");
-                }
-            });
-
-            Scene scene = new Scene(layout, 300, 250);
-            verificationStage.setScene(scene);
-            verificationStage.setTitle("Vérification Email");
-            verificationStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Erreur lors de l'ouverture de la fenêtre de vérification");
-        }
-    }
-
-
-
-    private void startVerificationTimer(Label timerLabel, Label messageLabel, Stage stage) {
-        final int[] timeLeft = {120}; // 2 minutes in seconds
-
-        codeExpirationTimer = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> {
-                    timeLeft[0]--;
-                    int minutes = timeLeft[0] / 60;
-                    int seconds = timeLeft[0] % 60;
-                    timerLabel.setText(String.format("Temps restant: %d:%02d", minutes, seconds));
-
-                    if (timeLeft[0] <= 0) {
-                        codeExpirationTimer.stop();
-                        verificationCode = null;
-                        messageLabel.setText("Le code a expiré. Veuillez recommencer l'inscription.");
-
-                        Timeline closeWindow = new Timeline(new KeyFrame(Duration.seconds(2), event -> stage.close()));
-                        closeWindow.play();
-                    }
-                })
-        );
-
-        codeExpirationTimer.setCycleCount(Timeline.INDEFINITE);
-        codeExpirationTimer.play();
-    }
-
-
-
-
     @FXML
     void enregistrer(ActionEvent event) {
         if (!validateForm()) return;
 
-        pendingUser = createUserFromForm();
-
+        Users user = createUserFromForm();
         try {
-            if (userService.emailExists(pendingUser.getEmail())) {
+            if (userService.emailExists(user.getEmail())) {
                 showAlert("Erreur", "Cet email est déjà utilisé !");
                 return;
             }
 
-            // Generate and send verification code
-            verificationCode = generateVerificationCode();
-            sendVerificationEmail(pendingUser.getEmail(), verificationCode);
-
-            // Show verification window
-            showVerificationWindow(event);
-
+            userService.add(user);
+            showAlert("Succès", "Inscription réussie !");
+            navigateToLogin(event);
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'inscription : " + e.getMessage());
             e.printStackTrace();
@@ -350,7 +143,6 @@ public class Signup {
         boolean isValid = true;
         resetValidationLabels();
 
-        // Validation des champs
         isValid &= validateField(nom_user, validationnom, "Nom requis");
         isValid &= validateField(prenom_user, validationprenom, "Prénom requis");
         isValid &= validateEmail();
@@ -360,10 +152,13 @@ public class Signup {
         isValid &= validateUserType();
         isValid &= validateImage();
 
+        if ("Entreprise".equals(type_user.getValue())) {
+            isValid &= validateField(tax_id, validationroleuser, "Tax ID requis");
+        }
+
         return isValid;
     }
 
-    // Méthodes de validation
     private boolean validateField(TextField field, Label errorLabel, String message) {
         if (field.getText().trim().isEmpty()) {
             errorLabel.setText(message);
@@ -404,6 +199,7 @@ public class Signup {
         return true;
     }
 
+
     private boolean validateUserType() {
         if (type_user.getValue() == null) {
             validationroleuser.setText("Sélectionnez un type");
@@ -420,8 +216,6 @@ public class Signup {
         return true;
     }
 
-
-    // Utilitaires
     private void resetValidationLabels() {
         validationnom.setText("");
         validationprenom.setText("");
@@ -433,8 +227,7 @@ public class Signup {
     }
 
     private String hashPassword(String password) {
-        // Implémentez le hachage réel ici (BCrypt, etc.)
-        return password; // À remplacer par un vrai hachage
+        return password; // Replace with actual hashing
     }
 
     private void showAlert(String title, String message) {
@@ -457,7 +250,6 @@ public class Signup {
         navigateToLogin(event);
     }
 
-    // Méthodes de validation de base
     private boolean isValidEmail(String email) {
         return Pattern.matches("^[\\w.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", email);
     }
@@ -474,28 +266,3 @@ public class Signup {
         return birthDate.plusYears(15).isBefore(LocalDate.now());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

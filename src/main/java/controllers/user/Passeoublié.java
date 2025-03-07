@@ -37,7 +37,16 @@ public class Passeoublié {
     private Timeline codeExpirationTimer;
     private Stage verificationStage;
     private String userEmail;
-
+    private void navigateToLogin(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/user/login.fxml"));
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    @FXML
+    void back(ActionEvent event) throws IOException {
+        navigateToLogin(event);
+    }
     @FXML
     void Rechercher(ActionEvent event) throws MessagingException {
         String email = email_identifier.getText().trim();

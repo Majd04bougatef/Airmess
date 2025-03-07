@@ -59,7 +59,26 @@ import javafx.stage.Stage;
 public class MenuEntreprise {
     @FXML
     private Text nameus;
+    @FXML
+    private ImageView fotouser;
+    @FXML
+    void compt(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/detailuser.fxml"));
+            Parent userPage = loader.load();
 
+            // Get the controller and pass the centralAnocherPane reference
+            Detailuser detailUserController = loader.getController();
+            detailUserController.setCentralAnocherPane(centralAnocherPane);
+
+            centralAnocherPane.getChildren().clear(); // Clear previous content
+            centralAnocherPane.getChildren().add(userPage);
+
+            System.out.println("Detailuser.fxml loaded inside centralAnocherPane.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private AnchorPane anchorpane1;
@@ -189,14 +208,11 @@ public class MenuEntreprise {
                 File imageFile = new File(session.getCurrentUser().getImagesU());
                 if (imageFile.exists()) {
                     Image userImage = new Image(imageFile.toURI().toString()); // Convert to valid URL
-                    ImageView imageView = new ImageView(userImage);
+                    fotouser.setImage(userImage);
 
-                    imageView.setFitWidth(100);
-                    imageView.setFitHeight(58);
-                    imageView.setPreserveRatio(true);
-
-                    // Add the ImageView to the AnchorPane or any other container
-                    centralAnocherPane.getChildren().add(imageView);
+                    fotouser.setFitWidth(100);
+                    fotouser.setFitHeight(58);
+                    fotouser.setPreserveRatio(true);
                 } else {
                     System.out.println("Image file not found: " + imageFile.getAbsolutePath());
                 }
@@ -204,6 +220,7 @@ public class MenuEntreprise {
                 e.printStackTrace();
             }
         }
+        }
 
     }
-}
+

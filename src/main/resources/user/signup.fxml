@@ -43,7 +43,7 @@
                 <DatePicker fx:id="dateN_user" layoutX="427.0" layoutY="377.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
                 <Text fill="#1b56a4" layoutX="428.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type de compte" />
                 <Text fill="#1b56a4" layoutX="428.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="numéro de téléphone" />
-                <Text fill="#1b56a4" layoutX="428.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text="date de naissance " />
+                <Text fill="#1b56a4" layoutX="428.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                 <Button layoutX="427.0" layoutY="444.0" mnemonicParsing="false" onAction="#enregistrer" prefHeight="35.0" prefWidth="240.0" style="-fx-background-radius: 50; -fx-background-color: #db7093;" text="S’enregistrer" textFill="WHITE">
                     <font>
                         <Font size="18.0" />

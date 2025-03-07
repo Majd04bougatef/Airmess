@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -141,7 +140,7 @@
                         <children>
                             <HBox layoutX="824.0" layoutY="6.0" prefHeight="47.0" prefWidth="120.0">
                                 <children>
-                                    <Text fx:id="nameus" fill="#807d7d" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de l'utilsateur">
+                                    <Text fx:id="nameus" fill="#807d7d" strokeType="OUTSIDE" strokeWidth="0.0">
                                         <HBox.margin>
                                             <Insets right="10.0" top="12.0" />
                                         </HBox.margin>
@@ -149,7 +148,6 @@
                                             <Font size="16.0" />
                                         </font>
                                     </Text>
-                                    <Circle fx:id="imageUser" fill="WHITE" radius="22.0" stroke="#c1c1c1" strokeType="INSIDE" />
                                 </children>
                             </HBox>
                             <TextField fx:id="rechercheMenu_Voyageurs" layoutX="225.0" layoutY="18.0" prefHeight="25.0" prefWidth="202.0" promptText="Recherche" />
@@ -158,6 +156,8 @@
                                     <Image url="@image/menu_voyageurs/recherche.png" />
                                 </image>
                             </ImageView>
+                        <ImageView fx:id="fotouser" fitHeight="59.0" fitWidth="166.0" layoutX="850.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button layoutX="908.0" layoutY="2.0" mnemonicParsing="false" onAction="#compt" prefHeight="56.0" prefWidth="108.0" style="-fx-background-color: whi;" />
                         </children>
                     </Pane>
                 </children>

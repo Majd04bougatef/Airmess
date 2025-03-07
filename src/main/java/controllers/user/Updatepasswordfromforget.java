@@ -2,9 +2,15 @@ package controllers.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.stage.Stage;
 import services.UsersService;
+
+import java.io.IOException;
 
 public class Updatepasswordfromforget {
 
@@ -41,6 +47,7 @@ public class Updatepasswordfromforget {
 
             if (updated) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Mot de passe mis à jour avec succès !");
+                navigateToLogin(event);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour du mot de passe.");
             }
@@ -56,5 +63,20 @@ public class Updatepasswordfromforget {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void navigateToLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/login.fxml"));
+            Parent loginPage = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loginPage);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran de connexion.");
+        }
     }
 }
