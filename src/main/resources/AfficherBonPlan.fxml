@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherBonPlan" stylesheets="/css/style.css">
+<AnchorPane stylesheets="/css/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="controllers.AfficherBonPlan">
     <children>
 
-        <Button text="Ajouter un Bon Plan" layoutX="20" layoutY="10" onAction="#showAddBonPlan" styleClass="add-button"/>
-
-        <ScrollPane layoutX="10.0" layoutY="50.0" prefWidth="1000.0" prefHeight="700.0">
+        <ScrollPane layoutX="10.0" layoutY="50.0" prefHeight="700.0" prefWidth="1000.0">
             <content>
-                <FlowPane fx:id="flowPaneBonPlans" hgap="30" vgap="30" prefWrapLength="900" style="-fx-padding: 10;">
-                    <VBox fx:id="bonPlanCard" prefWidth="250.0" prefHeight="400.0" styleClass="bonplan-card">
+                <FlowPane fx:id="flowPaneBonPlans" hgap="30" prefWrapLength="900" style="-fx-padding: 10;" vgap="30">
+                    <VBox fx:id="bonPlanCard" prefHeight="400.0" prefWidth="250.0" styleClass="bonplan-card">
 
                         <!-- Conteneur pour l'image et le menu (⋮) -->
                         <HBox alignment="TOP_RIGHT" spacing="5">
-                            <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250"/>
+                            <ImageView fx:id="imageBP" fitHeight="150" fitWidth="250" />
 
                             <!-- MenuButton avec les options Modifier/Supprimer -->
-                            <MenuButton text="⋮" styleClass="menu-button">
+                            <MenuButton styleClass="menu-button" text="⋮">
                                 <items>
-                                    <MenuItem fx:id="editComment" text="Modifier"/>
-                                    <MenuItem fx:id="deleteComment" text="Supprimer"/>
+                                    <MenuItem fx:id="editComment" text="Modifier" />
+                                    <MenuItem fx:id="deleteComment" text="Supprimer" />
                                 </items>
                             </MenuButton>
                         </HBox>
 
-                        <Label fx:id="nameLabel" text="Nom du Bon Plan" styleClass="bonplan-title label-bold" />
-                        <Label fx:id="descriptionLabel" text="Description" styleClass="bonplan-description label-bold" />
+                        <Label fx:id="nameLabel" styleClass="bonplan-title label-bold" text="Nom du Bon Plan" />
+                        <Label fx:id="descriptionLabel" styleClass="bonplan-description label-bold" text="Description" />
 
                         <!-- Boutons Modifier et Supprimer du bon plan -->
-                        <HBox spacing="10" alignment="CENTER">
-                            <Button fx:id="btnModifier" text="Modifier" styleClass="update-button"/>
-                            <Button fx:id="btnSupprimer" text="Supprimer" styleClass="delete-button"/>
+                        <HBox alignment="CENTER" spacing="10">
+                            <Button fx:id="btnModifier" onAction="#showUpdateBonPlan" styleClass="update-button" text="Modifier" />
+                            <Button fx:id="btnSupprimer" styleClass="delete-button" text="Supprimer" />
                         </HBox>
-                        <HBox spacing="2" alignment="CENTER">
-                            <Label fx:id="star1" text="★" styleClass="star"/>
-                            <Label fx:id="star2" text="★" styleClass="star"/>
-                            <Label fx:id="star3" text="★" styleClass="star"/>
-                            <Label fx:id="star4" text="★" styleClass="star"/>
-                            <Label fx:id="star5" text="★" styleClass="star"/>
+                        <HBox alignment="CENTER" spacing="2">
+                            <Label fx:id="star1" styleClass="star" text="★" />
+                            <Label fx:id="star2" styleClass="star" text="★" />
+                            <Label fx:id="star3" styleClass="star" text="★" />
+                            <Label fx:id="star4" styleClass="star" text="★" />
+                            <Label fx:id="star5" styleClass="star" text="★" />
                         </HBox>
                         <!-- Commentaires -->
                         <VBox fx:id="commentsSection" spacing="5" style="-fx-padding: 10;">
-                            <Label text="Commentaires :" styleClass="comment-title"/>
-                            <VBox fx:id="commentsList" spacing="5" styleClass="comments-list"/>
+                            <Label styleClass="comment-title" text="Commentaires :" />
+                            <VBox fx:id="commentsList" spacing="5" styleClass="comments-list" />
                             <HBox spacing="5">
                                 <TextField fx:id="commentField" promptText="Ajouter un commentaire..." />
-                                <Button fx:id="btnAddComment" text="Envoyer" styleClass="add-comment-button"/>
+                                <Button fx:id="btnAddComment" styleClass="add-comment-button" text="Envoyer" />
                             </HBox>
                         </VBox>
                     </VBox>

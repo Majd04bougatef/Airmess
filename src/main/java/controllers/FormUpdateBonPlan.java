@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -40,6 +41,11 @@ public class FormUpdateBonPlan implements Initializable {
     private Button addImageButton;
     @FXML
     private WebView mapView; // Ajout de la carte
+
+    private AnchorPane centralAnocherPane;
+    public void setCentralAnchorPane(AnchorPane centralAnocherPane) {
+        this.centralAnocherPane = centralAnocherPane;
+    }
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
     private bonplan selectedBonPlan;
