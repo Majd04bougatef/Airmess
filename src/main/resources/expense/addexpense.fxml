@@ -24,7 +24,7 @@
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Text fill="#1b56a4" layoutX="359.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dépenses" wrappingWidth="239.9999999999999">
+            <Text fill="#1b56a4" layoutX="309.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dépenses" wrappingWidth="374.39996337890614">
                <font>
                   <Font name="Aldhabi" size="70.0" />
                </font>
