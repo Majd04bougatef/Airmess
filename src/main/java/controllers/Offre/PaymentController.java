@@ -6,25 +6,41 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import models.Offre;
 import models.Reservation;
 import netscape.javascript.JSObject;
 import services.CurrencyConverter;
+import services.OffreService;
+import services.ReservationService;
+import test.Session;
+import util.Mailer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PaymentController {
+    public DatePicker reservationDatePicker;
+    public AnchorPane rootAnchorPane;
+    public Label informationsLabel;
     @FXML
     private WebView paymentWebView;
     @FXML
@@ -34,6 +50,7 @@ public class PaymentController {
     private String purchaseId;
 
     private Reservation reservation;
+    private Offre offre;
 
     private ReservationController reservationController;
 
@@ -43,6 +60,38 @@ public class PaymentController {
 
     private static final Logger logger = Logger.getLogger(PaymentController.class.getName());
 
+    public Offre getOffre() {
+        return offre;
+    }
+
+    public void setOffre(Offre offre) {
+        this.offre = offre;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse(offre.getStartDate(), formatter);
+        LocalDateTime endDate = LocalDateTime.parse(offre.getEndDate(), formatter);
+        informationsLabel.setText("Please select a date between : " + offre.getStartDate().split(" ")[0] + " and " + offre.getEndDate().split(" ")[0] + " :");
+        reservationDatePicker.setDayCellFactory(picker -> new DateCell(){
+            public void updateItem(LocalDate date, boolean empty){
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(startDate.toLocalDate()) || date.isAfter(endDate.toLocalDate()));
+            }
+        });
+    }
+    @FXML
+    private VBox paymentContainer; // Add this to your FXML and wrap WebView in it
+
+    private void updateWebViewDisabledState(boolean disabled) {
+        if (disabled) {
+            paymentWebView.setStyle("-fx-opacity: 0.5;");
+            // add blur effect
+
+            GaussianBlur blur = new GaussianBlur(5);
+            paymentWebView.setEffect(blur);
+        } else {
+            paymentWebView.setStyle("-fx-opacity: 1.0;");
+            paymentWebView.setEffect(null);
+        }
+    }
     @FXML
     private void initialize() {
         logger.info("PaymentController initialized");
@@ -70,6 +119,51 @@ public class PaymentController {
                 initializePayment();
             }
         });
+
+        reservationDatePicker.valueProperty().addListener((observableValue, oldVal, newVal) -> {
+           validateReservationDate(newVal);
+        });
+
+        paymentWebView.setDisable(true);
+        updateWebViewDisabledState(true);
+    }
+
+    private void validateReservationDate(LocalDate selectedDate) {
+        if (selectedDate == null || offre == null) {
+            paymentWebView.setDisable(true);
+            updateWebViewDisabledState(true);
+            return;
+        }
+
+        try {
+            // Fix date parsing by taking only the date part before the space
+            String startDateStr = offre.getStartDate().split(" ")[0];
+            String endDateStr = offre.getEndDate().split(" ")[0];
+
+            LocalDate startDate = LocalDate.parse(startDateStr);
+            LocalDate endDate = LocalDate.parse(endDateStr);
+
+            System.out.println("Start: " + startDate);
+            System.out.println("End: " + endDate);
+            System.out.println("Selected: " + selectedDate);
+
+            // Check if selected date is within range
+            boolean isValidDate = !selectedDate.isBefore(startDate) && !selectedDate.isAfter(endDate);
+
+            // Enable/disable payment based on date validity
+            paymentWebView.setDisable(!isValidDate);
+            updateWebViewDisabledState(!isValidDate);
+
+            if (!isValidDate) {
+                showAlert("Invalid Date",
+                        "Please select a date between " + startDate + " and " + endDate,
+                        Alert.AlertType.WARNING);
+            }
+        } catch (Exception e) {
+            logger.severe("Date parsing error: " + e.getMessage());
+            showAlert("Date Error", "Invalid date format: " + e.getMessage(), Alert.AlertType.ERROR);
+            paymentWebView.setDisable(true);
+        }
     }
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
@@ -155,7 +249,8 @@ public class PaymentController {
                 if (newState == Worker.State.SUCCEEDED) {
                     JSObject window = (JSObject) webEngine.executeScript("window");
                     javaBridge = new JavaBridge(this);
-                    window.setMember("javaBridge", javaBridge);
+                    javaBridge.setOffre(offre);
+                    window.setMember("java", javaBridge);
                 }
             });
         } catch (Exception e) {
@@ -178,19 +273,55 @@ public class PaymentController {
         }
     }
 
+    public void handleCloseButtonAction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reservation.fxml"));
+            Parent root = loader.load();
+            rootAnchorPane.getChildren().setAll(root);
+        } catch (Exception e) {
+            System.err.println("Failed to load reservation window: " + e.getMessage());
+        }
+
+    }
+
     public static class JavaBridge {
+        private Offre offre;
         private PaymentController controller;
 
         public JavaBridge(PaymentController controller) {
             this.controller = controller;
         }
 
+        public void setOffre(Offre offre) {
+            this.offre = offre;
+        }
+
+        public Offre getOffre() {
+            return offre;
+        }
+
         public void handlePaymentSuccess(String paymentId) {
             System.out.println("Payment successful: " + paymentId);
+            // Show confirmation to user
+                controller.showAlert("Payment Successful",
+                        "Your payment has been processed successfully!", Alert.AlertType.INFORMATION);
+            ReservationService reservationService = new ReservationService();
+            Reservation reservation = new Reservation();
+            reservation.setIdO(offre);
+            reservation.setId_U(Session.getInstance().getId_U());
+            reservation.setDateRes(controller.reservationDatePicker.getValue().toString());
+            reservation.setModePaiement("carte");
+            reservationService.add(reservation);
+            offre.setNumberLimit(offre.getNumberLimit() - 1);
+            OffreService offreService = new OffreService();
+            offreService.update(offre);
+            controller.handleCloseButtonAction(null);
+            CompletableFuture.runAsync(() -> {
+                Mailer.sendReservationConfirmation(Session.getInstance().getEmail(), reservation, offre);
+            });
         }
         public void handlePaymentError(String errorMessage) {
             System.err.println("Payment failed: " + errorMessage);
         }
-
     }
 }

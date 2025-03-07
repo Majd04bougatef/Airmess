@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="640.0" prefWidth="1030.0" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx/fxml/1" fx:controller="controllers.Offre.UserReservationsController">
+    <VBox spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Button fx:id="backButton" onAction="#handleBackButton" styleClass="btn-secondary" text="Back" />
+            <Label styleClass="form-title" text="My Reservations" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+        </HBox>
+
+        <TableView fx:id="reservationsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="offerDescriptionColumn" prefWidth="250.0" text="Title" />
+                <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Reservation Date" />
+                <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
+                <TableColumn fx:id="actionsColumn" prefWidth="200.0" text="Actions" />
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>
