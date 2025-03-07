@@ -25,12 +25,12 @@
                 </AnchorPane>
                 <ImageView fitHeight="120.0" fitWidth="108.0" layoutX="38.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/AirMess%20copie.png" />
+                        <Image url="@../image/AirMess%20copie.png" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="134.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@image/Capture%20d'écran%202025-01-30%20203129.png" />
+                        <Image url="@../image/Capture%20d'écran%202025-01-30%20203129.png" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="441.0" fitWidth="310.0" layoutX="511.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
@@ -51,23 +51,12 @@
                         <Font size="18.0" />
                     </font>
                 </Button>
-                <Text fill="#9c9898" layoutX="209.0" layoutY="452.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ou continuer avec" />
                 <Text fill="#9c9898" layoutX="101.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vous n’avez pas encore de compte ?" />
                 <Button layoutX="235.0" layoutY="287.0" mnemonicParsing="false" onAction="#oubliemotpasse" style="-fx-background-color: white;" text="Mot de passe oublié ?" textFill="#9c9898" />
                 <Button layoutX="303.0" layoutY="530.0" mnemonicParsing="false" onAction="#signup" style="-fx-background-color: white;" text="Inscrivez-vous gratuitement" textFill="PALEVIOLETRED" />
                 <CheckBox fx:id="show" layoutX="134.0" layoutY="344.0" mnemonicParsing="false" onAction="#showpass" prefHeight="35.0" prefWidth="163.0" text="Afficher le mot de passe" textFill="#9c9898" />
                 <TextField fx:id="passsee" layoutX="121.0" layoutY="309.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
                 <PasswordField fx:id="mot_isentifier" layoutX="121.0" layoutY="309.0" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #f0f5f9; -fx-background-radius: 50;" />
-                <ImageView fx:id="googl" fitHeight="40.0" fitWidth="70.0" layoutX="189.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../image/icons8-google-48.png" />
-                    </image>
-                </ImageView>
-                <ImageView fx:id="facebook" fitHeight="40.0" fitWidth="70.0" layoutX="274.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../image/icons8-facebook-48.png" />
-                    </image>
-                </ImageView>
             </children>
         </AnchorPane>
     </children>

@@ -827,7 +827,7 @@ public class SocialMediaview {
     }
 
 
-    List<String> forbiddenWords = Arrays.asList("ccc", "bbb");
+    List<String> forbiddenWords = Arrays.asList("shit", "fuck");
 
     public  boolean validateContent(String content) {
         if (content.isEmpty() || content.trim().isEmpty()) {

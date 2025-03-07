@@ -69,7 +69,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fill="#406dab" layoutX="615.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date de naissance">
+      <Text fill="#406dab" layoutX="615.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date ">
          <font>
             <Font size="20.0" />
          </font>
