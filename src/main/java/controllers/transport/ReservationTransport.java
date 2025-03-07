@@ -1,12 +1,17 @@
 package controllers.transport;
 
 import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.lowagie.text.Font;
+import com.lowagie.text.Rectangle;
+import controllers.Offre.PaymentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.reservation_transport;
@@ -15,6 +20,10 @@ import services.ReservationTransportService;
 import services.StationService;
 import test.Session;
 
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+
+import java.awt.*;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -25,8 +34,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
-
-import java.awt.Desktop;
 
 
 import com.google.zxing.BarcodeFormat;
@@ -94,7 +101,7 @@ public class ReservationTransport {
             }
 
             long heures = ChronoUnit.HOURS.between(LocalDateTime.now(), dateFinValue.atStartOfDay());
-            prixTotalValue = calculateTotalPrice(heures, nbVelo);
+            prixTotalValue = calculateTotalPrice(heures, nbVelo)[0];
             prixTotal.setText(String.format(PRIX_FORMAT, prixTotalValue));
         } catch (NumberFormatException e) {
             prixTotal.setText(ERREUR_MESSAGE);
@@ -105,9 +112,24 @@ public class ReservationTransport {
         return nbVelo <= 0 || nbVelo > nbVeloDispo || dateFinValue == null || !dateFinValue.isAfter(LocalDate.now());
     }
 
-    private double calculateTotalPrice(long heures, int nbVelo) {
+    private double[] calculateTotalPrice(long heures, int nbVelo) {
         if (heures <= 0) heures = 1;
-        return heures * prixParHeure * nbVelo;
+        double totalWithoutDiscount = heures * prixParHeure * nbVelo;
+        double totalWithDiscount = totalWithoutDiscount;
+        if (nbVeloDispo > 50) {
+            totalWithDiscount *= 0.9; // Apply 10% discount
+        }
+        return new double[]{totalWithoutDiscount, totalWithDiscount};
+    }
+
+    private void updateRecap(int nbVelo, LocalDate dateFinValue) {
+        double[] prices = calculateTotalPrice(ChronoUnit.HOURS.between(LocalDateTime.now(), dateFinValue.atStartOfDay()), nbVelo);
+        double totalWithoutDiscount = prices[0];
+        double totalWithDiscount = prices[1];
+        String discountInfo = (nbVeloDispo > 50) ? "Remise : 10%" : "Remise : 0%";
+        recapitulatifDetails.setText(String.format("Référence : %s\nStation : %s\nNombre de vélos : %d\nDate de fin : %s\n%s\nMontant sans remise : %.2f €\nMontant avec remise : %.2f €\nStatut : En attente",
+                reference, currentStation.getNom(), nbVelo, dateFinValue, discountInfo, totalWithoutDiscount, totalWithDiscount));
+        recapPrixTotal.setText(String.format(PRIX_FORMAT, totalWithDiscount));
     }
 
     @FXML
@@ -127,19 +149,6 @@ public class ReservationTransport {
         }
     }
 
-    private void updateRecap(int nbVelo, LocalDate dateFinValue) {
-        recapitulatifDetails.setText(String.format("Référence : %s\nStation : %s\nNombre de vélos : %d\nDate de fin : %s\nStatut : En attente",
-                reference, currentStation.getNom(), nbVelo, dateFinValue));
-        recapPrixTotal.setText(String.format(PRIX_FORMAT, prixTotalValue));
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.showAndWait();
-    }
-
     @FXML
     public void payerReservation(ActionEvent actionEvent) {
         StationService st = new StationService() {};
@@ -153,6 +162,19 @@ public class ReservationTransport {
 
             ajouterReservation(nbVeloRes);
             st.updateNombreVelo(currentStation.getIdS(), nbVeloRes);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/transport/paymentTransport.fxml"));
+                Parent root = loader.load();
+                PaymentTransport controller = loader.getController(); // Corrected casting
+                controller.setTotalAmount(prixTotalValue); // Ensure this method exists in PaymentTransport
+                Stage stage = new Stage();
+                stage.setTitle("Payment");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             genererPDF();
         } catch (NumberFormatException e) {
             showAlert("Erreur", "Veuillez entrer un nombre valide pour les vélos.");
@@ -224,43 +246,92 @@ public class ReservationTransport {
     }
 
 
-    @FXML
     public void genererPDF() {
         try {
+            // Define a horizontal format (200x500) for the ticket
+            Document document = new Document(new Rectangle(500, 200));  // Horizontal format (size suitable for a ticket)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            Document document = new Document();
 
             PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
 
+            // Create a main rectangle divided into two parts: left (70%) and right (30%)
+            Rectangle fullRectangle = new Rectangle(0, 0, 500, 200);  // Main rectangle
+            fullRectangle.setBorder(Rectangle.BOX);
+            fullRectangle.setBorderWidth(2);
+            document.add(fullRectangle);
+
+            // Left part: White background and information
+            Rectangle leftRectangle = new Rectangle(0, 0, 350, 200);  // 70% of the width
+            leftRectangle.setBackgroundColor(new Color(255, 255, 255));  // White background for the left part
+            document.add(leftRectangle);
+
+            // Logo (positioned at the top left in the left part)
+            Image logo = Image.getInstance(getClass().getResource("/image/AirMess copie.png"));
+            logo.setAbsolutePosition(20, 130);  // Logo position (adjusted based on logo size)
+            logo.scaleToFit(50, 50);
+            document.add(logo);
+
+            // Reservation information in the left part
+            Font textFont = new Font(Font.HELVETICA, 12);
+            Paragraph infoParagraph = new Paragraph();
+            infoParagraph.add(new Chunk("\n\n\n\nNom de la station : " + currentStation.getNom() + "\n", textFont));
+            infoParagraph.add(new Chunk("Date de réservation : " + dateRes.getText() + "\n", textFont));
+            infoParagraph.add(new Chunk("Date de fin : " + dateFin.getValue() + "\n", textFont));
+            infoParagraph.add(new Chunk("Nombre de vélos : " + nombreVelo.getText() + "\n", textFont));
+            infoParagraph.add(new Chunk("Prix total : " + String.format("%.2f €", prixTotalValue) + "\n", textFont));
+            infoParagraph.setLeading(10);  // Line spacing
+            document.add(infoParagraph);
+
+            // Right part: QR code and additional information
+            float qrCodeX = 370;  // X position for the QR code
+            float qrCodeY = 100;  // Y position for the QR code
             String qrCodeText = "Référence: " + reference;
             Image qrCodeImage = createQRCodeImage(qrCodeText);
-
-            float xPosition = document.getPageSize().getWidth() - qrCodeImage.getScaledWidth() - 20;
-            float yPosition = document.getPageSize().getHeight() - qrCodeImage.getScaledHeight() - 20;
-            qrCodeImage.setAbsolutePosition(xPosition, yPosition);
+            qrCodeImage.setAbsolutePosition(qrCodeX, qrCodeY);
+            qrCodeImage.scaleToFit(80, 80);  // Adjust QR code size
             document.add(qrCodeImage);
 
-            Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
-            Paragraph title = new Paragraph("Détails de la Réservation", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-
-            document.add(new Paragraph("\nRéférence : " + reference));
-            document.add(new Paragraph("Station : " + currentStation.getNom()));
-            document.add(new Paragraph("Nombre de vélos : " + nombreVelo.getText()));
-            document.add(new Paragraph("Date de fin : " + dateFin.getValue()));
-            document.add(new Paragraph("Prix total : " + String.format("%.2f €", prixTotalValue)));
-            document.add(new Paragraph("\nStatut : En attente"));
+            // Reference and total price in the right part
+            Paragraph rightInfoParagraph = new Paragraph();
+            rightInfoParagraph.add(new Chunk(reference + "\n", textFont));
+            rightInfoParagraph.add(new Chunk("Prix total : " + String.format("%.2f €", prixTotalValue) + "\n", textFont));
+            rightInfoParagraph.setLeading(10);  // Line spacing
+            rightInfoParagraph.setAlignment(Element.ALIGN_RIGHT);  // Align to the right
+            document.add(rightInfoParagraph);
 
             document.close();
 
-            showAlert("PDF généré", "Le PDF de votre réservation a été généré avec succès.");
+            // Display the generated PDF
             afficherPDF(byteArrayOutputStream.toByteArray());
 
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Une erreur s'est produite lors de la génération du PDF.");
+        }
+    }
+
+
+
+    private Image createQRCodeImage(String text) {
+        try {
+            Map<EncodeHintType, Object> hintMap = new HashMap<>();
+            hintMap.put(EncodeHintType.MARGIN, 1);
+
+            // Génération du QR code en mémoire
+            BitMatrix matrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 100, 100, hintMap);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(matrix, "PNG", byteArrayOutputStream);
+
+            // Créer l'image à partir de la mémoire
+            Image qrCodeImage = Image.getInstance(byteArrayOutputStream.toByteArray());
+            qrCodeImage.scaleToFit(80, 80);  // Ajuster la taille du QR code
+            return qrCodeImage;
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur s'est produite lors de la génération du QR code.");
+            return null;
         }
     }
 
@@ -279,26 +350,11 @@ public class ReservationTransport {
         }
     }
 
-    private Image createQRCodeImage(String text) {
-        try {
-            Map<EncodeHintType, Object> hintMap = new HashMap<>();
-            hintMap.put(EncodeHintType.MARGIN, 1);
-
-            // Génération du QR code en mémoire
-            BitMatrix matrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 200, 200, hintMap);
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            MatrixToImageWriter.writeToStream(matrix, "PNG", byteArrayOutputStream);
-
-            // Créer l'image à partir de la mémoire
-            Image qrCodeImage = Image.getInstance(byteArrayOutputStream.toByteArray());
-            qrCodeImage.scaleToFit(100, 100);
-            return qrCodeImage;
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Une erreur s'est produite lors de la génération du QR code.");
-            return null;
-        }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 
 
