@@ -9,10 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import models.bonplan;
 import models.ReviewBonplan;
@@ -34,8 +31,8 @@ public class AfficherBonPlan {
     private AnchorPane centralAnchorPane; // Assurez-vous que cette variable est bien déclarée
 
 
-    public void setCentralAnchorPane(AnchorPane anchorPane) {
-        this.centralAnchorPane = anchorPane;
+    public void setCentralAnchorPane(AnchorPane centralAnocherPane) {
+        this.centralAnchorPane = centralAnocherPane;
     }
 
     private final BonPlanServices bonPlanServices = new BonPlanServices(){};
@@ -66,6 +63,13 @@ public class AfficherBonPlan {
         card.setAlignment(Pos.CENTER);
         card.setPrefWidth(250);
 
+
+        // Récupérer la moyenne des ratings
+        int averageRating = reviewService.getAverageRating(bp.getIdP());
+        HBox starRating = createStarRating(averageRating);
+        System.out.println("Moyenne des ratings pour " + bp.getNomplace() + " : " + averageRating);
+
+
         // Image du Bon Plan
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
@@ -76,6 +80,13 @@ public class AfficherBonPlan {
                 imageView.setImage(new Image(file.toURI().toString()));
             }
         }
+        // Conteneur pour superposer la moyenne sur l'image
+        StackPane imageContainer = new StackPane();
+        StackPane.setAlignment(starRating, Pos.TOP_LEFT); // Positionner en haut à gauche
+        //starRating.setStyle("-fx-background-color: rgb(66,146,191); -fx-padding: 5px; -fx-border-radius: 10px;");
+
+
+        imageContainer.getChildren().addAll(imageView, starRating);
         makeImageRounded(imageView);
 
         // Labels
@@ -148,16 +159,12 @@ public class AfficherBonPlan {
                 showAlert("Erreur", "Veuillez entrer un commentaire.");
             }
         });
-        // 🔹 Afficher la moyenne des ratings avec des étoiles
-        int averageRating = reviewService.getAverageRating(bp.getIdP());
-        HBox starRating = createStarRating(averageRating);
-
         // 🔹 Organisation des éléments dans la carte
         HBox commentBox = new HBox(10, commentField, addCommentButton);
         commentBox.setAlignment(Pos.CENTER_LEFT);
 
         card.getChildren().addAll(
-                menuBox, imageView, nomLabel, descLabel, locLabel, typeLabel,
+                menuBox,imageContainer, imageView, nomLabel, descLabel, locLabel, typeLabel,starRating,
                 interactiveStars, separator, commentsSection, commentBox
         );
 
@@ -272,18 +279,44 @@ public class AfficherBonPlan {
             e.printStackTrace();
         }
     }
+    private bonplan selectedBonPlan;
+    @FXML
+    private void showUpdateBonPlan() {
+        if (selectedBonPlan != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FormUpdateBonPlan.fxml"));
+                Parent updateBonPlan = loader.load();
+
+                // Récupérer le contrôleur du formulaire et lui envoyer les données du bon plan
+                FormUpdateBonPlan controller = loader.getController();
+                controller.initData(selectedBonPlan);
+
+                // Effacer le contenu actuel et afficher le formulaire dans centralAnchorPane
+                centralAnchorPane.getChildren().clear();
+                centralAnchorPane.getChildren().add(updateBonPlan);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showAlert("Erreur", "Veuillez sélectionner un bon plan à modifier !");
+        }
+    }
+
     private HBox createStarRating(int rating) {
-        HBox starBox = new HBox(2); // Espacement entre les étoiles
+        HBox starBox = new HBox(5); // Espacement entre étoile et texte
         starBox.setAlignment(Pos.CENTER_LEFT);
 
-        for (int i = 1; i <= 5; i++) {
-            Label star = new Label(i <= rating ? "★" : "☆"); // Remplit selon le rating
-            star.setStyle("-fx-font-size: 18px; -fx-text-fill: gold;");
-            starBox.getChildren().add(star);
-        }
+        Label star = new Label("★"); // Une seule étoile jaune
+        star.setStyle("-fx-font-size: 22px; -fx-text-fill: gold;");
 
+        Label ratingText = new Label(String.format("%.1f", (double) rating)); // Affiche la moyenne avec une décimale
+        ratingText.setStyle("-fx-font-size: 18px; -fx-text-fill: black;");
+
+        starBox.getChildren().addAll(star, ratingText);
         return starBox;
     }
+
+
     private HBox createInteractiveStars(ChoiceBox<Integer> ratingBox) {
         HBox starBox = new HBox(5); // Espacement entre les étoiles
         starBox.setAlignment(Pos.CENTER_LEFT);
@@ -316,6 +349,17 @@ public class AfficherBonPlan {
 
                 // Mettre la valeur sélectionnée dans le ChoiceBox
                 ratingBox.setValue(ratingValue);
+                if (ratingValue == 1) {
+                    String[] messages = {
+                            "Vraiment ? Une seule étoile ? On peut s'améliorer, promis !",
+                            "Ouch ! 😨 Dites-nous ce qui ne va pas !",
+                            "On peut discuter ? 😅 Votre retour est précieux !",
+                            "Une étoile... est-ce que c'était si terrible ? 😭",
+                            "On veut s'améliorer, que s'est-il passé ? 🤔"
+                    };
+                    int randomIndex = (int) (Math.random() * messages.length);
+                    showAlert("Oh non ! 😢", messages[randomIndex]);
+                }
             });
 
             starBox.getChildren().add(stars[i]);
