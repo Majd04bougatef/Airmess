@@ -19,7 +19,7 @@
             <TableView fx:id="offreTableView" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="imageColumn" text="Image" prefWidth="100" />
-                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200" />
+                    <TableColumn fx:id="descriptionColumn" text="Titre" prefWidth="200" />
                     <TableColumn fx:id="priceInitColumn" text="Initial Price" prefWidth="90" />
                     <TableColumn fx:id="priceAfterColumn" text="Discounted Price" prefWidth="110" />
                     <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="100" />

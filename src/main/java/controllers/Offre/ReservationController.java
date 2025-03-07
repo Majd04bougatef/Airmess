@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import models.Offre;
 import models.Reservation;
@@ -69,6 +71,22 @@ public class ReservationController implements Initializable {
                 .toList();
         for (Offre offre : offres) {
             VBox card = createOffreCard(offre);
+            if (offre.getNumberLimit() == 0 || LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now())) {
+                card.getStyleClass().add("expired-card");
+                javafx.scene.effect.ColorAdjust monochrome = new javafx.scene.effect.ColorAdjust();
+                monochrome.setSaturation(-1.0); // -1.0 means completely desaturated (grayscale)
+
+                // Create blur effect
+                javafx.scene.effect.GaussianBlur blur = new javafx.scene.effect.GaussianBlur(3.0);
+
+                // Chain effects: monochrome first, then blur
+                blur.setInput(monochrome);
+
+                // Apply combined effect to the card
+                card.setEffect(blur);
+                // monochrome filter
+
+            }
             cardsContainer.getChildren().add(card);
         }
     }
@@ -126,24 +144,38 @@ public class ReservationController implements Initializable {
         contentBox.setMinHeight(150);
         contentBox.setMaxHeight(150);
         contentBox.setPadding(new Insets(5, 10, 5, 10));
+        contentBox.setAlignment(Pos.TOP_CENTER);
 
-        Text descriptionText = new Text("Description: " + offre.getDescription());
+        Text descriptionText = new Text(offre.getDescription());
         descriptionText.getStyleClass().add("card-title");
+        descriptionText.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         // Limit text length to prevent excessive wrapping
         if (descriptionText.getText().length() > 80) {
             descriptionText.setText(descriptionText.getText().substring(0, 77) + "...");
         }
 
-        Text priceText = new Text(String.format("Price: %.2f", offre.getPriceInit()));
-        priceText.getStyleClass().add("card-subtitle");
+        Text priceText = new Text(String.format("%.2f", offre.getPriceInit()));
+        priceText.setFont(Font.font("Arial", 11));
+        priceText.setStyle("-fx-strikethrough: true; -fx-fill: red;");
+        priceText.setFill(javafx.scene.paint.Color.RED);
 
-        Text discountText = new Text(String.format("Discounted Price: %.2f", offre.getPriceAfter()));
-        discountText.getStyleClass().add("card-subtitle");
+        Text discountText = new Text(String.format(" %.2f", offre.getPriceAfter()));
+        discountText.setFont(Font.font("Arial", 18));
+        discountText.setStyle("-fx-fill: green;");
+        discountText.setFill(javafx.scene.paint.Color.GREEN);
+        HBox priceContainer = new HBox(5);
+        priceContainer.setAlignment(Pos.CENTER);
+        priceContainer.getChildren().addAll(priceText, discountText);
 
         Text datesText = new Text("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER)
                 + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
         datesText.getStyleClass().add("card-subtitle");
+        datesText.setTextAlignment(TextAlignment.LEFT);
 
+
+        VBox dateContainer = new VBox(5);
+        dateContainer.setAlignment(Pos.CENTER_LEFT);
+        dateContainer.getChildren().add(datesText);
         Text placeText;
         try {
             String lat = offre.getPlace().split(",")[0].trim();
@@ -162,8 +194,10 @@ public class ReservationController implements Initializable {
 
         Text limitText = new Text("Limit: " + offre.getNumberLimit());
         limitText.getStyleClass().add("card-subtitle");
+        limitText.setTextAlignment(TextAlignment.LEFT);
 
-        contentBox.getChildren().addAll(descriptionText, priceText, discountText, datesText, placeText, limitText);
+        dateContainer.getChildren().addAll(placeText, limitText);
+        contentBox.getChildren().addAll(descriptionText, priceContainer, dateContainer);
 
         // Spacer to push button to bottom but with controlled expansion
         javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
@@ -182,8 +216,26 @@ public class ReservationController implements Initializable {
         Button reserveButton = new Button("Reserve Now");
         reserveButton.getStyleClass().add("btn-primary");
         reserveButton.setOnAction(event -> handleReserveButtonAction(offre));
+        Button detailsButton = new Button("Details");
+        detailsButton.getStyleClass().add("btn-secondary");
+        detailsButton.setOnAction(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/offreDetails.fxml"));
+                Parent root = loader.load();
+                OffreDetailsController controller = loader.getController();
+                controller.setOffre(offre);
+                Stage stage = new Stage();
+                stage.setTitle("Offer Details");
+                stage.setScene(new Scene(root));
+                stage.initOwner(cardsContainer.getScene().getWindow());
+                stage.show();
+            } catch (Exception e) {
+                System.err.println("Failed to load offre details window." + e.getMessage());
+            }
+        });
 
         buttonBox.getChildren().add(reserveButton);
+        buttonBox.getChildren().add(detailsButton);
 
         // Add all components to the main card
         card.getChildren().addAll(imageContainer, idText, contentBox, spacer, buttonBox);
@@ -191,6 +243,7 @@ public class ReservationController implements Initializable {
         // Handle disabled state
         if (LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now()) || offre.getNumberLimit() == 0) {
             reserveButton.setDisable(true);
+            detailsButton.setDisable(true);
             card.getStyleClass().add("expired-card");
         }
 

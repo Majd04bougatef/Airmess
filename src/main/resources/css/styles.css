@@ -167,7 +167,7 @@
 .split-menu-button .menu-item:focused .label {
     -fx-text-fill: white;
 }
-/* cardOffre.css */
+/*Offre.css */
 
 .card {
     -fx-background-color: #ffffff;
@@ -307,4 +307,76 @@
 .table-row-cell:selected {
     -fx-background-color: #4a90e2;
     -fx-text-fill: white;
+}
+.expired-card {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5),
+                innershadow(gaussian, rgba(200, 200, 200, 0.8), 10, 0, 0, 0);
+}
+
+.expired-card::after {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 20px;
+}
+
+.expired-card .card-content {
+    -fx-effect: blur(2px);
+}
+
+.expired-card .btn-primary, .expired-card .btn-secondary {
+    -fx-opacity: 0.6;
+}
+
+.expired-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
+    -fx-translate-y: 0px;
+}
+
+/* Black and white buttons for expired cards */
+.expired-card .btn-primary {
+    -fx-background-color: #888888;
+    -fx-text-fill: white;
+}
+
+.expired-card .btn-secondary {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #333333;
+}
+
+/* Disable hover effects for expired card buttons */
+.expired-card .btn-primary:hover,
+.expired-card .btn-secondary:hover {
+    -fx-background-color: #888888;
+    -fx-effect: none;
+}
+
+/* Remove any colored borders if present */
+.expired-card .btn-primary,
+.expired-card .btn-secondary {
+    -fx-border-color: #aaaaaa;
+}
+/* Make all text monochrome in expired cards */
+.expired-card Text {
+    -fx-fill: #555555 !important;
+}
+
+/* Override specific colored text elements */
+.expired-card .card-title {
+    -fx-fill: #333333 !important;
+}
+
+.expired-card .card-subtitle {
+    -fx-fill: #777777 !important;
+}
+
+/* Override the colored price text */
+.expired-card Text {
+    -fx-strikethrough: false;
+    -fx-fill: #555555 !important;
+}
+
+/* Ensure inline styles are overridden with !important */
+.expired-card HBox Text {
+    -fx-fill: #555555 !important;
+    -fx-strikethrough: false !important;
 }
