@@ -25,7 +25,7 @@
                         <Image url="@image/Capture%20d'écran%202025-01-30%20203129.png" />
                     </image>
                 </ImageView>
-                <Text fill="#406dab" layoutX="412.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S’enregistrer" wrappingWidth="261.1401214599607">
+                <Text fill="#406dab" layoutX="337.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S’enregistrer" wrappingWidth="402.7402191162107">
                     <font>
                         <Font name="Aldhabi" size="70.0" />
                     </font>

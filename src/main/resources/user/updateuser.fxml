@@ -53,7 +53,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Text fill="#406dab" layoutX="397.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier le profil " wrappingWidth="384.3400726318357">
+      <Text fill="#406dab" layoutX="257.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier le profil " wrappingWidth="618.7400970458982">
          <font>
             <Font name="Aldhabi" size="70.0" />
          </font>
