@@ -2,6 +2,7 @@ package services;
 
 import interfaces.GlobalInterface;
 import models.Offre;
+import test.Session;
 import util.MyDatabase;
 
 import java.sql.Connection;
@@ -22,7 +23,7 @@ public class OffreService implements GlobalInterface<Offre> {
         String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, offre.getId_U());
+            preparedStatement.setInt(1, Session.getInstance().getId_U());
             preparedStatement.setDouble(2, offre.getPriceInit());
             preparedStatement.setDouble(3, offre.getPriceAfter());
             preparedStatement.setString(4, offre.getStartDate());

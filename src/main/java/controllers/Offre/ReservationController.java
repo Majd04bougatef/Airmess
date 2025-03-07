@@ -1,17 +1,24 @@
 package controllers.Offre;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Offre;
 import models.Reservation;
@@ -34,6 +41,7 @@ public class ReservationController implements Initializable {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public AnchorPane rootAnchorPane;
 
     @FXML
     private FlowPane cardsContainer;
@@ -44,6 +52,9 @@ public class ReservationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         offreService = new OffreService();
         loadOffreCards();
+        cardsContainer.setHgap(10);
+        cardsContainer.setVgap(10);
+        cardsContainer.setPadding(new Insets(10));
     }
 
     private void loadOffreCards() {
@@ -63,49 +74,30 @@ public class ReservationController implements Initializable {
     }
 
     private VBox createOffreCard(Offre offre) {
-        // Create a card layout
-        VBox card = new VBox(10);
-        card.setStyle("-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-background-radius: 15; -fx-pref-width: 300; -fx-pref-height: 200;");
+        // Main card container
+        VBox card = new VBox();
+        card.getStyleClass().clear();
+        card.getStyleClass().add("card");
 
-        // Add offer details
-        Label descriptionLabel = new Label("Description: " + offre.getDescription());
-        descriptionLabel.setFont(new Font(14));
-        descriptionLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
+        card.setMinWidth(315);
+        card.setMaxWidth(315);
+        card.setMinHeight(420);
+        card.setMaxHeight(420);
+        card.setAlignment(Pos.TOP_CENTER);
 
-        Label priceLabel = new Label(String.format("Price: %.2f", offre.getPriceInit()));
-        priceLabel.setFont(new Font(14));
-        priceLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
+        String cssPath = getClass().getResource("/css/styles.css").toExternalForm();
+        card.getStylesheets().add(cssPath);
 
-        Label discountLabel = new Label(String.format("Discounted Price: %.2f", offre.getPriceAfter()));
-        discountLabel.setFont(new Font(14));
-        discountLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-strikethrough: true;");
+        // Image container
+        HBox imageContainer = new HBox();
+        imageContainer.setAlignment(Pos.CENTER);
+        imageContainer.setPadding(new Insets(10, 0, 0, 0));
 
-        Label datesLabel = new Label("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER) + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
-        datesLabel.setFont(new Font(14));
-        datesLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
-
-        Label placeLabel;
-        try {
-            String lat = offre.getPlace().split(",")[0].trim();
-            String lon = offre.getPlace().split(",")[1].trim();
-            placeLabel = new Label("Place: " + GeoCodeApi.getAddressFromLatLong(lat, lon));
-            placeLabel.setFont(new Font(14));
-            placeLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
-        } catch (Exception e) {
-            placeLabel = new Label("Place: " + offre.getPlace());
-            placeLabel.setFont(new Font(14));
-            placeLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
-        }
-
-        Label limitLabel = new Label("Limit: " + offre.getNumberLimit());
-        limitLabel.setFont(new Font(14));
-        limitLabel.setStyle("-fx-text-alignment: center; -fx-alignment: center;");
-
-        // Add ImageView for the offer image
+        // Image at the top
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(280.0);
+        imageView.setFitHeight(130.0);
+        imageView.setPreserveRatio(false);
         if (offre.getImage() != null && !offre.getImage().isEmpty()) {
             File imageFile = new File(offre.getImage());
             if (imageFile.exists()) {
@@ -113,25 +105,99 @@ public class ReservationController implements Initializable {
             }
         }
 
-        // Add "Reserve Now" button
+        Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+
+        clip.setArcWidth(50);
+        clip.setArcHeight(50);
+        imageView.setClip(clip);
+
+        imageView.getStyleClass().clear();
+        imageView.getStyleClass().add("card-image");
+        imageContainer.getChildren().add(imageView);
+
+        // Hidden ID
+        Text idText = new Text(String.valueOf(offre.getIdO()));
+        idText.setVisible(false);
+        idText.setOpacity(0);
+
+        // Content VBox - reduce fixed height
+        VBox contentBox = new VBox(5);
+        contentBox.getStyleClass().add("card-content");
+        contentBox.setMinHeight(150);
+        contentBox.setMaxHeight(150);
+        contentBox.setPadding(new Insets(5, 10, 5, 10));
+
+        Text descriptionText = new Text("Description: " + offre.getDescription());
+        descriptionText.getStyleClass().add("card-title");
+        // Limit text length to prevent excessive wrapping
+        if (descriptionText.getText().length() > 80) {
+            descriptionText.setText(descriptionText.getText().substring(0, 77) + "...");
+        }
+
+        Text priceText = new Text(String.format("Price: %.2f", offre.getPriceInit()));
+        priceText.getStyleClass().add("card-subtitle");
+
+        Text discountText = new Text(String.format("Discounted Price: %.2f", offre.getPriceAfter()));
+        discountText.getStyleClass().add("card-subtitle");
+
+        Text datesText = new Text("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER)
+                + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
+        datesText.getStyleClass().add("card-subtitle");
+
+        Text placeText;
+        try {
+            String lat = offre.getPlace().split(",")[0].trim();
+            String lon = offre.getPlace().split(",")[1].trim();
+            String address = GeoCodeApi.getAddressFromLatLong(lat, lon);
+            // Limit address length
+            if (address.length() > 60) {
+                address = address.substring(0, 57) + "...";
+            }
+            placeText = new Text("Place: " + address);
+        } catch (Exception e) {
+            placeText = new Text("Place: " + offre.getPlace());
+        }
+        placeText.getStyleClass().add("card-subtitle");
+        placeText.setWrappingWidth(270);
+
+        Text limitText = new Text("Limit: " + offre.getNumberLimit());
+        limitText.getStyleClass().add("card-subtitle");
+
+        contentBox.getChildren().addAll(descriptionText, priceText, discountText, datesText, placeText, limitText);
+
+        // Spacer to push button to bottom but with controlled expansion
+        javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+        VBox.setVgrow(spacer, javafx.scene.layout.Priority.SOMETIMES);
+        spacer.setMinHeight(10);
+
+        // Buttons container
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(0, 0, 5, 0));
+        buttonBox.getStyleClass().clear();
+        buttonBox.getStyleClass().add("card-actions");
+        buttonBox.setMinHeight(30);
+        buttonBox.setMaxHeight(30);
+
         Button reserveButton = new Button("Reserve Now");
-        reserveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 15;");
+        reserveButton.getStyleClass().add("btn-primary");
         reserveButton.setOnAction(event -> handleReserveButtonAction(offre));
 
-        // Add all elements to the card
-        card.getChildren().addAll(imageView, descriptionLabel, priceLabel, discountLabel, datesLabel, placeLabel, limitLabel, reserveButton);
-        card.setStyle("-fx-alignment: center; -fx-background-color: #f0f0f0; -fx-pref-width: 300; -fx-pref-height: 200;");
+        buttonBox.getChildren().add(reserveButton);
 
+        // Add all components to the main card
+        card.getChildren().addAll(imageContainer, idText, contentBox, spacer, buttonBox);
 
+        // Handle disabled state
         if (LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).isBefore(LocalDate.now()) || offre.getNumberLimit() == 0) {
             reserveButton.setDisable(true);
-            card.setStyle("-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-border-color: #ff0000; -fx-border-radius: 15; -fx-background-radius: 15; -fx-pref-width: 300; -fx-pref-height: 200;");
-            card.setEffect(new javafx.scene.effect.GaussianBlur(6));
+            card.getStyleClass().add("expired-card");
         }
+
         return card;
     }
 
-//    private void handleReserveButtonAction(Offre offre) {
+    //    private void handleReserveButtonAction(Offre offre) {
 //
 //        try {
 //            // Load the FXML file for the reservation dialog
@@ -190,15 +256,24 @@ public class ReservationController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/paymentWindow.fxml"));
             Parent root = loader.load();
             PaymentController controller = loader.getController();
-            controller.setTotalAmount(2);
-            Stage stage = new Stage();
-            stage.setTitle("Payment");
-            stage.setScene(new Scene(root));
-            stage.initOwner(cardsContainer.getScene().getWindow());
-            stage.showAndWait();
+            controller.setTotalAmount(offre.getPriceAfter());
+            controller.setOffre(offre);
+            rootAnchorPane.getChildren().setAll(root);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    private void handleUserReservationsButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userReservations.fxml"));
+            Parent root = loader.load();
+            rootAnchorPane.getChildren().setAll(root);
+        } catch (Exception e) {
+            System.err.println("Failed to load user reservations window." + e.getMessage());
+        }
+    }
+
 }

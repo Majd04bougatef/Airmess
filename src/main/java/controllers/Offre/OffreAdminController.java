@@ -6,10 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 public class OffreAdminController implements Initializable {
     private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public VBox deleteConfirmationBox;
     public TextField confirmationTextField;
@@ -44,96 +44,107 @@ public class OffreAdminController implements Initializable {
     public TextField updateNumberField;
     public HBox controlButtons;
     public AnchorPane rootAnchorPane;
+
     @FXML
-    private ListView<Offre> offreListView;
+    private TableView<Offre> offreTableView;
+    @FXML
+    private TableColumn<Offre, String> descriptionColumn;
+    @FXML
+    private TableColumn<Offre, Double> priceInitColumn;
+    @FXML
+    private TableColumn<Offre, Double> priceAfterColumn;
+    @FXML
+    private TableColumn<Offre, String> startDateColumn;
+    @FXML
+    private TableColumn<Offre, String> endDateColumn;
+    @FXML
+    private TableColumn<Offre, String> placeColumn;
+    @FXML
+    private TableColumn<Offre, Integer> numberLimitColumn;
+    @FXML
+    private TableColumn<Offre, String> imageColumn;
 
     private OffreService offreService;
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         offreService = new OffreService();
-        loadOffres();
 
-        // Set a custom cell factory to control how Offre objects are displayed
-        offreListView.setCellFactory(new Callback<ListView<Offre>, ListCell<Offre>>() {
-            @Override
-            public ListCell<Offre> call(ListView<Offre> param) {
-                return new ListCell<Offre>() {
-                    @Override
-                    protected void updateItem(Offre offre, boolean empty) {
-                        super.updateItem(offre, empty);
-                        if (empty || offre == null) {
-                            setText(null);
-                            setGraphic(null);
-                        } else {
-                            // Customize the display text
-                            setGraphic(formatOffreDisplay(offre));
-                            setStyle("-fx-text-fill: black;");
-                        }
-                    }
-                };
+        // Initialize table columns
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        priceInitColumn.setCellValueFactory(new PropertyValueFactory<>("priceInit"));
+        priceAfterColumn.setCellValueFactory(new PropertyValueFactory<>("priceAfter"));
+        placeColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
+        numberLimitColumn.setCellValueFactory(new PropertyValueFactory<>("numberLimit"));
+
+        // Custom cell factories for date columns to format dates
+        startDateColumn.setCellValueFactory(cellData -> {
+            String startDate = cellData.getValue().getStartDate();
+            if (startDate != null) {
+                LocalDate date = LocalDate.parse(startDate, DATE_FORMATTER);
+                return javafx.beans.binding.Bindings.createStringBinding(() -> date.format(DATE_ONLY_FORMATTER));
             }
+            return javafx.beans.binding.Bindings.createStringBinding(() -> "");
         });
 
-
-        updateFieldsBox.setAlignment(Pos.TOP_CENTER);
-    }
-
-    private VBox formatOffreDisplay(Offre offre) {
-        VBox vbox = new VBox(10);
-        vbox.setAlignment(Pos.CENTER_LEFT);
-        vbox.setStyle("-fx-padding: 10; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: #f9f9f9; -fx-background-radius: 5;");
-
-        // Create ImageView for the offer image
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        imageView.setPreserveRatio(true);
-        imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 0); -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5;");
-        if (offre.getImage() != null && !offre.getImage().isEmpty()) {
-            File imageFile = new File(offre.getImage());
-            if (imageFile.exists()) {
-                imageView.setImage(new Image(imageFile.toURI().toString()));
+        endDateColumn.setCellValueFactory(cellData -> {
+            String endDate = cellData.getValue().getEndDate();
+            if (endDate != null) {
+                LocalDate date = LocalDate.parse(endDate, DATE_FORMATTER);
+                return javafx.beans.binding.Bindings.createStringBinding(() -> date.format(DATE_ONLY_FORMATTER));
             }
-        }
+            return javafx.beans.binding.Bindings.createStringBinding(() -> "");
+        });
 
-        // Create labels for offer details
-        Label descriptionLabel = new Label("Description: " + offre.getDescription());
-        descriptionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        // Image column
+        imageColumn.setCellFactory(param -> new TableCell<Offre, String>() {
+            private final ImageView imageView = new ImageView();
 
-        Label priceLabel = new Label(String.format("Price: %.2f -> %.2f", offre.getPriceInit(), offre.getPriceAfter()));
-        priceLabel.setStyle("-fx-font-size: 12px;");
+            {
+                imageView.setFitHeight(50);
+                imageView.setFitWidth(50);
+                imageView.setPreserveRatio(true);
+            }
 
-        Label datesLabel = new Label("Dates: " + LocalDate.parse(offre.getStartDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER) + " to " + LocalDate.parse(offre.getEndDate(), DATE_FORMATTER).format(DATE_ONLY_FORMATTER));
-        datesLabel.setStyle("-fx-font-size: 12px;");
+            @Override
+            protected void updateItem(String imagePath, boolean empty) {
+                super.updateItem(imagePath, empty);
 
-        Label placeLabel = new Label("Place: " + offre.getPlace());
-        placeLabel.setStyle("-fx-font-size: 12px;");
+                if (empty || imagePath == null) {
+                    setGraphic(null);
+                } else {
+                    File imageFile = new File(imagePath);
+                    if (imageFile.exists()) {
+                        imageView.setImage(new Image(imageFile.toURI().toString()));
+                        setGraphic(imageView);
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+        imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
 
-        Label limitLabel = new Label("Number of places: " + offre.getNumberLimit());
-        limitLabel.setStyle("-fx-font-size: 12px;");
-
-        // Add all elements to the VBox
-        vbox.getChildren().addAll(imageView, descriptionLabel, priceLabel, datesLabel, placeLabel, limitLabel);
-
-        return vbox;
+        loadOffres();
+        updateFieldsBox.setAlignment(javafx.geometry.Pos.TOP_CENTER);
     }
+
     private void loadOffres() {
         List<Offre> offres = offreService.getAll();
         ObservableList<Offre> observableList = FXCollections.observableArrayList(offres);
-        offreListView.setItems(observableList);
+        offreTableView.setItems(observableList);
     }
 
     @FXML
     private void handleUpdateButtonAction() {
-        Offre selectedOffre = offreListView.getSelectionModel().getSelectedItem();
+        Offre selectedOffre = offreTableView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
             // Show the update fields box
             updateFieldsBox.setVisible(true);
-            offreListView.setVisible(false);
+            offreTableView.setVisible(false);
+            offreTableView.setManaged(false);
             controlButtons.setVisible(false);
+            controlButtons.setManaged(false);
             updateFieldsBox.setManaged(true);
 
             // Fill the fields with the selected offer's data
@@ -151,9 +162,9 @@ public class OffreAdminController implements Initializable {
 
     @FXML
     private void handleDeleteButtonAction() {
-        Offre selectedOffre = offreListView.getSelectionModel().getSelectedItem();
+        Offre selectedOffre = offreTableView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
-            // Show the delete confirmation bo;
+            // Show the delete confirmation box
             deleteConfirmationBox.setVisible(true);
             deleteConfirmationBox.setManaged(true);
         } else {
@@ -166,7 +177,7 @@ public class OffreAdminController implements Initializable {
         // Hide the delete confirmation box
         deleteConfirmationBox.setVisible(false);
         deleteConfirmationBox.setManaged(false);
-        Offre selectedOffre = offreListView.getSelectionModel().getSelectedItem();
+        Offre selectedOffre = offreTableView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
             offreService.delete(selectedOffre);
             loadOffres();
@@ -199,10 +210,13 @@ public class OffreAdminController implements Initializable {
     }
 
     public void confirmUpdate(ActionEvent actionEvent) {
-        Offre selectedOffre = offreListView.getSelectionModel().getSelectedItem();
+        Offre selectedOffre = offreTableView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
             // Update the selected offer with the new data
-            if (updateDescriptionField.getText().isEmpty() || updatePriceField.getText().isEmpty() || updateDiscountField.getText().isEmpty() || updateStartDateField.getValue() == null || updateEndDateField.getValue() == null || updateLocationField.getText().isEmpty() || updateNumberField.getText().isEmpty()) {
+            if (updateDescriptionField.getText().isEmpty() || updatePriceField.getText().isEmpty() ||
+                    updateDiscountField.getText().isEmpty() || updateStartDateField.getValue() == null ||
+                    updateEndDateField.getValue() == null || updateLocationField.getText().isEmpty() ||
+                    updateNumberField.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Missing Fields");
                 alert.setHeaderText("Please fill in all the fields");
@@ -256,7 +270,6 @@ public class OffreAdminController implements Initializable {
             selectedOffre.setPlace(updateLocationField.getText());
             selectedOffre.setNumberLimit(Integer.parseInt(updateNumberField.getText()));
 
-
             // Save the updated offer to the database
             if (updateEndDateField.getValue().isBefore(updateStartDateField.getValue())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -270,9 +283,11 @@ public class OffreAdminController implements Initializable {
 
             // Hide the update fields box
             updateFieldsBox.setVisible(false);
-            offreListView.setVisible(true);
+            offreTableView.setVisible(true);
             controlButtons.setVisible(true);
             updateFieldsBox.setManaged(false);
+            offreTableView.setManaged(true);
+            controlButtons.setManaged(true);
 
             // Refresh the list of offers
             loadOffres();
@@ -284,8 +299,10 @@ public class OffreAdminController implements Initializable {
     public void cancelUpdate(ActionEvent actionEvent) {
         // Hide the update fields box
         updateFieldsBox.setVisible(false);
-        offreListView.setVisible(true);
+        offreTableView.setVisible(true);
+        offreTableView.setManaged(true);
         controlButtons.setVisible(true);
+        controlButtons.setManaged(true);
         updateFieldsBox.setManaged(false);
     }
 
@@ -297,7 +314,7 @@ public class OffreAdminController implements Initializable {
 
             // Get the controller for the "Reservations" dialog
             ReservationAdminController reservationsController = loader.getController();
-            reservationsController.initialize(offreListView.getSelectionModel().getSelectedItem());
+            reservationsController.initialize(offreTableView.getSelectionModel().getSelectedItem());
 
             // Create a new stage (dialog) for the "Reservations" window
             Stage stage = new Stage();
@@ -305,7 +322,7 @@ public class OffreAdminController implements Initializable {
             stage.setScene(new Scene(root));
 
             // Set the current stage as the owner of the new stage (optional, for modality)
-            stage.initOwner(offreListView.getScene().getWindow());
+            stage.initOwner(offreTableView.getScene().getWindow());
 
             // Show the dialog and wait for it to close
             stage.showAndWait();
