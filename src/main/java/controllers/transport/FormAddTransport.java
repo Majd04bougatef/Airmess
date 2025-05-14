@@ -162,7 +162,13 @@ public class FormAddTransport {
             return;
         }
 
-        station newStation = new station(session.getId_U(), nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo,Pays);
+        // Création d'une nouvelle station avec les valeurs par défaut
+        // Les valeurs suivantes sont automatiquement initialisées dans le constructeur:
+        // - numberRaters = 0
+        // - rating = 0.0
+        // - statut = "inactive"
+        station newStation = new station(session.getId_U(), nom, lat, lng, prixHeure, capacite, nbVelo, typeVelo, Pays);
+        
         StationService stService = new StationService() {};
         stService.add(newStation);
 

@@ -5,9 +5,9 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
 public class SmsService {
-    private static final String ACCOUNT_SID = "AC3d165128a264ab851cadb626e2c8240e";
-    private static final String AUTH_TOKEN = "458a1c25d2f2a1162639dc9e506c829b";
-    private static final String FROM_PHONE_NUMBER = "+16812011794";
+    private static final String ACCOUNT_SID = "AC4211756b926c6275e1c75200efa94fae";
+    private static final String AUTH_TOKEN = "2a5dee3de97cf7d1416591187b23daa2";
+    private static final String FROM_PHONE_NUMBER = "+12792372079";
 
     static {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
