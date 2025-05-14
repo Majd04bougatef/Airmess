@@ -21,7 +21,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
     @Override
     public void add(Reservation reservation) {
         // Add reservation to database
-        String query = "INSERT INTO reservation (id_U, idO, dateRes, modePaiement) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO reservation (id_U, idO, date_res, mode_paiement) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
@@ -37,7 +37,7 @@ public class ReservationService implements GlobalInterface<Reservation> {
     @Override
     public void update(Reservation reservation) {
         // Update reservation in database
-        String query = "UPDATE reservation SET id_U = ?, idO = ?, dateRes = ?, modePaiement = ? WHERE idR = ?";
+        String query = "UPDATE reservation SET id_U = ?, idO = ?, date_res = ?, mode_paiement = ? WHERE idR = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, reservation.getId_U());
@@ -70,22 +70,29 @@ public class ReservationService implements GlobalInterface<Reservation> {
         String query = "SELECT * FROM reservation";
         List<Reservation> reservations = new ArrayList<>();
         try {
+            System.out.println("tru ID: ");
+
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet res = preparedStatement.executeQuery();
+            System.out.println("tru ID 2: ");
             while (res.next()) {
+                System.out.println("tru ID 3: ");
                 Reservation reservation = new Reservation();
                 reservation.setIdR(res.getInt("idR"));
                 reservation.setId_U(res.getInt("id_U"));
                 Offre offre = new Offre();
                 offre.setIdO(res.getInt("idO"));
                 reservation.setIdO(offre);
-                reservation.setDateRes(res.getString("dateRes"));
-                reservation.setModePaiement(res.getString("modePaiement"));
+                reservation.setDateRes(res.getString("date_res"));
+                reservation.setModePaiement(res.getString("mode_paiement"));
 
                 reservations.add(reservation);
+                System.out.println("Reservation IDdddddd: " + reservation.getIdR());
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
+
         }
         return reservations;
     }
@@ -105,8 +112,8 @@ public class ReservationService implements GlobalInterface<Reservation> {
                 Offre offre = new Offre();
                 offre.setIdO(res.getInt("idO"));
                 reservation.setIdO(offre);
-                reservation.setDateRes(res.getString("dateRes"));
-                reservation.setModePaiement(res.getString("modePaiement"));
+                reservation.setDateRes(res.getString("date_res"));
+                reservation.setModePaiement(res.getString("mode_paiement"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

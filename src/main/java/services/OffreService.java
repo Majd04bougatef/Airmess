@@ -20,7 +20,7 @@ public class OffreService implements GlobalInterface<Offre> {
 
     @Override
     public void add(Offre offre) {
-        String query = "INSERT INTO offre (id_U, priceInit, priceAfter, startDate, endDate, numberLimit, description, place, image_path, aidesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO offre (id_U, price_init, price_after, start_date, end_date, number_limit, description, place, image_path, aidesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, Session.getInstance().getId_U());
@@ -42,7 +42,7 @@ public class OffreService implements GlobalInterface<Offre> {
     @Override
     public void update(Offre offre) {
         // TODO Auto-generated method stub
-        String query = "UPDATE offre SET id_U = ?, priceInit = ?, priceAfter = ?, startDate = ?, endDate = ?, numberLimit = ?, description = ?, place = ?, image_path = ? WHERE idO = ?";
+        String query = "UPDATE offre SET id_U = ?, price_init = ?, price_after = ?, start_date = ?, end_date = ?, number_limit = ?, description = ?, place = ?, image_path = ? WHERE idO = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, offre.getId_U());
@@ -85,11 +85,11 @@ public class OffreService implements GlobalInterface<Offre> {
                 Offre offre = new Offre();
                 offre.setIdO(resultSet.getInt("idO"));
                 offre.setId_U(resultSet.getInt("id_U"));
-                offre.setPriceInit(resultSet.getDouble("priceInit"));
-                offre.setPriceAfter(resultSet.getDouble("priceAfter"));
-                offre.setStartDate(resultSet.getString("startDate"));
-                offre.setEndDate(resultSet.getString("endDate"));
-                offre.setNumberLimit(resultSet.getInt("numberLimit"));
+                offre.setPriceInit(resultSet.getDouble("price_init"));
+                offre.setPriceAfter(resultSet.getDouble("price_after"));
+                offre.setStartDate(resultSet.getString("start_date"));
+                offre.setEndDate(resultSet.getString("end_date"));
+                offre.setNumberLimit(resultSet.getInt("number_limit"));
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
                 offre.setImage(resultSet.getString("image_path"));
@@ -113,11 +113,11 @@ public class OffreService implements GlobalInterface<Offre> {
             if (resultSet.next()) {
                 offre.setIdO(resultSet.getInt("idO"));
                 offre.setId_U(resultSet.getInt("id_U"));
-                offre.setPriceInit(resultSet.getDouble("priceInit"));
-                offre.setPriceAfter(resultSet.getDouble("priceAfter"));
-                offre.setStartDate(resultSet.getString("startDate"));
-                offre.setEndDate(resultSet.getString("endDate"));
-                offre.setNumberLimit(resultSet.getInt("numberLimit"));
+                offre.setPriceInit(resultSet.getDouble("price_init"));
+                offre.setPriceAfter(resultSet.getDouble("price_after"));
+                offre.setStartDate(resultSet.getString("start_date"));
+                offre.setEndDate(resultSet.getString("end_date"));
+                offre.setNumberLimit(resultSet.getInt("number_limit"));
                 offre.setDescription(resultSet.getString("description"));
                 offre.setPlace(resultSet.getString("place"));
                 offre.setImage(resultSet.getString("image_path"));

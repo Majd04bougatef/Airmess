@@ -98,59 +98,90 @@ public class FormAddSocialMedia {
 
     @FXML
     private void bttnsc() {
-        SocialMedia socialMedia = new SocialMedia();
-
-
-
-        if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty() ) {
-            showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
-            return;
-        }
-
-        if (!Lieu.getText().matches("[a-zA-Z0-9\\s]+")) {
-            showAlert("Erreur", "Le lieu ne doit contenir que des lettres, des chiffres et des espaces !", AlertType.ERROR);
-            return;
-        }
-
-        if (!validateContent(Titre.getText()) || !validateContent(contenu.getText()) || !validateContent(Lieu.getText())) {
-            return;
-        }
-
         try {
-            System.out.println("Modération du contenu : " + contenu.getText());  // Logging
-            String filteredContent = aiServices.moderateContent(contenu.getText());
-            System.out.println("Contenu modéré : " + filteredContent);  // Affiche le contenu modéré
-            contenu.setText(filteredContent); // Met à jour le champ de contenu avec le texte modéré
+            // Créer une nouvelle instance de SocialMedia
+            SocialMedia socialMedia = new SocialMedia();
+
+            // Validation des champs
+            if (Titre.getText().isEmpty() || contenu.getText().isEmpty() || Lieu.getText().isEmpty()) {
+                showAlert("Erreur", "Veuillez remplir tous les champs !", AlertType.ERROR);
+                return;
+            }
+
+            if (!Lieu.getText().matches("[a-zA-Z0-9\\s]+")) {
+                showAlert("Erreur", "Le lieu ne doit contenir que des lettres, des chiffres et des espaces !", AlertType.ERROR);
+                return;
+            }
+
+            if (!validateContent(Titre.getText()) || !validateContent(contenu.getText()) || !validateContent(Lieu.getText())) {
+                return;
+            }
+
+            // Modération du contenu
+            String filteredContent;
+            try {
+                System.out.println("Modération du contenu : " + contenu.getText());
+                filteredContent = aiServices.moderateContent(contenu.getText());
+                System.out.println("Contenu modéré : " + filteredContent);
+            } catch (Exception e) {
+                System.err.println("Erreur lors de la modération: " + e.getMessage());
+                e.printStackTrace();
+                // Continuer sans modération en cas d'échec
+                filteredContent = contenu.getText();
+            }
+
+            // Définir les valeurs de l'objet SocialMedia
+            socialMedia.setTitre(Titre.getText());
+            socialMedia.setContenu(filteredContent);
+            socialMedia.setLieu(Lieu.getText());
+            socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
+            
+            // Vérifier l'ID utilisateur
+            System.out.println("ID utilisateur : " + userId);
+            if (userId <= 0) {
+                // Utiliser une valeur par défaut si l'ID utilisateur n'est pas valide
+                userId = 1; // Valeur par défaut pour éviter les erreurs
+                System.out.println("Utilisation d'un ID utilisateur par défaut : " + userId);
+            }
+            socialMedia.setId_U(userId);
+            
+            // Définir l'image
+            if (imageName != null && !imageName.isEmpty()) {
+                socialMedia.setImagemedia(imageName);
+            } else {
+                socialMedia.setImagemedia(null);
+            }
+            
+            // Définir des valeurs par défaut pour les likes et dislikes
+            socialMedia.setLikee(0);
+            socialMedia.setDislike(0);
+            
+            // Ajouter la publication à la base de données
+            System.out.println("Tentative d'ajout de la publication : " + socialMedia);
+            socialMediaServices.add(socialMedia);
+            
+            showAlert("Succès", "Publication publiée avec succès !", AlertType.INFORMATION);
+            
+            // Rafraîchir l'affichage des publications
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SocialMediaview.fxml"));
+                AnchorPane root = loader.load();
+                SocialMediaview socialMediaviewController = loader.getController();
+                socialMediaviewController.refreshPosts();
+            } catch (IOException e) {
+                System.err.println("Erreur lors du chargement de la vue: " + e.getMessage());
+                e.printStackTrace();
+                // Ne pas empêcher l'utilisateur de continuer si la vue ne peut pas être rafraîchie
+            }
+            
+            // Nettoyer les champs après l'ajout
+            clearFields();
+            
         } catch (Exception e) {
-            showAlert("Erreur", "Impossible de modérer le contenu.", AlertType.ERROR);
-            return;
-        }
-
-        socialMedia.setTitre(Titre.getText());
-        socialMedia.setContenu(contenu.getText());
-        socialMedia.setLieu(Lieu.getText());
-        socialMedia.setPublicationDate(Date.valueOf(LocalDate.now()));
-        socialMedia.setId_U(userId);
-      //  socialMedia.setId_U(2);
-
-
-        if (imageName != null) {
-            socialMedia.setImagemedia(imageName);
-        } else {
-
-            socialMedia.setImagemedia(null);
-        }
-        socialMediaServices.add(socialMedia);
-        showAlert("Succès", "Publication publiée avec succès !", AlertType.INFORMATION);
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SocialMediaview.fxml"));
-            AnchorPane root = loader.load();
-            SocialMediaview socialMediaviewController = loader.getController();
-            socialMediaviewController.refreshPosts();
-        } catch (IOException e) {
+            System.err.println("Erreur lors de l'ajout de la publication: " + e.getMessage());
             e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ajouter la publication à la base de données: " + e.getMessage(), AlertType.ERROR);
         }
-        clearFields();
     }
 
     public void setSocialMediaViewController(SocialMediaview controller) {

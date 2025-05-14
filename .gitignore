@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Java error logs
+hs_err_*.log
+replay_*.log

@@ -100,71 +100,121 @@ public class SocialMediaview {
 
     @FXML
     public void loadPosts() {
-        postContainer.getChildren().clear();
-        List<SocialMedia> posts = socialMediaServices.getAll();
-
-        for (SocialMedia post : posts) {
-            VBox postBox = createPostBox(post);
-            postContainer.getChildren().add(postBox);
+        try {
+            postContainer.getChildren().clear();
+            List<SocialMedia> posts = socialMediaServices.getAll();
+            
+            if (posts.isEmpty()) {
+                System.out.println("Aucune publication à afficher!");
+                Label noPostsLabel = new Label("Aucune publication disponible.");
+                noPostsLabel.getStyleClass().add("no-posts-label");
+                postContainer.getChildren().add(noPostsLabel);
+            } else {
+                System.out.println("Nombre de publications récupérées: " + posts.size());
+                for (SocialMedia post : posts) {
+                    VBox postBox = createPostBox(post);
+                    postContainer.getChildren().add(postBox);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement des publications: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger les publications.", Alert.AlertType.ERROR);
         }
     }
 
 
     private VBox createPostBox(SocialMedia post) {
-        VBox postBox = new VBox(10);
-        postBox.getStyleClass().add("post-box");
+        try {
+            VBox postBox = new VBox(10);
+            postBox.getStyleClass().add("post-box");
+            postBox.setPadding(new Insets(15));
 
-        Label titleLabel = createLabel(post.getTitre(), "title-label");
-        Label contentLabel = createLabel(post.getContenu(), "content-label");
-        contentLabel.setWrapText(true);
+            // En-tête de la publication avec le titre et les informations utilisateur
+            Label titleLabel = createLabel(post.getTitre(), "title-label");
+            titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+            
+            // Informations utilisateur (photo de profil + nom)
+            HBox userHeader = createUserHeader(post.getId_U());
+            
+            // Date de publication
+            String publicationDate = post.getPublicationDate() != null ? post.getPublicationDate().toString() : "Date inconnue";
+            Label dateLabel = createLabel("Publié le : " + publicationDate, "date-label");
+            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666666;");
+            
+            // Lieu de la publication
+            String locationText = "\uD83D\uDCCD Lieu : " + (post.getLieu() != null ? post.getLieu() : "Lieu inconnu");
+            Label locationLabel = createLabel(locationText, "location-label");
+            locationLabel.setStyle("-fx-font-size: 12px;");
+            
+            // Contenu du post
+            Label contentLabel = createLabel(post.getContenu(), "content-label");
+            contentLabel.setWrapText(true);
+            contentLabel.setStyle("-fx-font-size: 14px;");
 
-        String locationText = "\uD83D\uDCCD Lieu : " + (post.getLieu() != null ? post.getLieu() : "Lieu inconnu");
-        Label locationLabel = createLabel(locationText, "location-label");
+            // Ajouter les éléments dans l'ordre souhaité
+            postBox.getChildren().addAll(titleLabel, userHeader, dateLabel, locationLabel, contentLabel);
 
-        String publicationDate = post.getPublicationDate() != null ? post.getPublicationDate().toString() : "Date inconnue";
-        Label dateLabel = createLabel("Publié le : " + publicationDate, "date-label");
-
-        HBox userHeader = createUserHeader(post.getId_U());
-
-        postBox.getChildren().addAll(titleLabel, userHeader, contentLabel, dateLabel, locationLabel);
-
-        if (post.getImagemedia() != null && !post.getImagemedia().isEmpty()) {
-            String imagePath = "file:/C:/xampp/htdocs/ImageSocialMedia/" + post.getImagemedia();
-            File imageFile = new File(imagePath.substring(5));
-            if (imageFile.exists()) {
+            // Ajouter l'image du post si elle existe
+            if (post.getImagemedia() != null && !post.getImagemedia().isEmpty()) {
                 try {
-                    Image postImage = new Image(imagePath);
-                    ImageView imageView = createImageView(postImage, 400, 400);
-                    postBox.getChildren().add(imageView);
+                    String imagePath = "file:/C:/xampp/htdocs/ImageSocialMedia/" + post.getImagemedia();
+                    File imageFile = new File(imagePath.substring(5));
+                    if (imageFile.exists()) {
+                        try {
+                            Image postImage = new Image(imagePath);
+                            ImageView imageView = createImageView(postImage, 400, 300);
+                            postBox.getChildren().add(imageView);
+                        } catch (Exception e) {
+                            System.err.println("Error loading post image: " + e.getMessage());
+                            displayDefaultPostImage(postBox);
+                        }
+                    } else {
+                        System.out.println("Image file not found: " + imagePath);
+                        displayDefaultPostImage(postBox);
+                    }
                 } catch (Exception e) {
-                    System.err.println("Error loading post image: " + e.getMessage());
+                    System.err.println("Error processing image path: " + e.getMessage());
                     displayDefaultPostImage(postBox);
                 }
-            } else {
-                System.out.println("Image file not found: " + imagePath);
-                displayDefaultPostImage(postBox);
             }
+
+            // Barre de boutons (like, commentaires, etc.)
+            HBox buttonBar = new HBox(10);
+            buttonBar.setAlignment(Pos.CENTER_LEFT);
+            buttonBar.setPadding(new Insets(10, 0, 0, 0));
+
+            HBox actionsBox = createActionsBox(post);
+            VBox commentSectionLocal = createCommentSection(post);
+            Button commentButton = createCommentButton(commentSectionLocal, post);
+
+            buttonBar.getChildren().addAll(actionsBox, commentButton);
+
+            // Ajouter la barre de boutons et la section commentaires
+            postBox.getChildren().addAll(buttonBar, commentSectionLocal);
+            commentSectionLocal.managedProperty().bind(commentSectionLocal.visibleProperty());
+            
+            return postBox;
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la création du post box: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Créer une box simple pour éviter de casser l'interface
+            VBox fallbackBox = new VBox(10);
+            fallbackBox.getStyleClass().add("post-box");
+            fallbackBox.setStyle("-fx-background-color: #fff0f0; -fx-border-color: #ffcccc; -fx-border-width: 1px;");
+            
+            Label errorLabel = new Label("Impossible d'afficher cette publication");
+            errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #cc0000;");
+            
+            fallbackBox.getChildren().add(errorLabel);
+            return fallbackBox;
         }
-
-        HBox buttonBar = new HBox(10);
-        buttonBar.setAlignment(Pos.CENTER_LEFT);
-
-        HBox actionsBox = createActionsBox(post);
-        VBox commentSectionLocal = createCommentSection(post);
-        Button commentButton = createCommentButton(commentSectionLocal, post);
-
-        buttonBar.getChildren().addAll(actionsBox, commentButton);
-
-        postBox.getChildren().addAll(buttonBar, commentSectionLocal);
-        commentSectionLocal.managedProperty().bind(commentSectionLocal.visibleProperty());
-        return postBox;
     }
 
     private void displayDefaultPostImage(VBox postBox) {
-        String defaultImagePath = "/image/default_post_image.png";
-        Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
-        ImageView defaultImageView = createImageView(defaultImage, 200, 200);
-        postBox.getChildren().add(defaultImageView);
+        // Ne plus afficher d'image par défaut du tout
+        System.out.println("Image du post non disponible");
     }
 
     private Label createLabel(String text, String styleClass) {
@@ -185,31 +235,51 @@ public class SocialMediaview {
         UsersService usersService = new UsersService();
         Users user = usersService.getById(userId);
 
+        // Créer un conteneur pour l'en-tête utilisateur
+        HBox userHeader = new HBox(10);
+        userHeader.setAlignment(Pos.CENTER_LEFT);
+        
+        // Créer l'image de profil
         ImageView userImageView = new ImageView();
         userImageView.setFitWidth(30);
         userImageView.setFitHeight(30);
         userImageView.setPreserveRatio(true);
+        userImageView.setStyle("-fx-border-radius: 15; -fx-background-radius: 15;");
 
-        String defaultImagePath = "/image/imagepardefaut.jpg";
-        Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
-
-        if (user != null && user.getImagesU() != null && !user.getImagesU().isEmpty()) {
-            try {
-                Image profileImage = new Image("file:/C:/xampp/htdocs/imguser/" + user.getImagesU());
-                userImageView.setImage(profileImage);
-            } catch (Exception e) {
-                System.err.println("Error loading profile image: " + e.getMessage());
+        // Charger l'image de profil
+        try {
+            String defaultImagePath = "/image/imagepardefaut.jpg";
+            Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
+            
+            if (user != null && user.getImagesU() != null && !user.getImagesU().isEmpty()) {
+                try {
+                    String profilePath = "file:/C:/xampp/htdocs/imguser/" + user.getImagesU();
+                    File profileFile = new File(profilePath.substring(5));
+                    if (profileFile.exists()) {
+                        Image profileImage = new Image(profilePath);
+                        userImageView.setImage(profileImage);
+                    } else {
+                        System.out.println("Image de profil non trouvée: " + profilePath);
+                        userImageView.setImage(defaultImage);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Erreur lors du chargement de l'image de profil: " + e.getMessage());
+                    userImageView.setImage(defaultImage);
+                }
+            } else {
                 userImageView.setImage(defaultImage);
             }
-        } else {
-            userImageView.setImage(defaultImage);
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image par défaut: " + e.getMessage());
+            // Continuer sans image si l'image par défaut n'est pas trouvée
         }
 
-        Label usernameLabel = new Label(user != null ? "Posté par: " + user.getName() : "Posté par: Utilisateur inconnu");
+        // Créer le label pour le nom d'utilisateur
+        String userName = user != null ? user.getName() : "Utilisateur inconnu";
+        Label usernameLabel = new Label("Posté par: " + userName);
         usernameLabel.getStyleClass().add("username-label");
 
-        HBox userHeader = new HBox(10);
-        userHeader.setAlignment(Pos.CENTER_LEFT);
+        // Ajouter les éléments à l'en-tête
         userHeader.getChildren().addAll(userImageView, usernameLabel);
 
         return userHeader;
@@ -360,9 +430,27 @@ public class SocialMediaview {
 
     @FXML
     public void refreshPosts() {
-        postContainer.getChildren().clear();
-        loadPosts();
-
+        try {
+            postContainer.getChildren().clear();
+            List<SocialMedia> posts = socialMediaServices.getAll();
+            
+            if (posts.isEmpty()) {
+                System.out.println("Aucune publication à afficher!");
+                Label noPostsLabel = new Label("Aucune publication disponible.");
+                noPostsLabel.getStyleClass().add("no-posts-label");
+                postContainer.getChildren().add(noPostsLabel);
+            } else {
+                System.out.println("Nombre de publications récupérées: " + posts.size());
+                for (SocialMedia post : posts) {
+                    VBox postBox = createPostBox(post);
+                    postContainer.getChildren().add(postBox);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du rafraîchissement des publications: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger les publications.", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
