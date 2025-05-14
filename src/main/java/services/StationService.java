@@ -21,7 +21,7 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public void add(station st) {
-        String sql = "INSERT INTO station ( id_U, nom, latitude, longitude, capacite, nombreVelo, typeVelo, prixHeure,pays) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO station (id_U, nom, latitude, longitude, capacite, nombreVelo, typeVelo, prixHeure, pays, numberRaters, rating, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, st.getIdU());
@@ -33,6 +33,10 @@ public abstract class StationService implements GlobalInterface<station> {
             preparedStatement.setString(7, st.getTypeVelo());
             preparedStatement.setDouble(8, st.getPrixheure());
             preparedStatement.setString(9, st.getPays());
+            // Valeurs par défaut pour les nouveaux champs
+            preparedStatement.setInt(10, 0); // numberRaters = 0
+            preparedStatement.setDouble(11, 0.0); // rating = 0.0
+            preparedStatement.setString(12, "inactive"); // statut = inactive
 
             preparedStatement.executeUpdate();
             System.out.println("Station added successfully");
@@ -55,13 +59,16 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public void update(station station) {
-        String sql= "UPDATE station SET capacite=? , nombreVelo=? , typeVelo =? , prixHeure=?  WHERE idS =?";
+        String sql= "UPDATE station SET capacite=?, nombreVelo=?, typeVelo=?, prixHeure=?, numberRaters=?, rating=?, statut=? WHERE idS=?";
         try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setInt(1, station.getCapacite());
             preparedStatement.setInt(2, station.getNbVelo());
             preparedStatement.setString(3, station.getTypeVelo());
             preparedStatement.setDouble(4, station.getPrixheure());
-            preparedStatement.setInt(5, station.getIdS());
+            preparedStatement.setInt(5, station.getNumberRaters());
+            preparedStatement.setDouble(6, station.getRating());
+            preparedStatement.setString(7, station.getStatut());
+            preparedStatement.setInt(8, station.getIdS());
             preparedStatement.executeUpdate();
             System.out.println("Station updated successfully");
         } catch (SQLException e) {
@@ -71,7 +78,7 @@ public abstract class StationService implements GlobalInterface<station> {
 
     @Override
     public List<station> getAll() {
-        String query = "SELECT * FROM `station`";
+        String query = "SELECT * FROM `station` WHERE statut='active'";
 
         List<station> st = new ArrayList<>();
 
@@ -91,15 +98,18 @@ public abstract class StationService implements GlobalInterface<station> {
                 s.setTypeVelo(rs.getString("typeVelo"));
                 s.setPrixheure(rs.getDouble("prixHeure"));
                 s.setPays(rs.getString("pays"));
+                // Récupérer les nouveaux champs
+                s.setNumberRaters(rs.getInt("numberRaters"));
+                s.setRating(rs.getDouble("rating"));
+                s.setStatut(rs.getString("statut"));
+                
                 st.add(s);
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         return st;
-
     }
 
     @Override
@@ -127,8 +137,10 @@ public abstract class StationService implements GlobalInterface<station> {
                 st.setTypeVelo(rs.getString("typeVelo"));
                 st.setPrixheure(rs.getDouble("prixHeure"));
                 st.setPays(rs.getString("pays"));
-
-
+                // Récupérer les nouveaux champs
+                st.setNumberRaters(rs.getInt("numberRaters"));
+                st.setRating(rs.getDouble("rating"));
+                st.setStatut(rs.getString("statut"));
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());

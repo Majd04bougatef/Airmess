@@ -39,7 +39,7 @@ public class MesReservationTransportVoyageurs {
     public void initialize() {
         statusFilter.setItems(FXCollections.observableArrayList("En cours", "Terminée"));
         statusFilter.setValue("En cours");
-        loadReservations("En cours");
+        loadReservations();
 
         statusFilter.setOnAction(event -> filterReservations());
 
@@ -59,12 +59,12 @@ public class MesReservationTransportVoyageurs {
 
     public void filterReservations() {
         String selectedStatus = statusFilter.getValue();
-        loadReservations(selectedStatus);
+        loadReservations();
     }
 
-    private void loadReservations(String status) {
+    private void loadReservations() {
         List<reservation_transport> reservations = reservationService.getAll().stream()
-                .filter(r -> r.getIdU() == session.getId_U() && r.getStatut().trim().equalsIgnoreCase(status.trim()))
+                .filter(r -> r.getIdU() == session.getId_U() )
                 .collect(Collectors.toList());
 
         ObservableList<HBox> reservationItems = FXCollections.observableArrayList();

@@ -2,9 +2,9 @@ package models;
 
 public class station {
 
-    private int idS,idU,capacite,nbVelo;
-    private String nom,typeVelo,pays;
-    private double latitude,longitude,prixheure;
+    private int idS,idU,capacite,nbVelo,numberRaters;
+    private String nom,typeVelo,pays,statut;
+    private double latitude,longitude,prixheure,rating;
 
     public station() {}
     public station(int id , int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,String pays) {
@@ -18,6 +18,9 @@ public class station {
         this.nbVelo = nbV;
         this.typeVelo = typeV;
         this.pays = pays;
+        this.numberRaters = 0;
+        this.rating = 0.0;
+        this.statut = "inactive";
     }
 
     public station(int idU , String nom , double latitude , double longitude , double prixheure,int capacite,int nbV,String typeV,String pays) {
@@ -30,6 +33,9 @@ public class station {
         this.nbVelo = nbV;
         this.typeVelo = typeV;
         this.pays = pays;
+        this.numberRaters = 0;
+        this.rating = 0.0;
+        this.statut = "inactive";
     }
 
     public int getIdS() {
@@ -108,8 +114,32 @@ public class station {
         return pays;
     }
 
-    public void setPays(String Pays) {
+    public void setPays(String pays) {
         this.pays = pays;
+    }
+
+    public int getNumberRaters() {
+        return numberRaters;
+    }
+
+    public void setNumberRaters(int numberRaters) {
+        this.numberRaters = numberRaters;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
     }
 
     @Override
@@ -119,11 +149,15 @@ public class station {
                 ", idU=" + idU +
                 ", capacite=" + capacite +
                 ", nbVelo=" + nbVelo +
+                ", numberRaters=" + numberRaters +
                 ", nom='" + nom + '\'' +
                 ", typeVelo='" + typeVelo + '\'' +
+                ", pays='" + pays + '\'' +
+                ", statut='" + statut + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", prixheure=" + prixheure +
+                ", rating=" + rating +
                 '}';
     }
 }
