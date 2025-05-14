@@ -56,7 +56,10 @@ public class UserReservationsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         reservationService = new ReservationService();
         setupTableColumns();
+        System.out.println("tght");
         loadUserReservations();
+        System.out.println("tght");
+
         reservationsTable.setTableMenuButtonVisible(false);
         reservationsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
@@ -175,9 +178,8 @@ public class UserReservationsController implements Initializable {
     private void loadUserReservations() {
         List<Reservation> userReservations = reservationService.getAll()
                                                                 .stream()
-                                .filter(reservation -> reservation.getId_U() == Session.getInstance().getId_U())
-                                .toList();
-
+                                .filter(reservation -> reservation.getId_U() == Session.getInstance().getId_U()).toList();
+        System.out.printf(userReservations.toString());
         reservationsList.clear();
         reservationsList.addAll(userReservations);
         reservationsTable.setItems(reservationsList);
